@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: development
+---
+spring:
+  profiles:
+    active: staging
+tarifftooldataloader:
+  azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
+  azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+  azure-storage-container: select-usa-stats
+---
+spring:
+  profiles: production
+  security:
+    oauth2:
+      client:
+        registration:
+          azure:
+            client-id: ${AZURE_OAUTH_CLIENT_ID}
+            client-secret: ${AZURE_OAUTH_CLIENT_SECRET}
+azure:
+  activedirectory:
+    tenant-id: ${AZURE_OAUTH_TENANT_ID}
+    active-directory-groups: EDSP
+tarifftooldataloader:
+  azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
+  azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+  azure-storage-container: select-usa-stats
+
