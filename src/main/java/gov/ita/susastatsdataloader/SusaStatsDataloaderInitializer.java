@@ -27,7 +27,7 @@ public class SusaStatsDataloaderInitializer implements ApplicationListener<Conte
       log.info("Initializing storage");
       storage.createContainer();
     }
-    storage.save("configuration.json", getResourceAsString("/fixtures/configuration.json"), null);
+    storage.save("configuration.json", getResourceAsString("/fixtures/configuration.json").getBytes(), null);
   }
 
   private String getResourceAsString(String resource) {

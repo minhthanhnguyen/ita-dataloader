@@ -7,16 +7,19 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @Profile("development")
 public class DevelopmentStorage implements Storage {
 
   @Override
-  public void save(String fileName, String fileContent, String user) {
+  public void save(String fileName, byte[] fileContent, String user) {
     System.out.println(user);
     System.out.println(fileName);
-    System.out.println(fileContent);
+    System.out.println(Arrays.toString(fileContent));
   }
 
   @Override
@@ -35,6 +38,16 @@ public class DevelopmentStorage implements Storage {
       return getResourceAsString("/fixtures/countries.json");
     else
       return getResourceAsString("/fixtures/open-data-catalog.json");
+  }
+
+  @Override
+  public String getListBlobsUrl() {
+    return "blobs url";
+  }
+
+  @Override
+  public List<BlobMetaData> getBlobMetadata() {
+    return Collections.emptyList();
   }
 
   private String getResourceAsString(String resource) {

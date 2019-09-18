@@ -2,4 +2,7 @@
 A tool that helps import (stage) data for reporting purposes
 
 ## APIs
-- /api/dataset/imf-weodata: returns content directly from https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019alla.xls
+- /api/config: Displays configuration urls
+- /api/save-datasets: Saves datasets to storage
+- /api/storage-content-url: Returns a url that returns a list of all files in storage
+- /api/storage-content: Returns a list of urls to the files in storage

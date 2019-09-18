@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,18 +40,18 @@ public class ProductionStorage implements Storage {
   private String containerName;
 
   @Override
-  public void save(String fileName, String fileContent, String user) {
+  public void save(String fileName, byte[] fileContent, String user) {
     if (user == null) user = accountName;
     ContainerURL containerURL = makeContainerUrl();
     BlockBlobURL blobURL = containerURL.createBlockBlobURL(fileName);
-    blobURL.upload(Flowable.just(ByteBuffer.wrap(fileContent.getBytes())), fileContent.getBytes().length,
+    blobURL.upload(Flowable.just(ByteBuffer.wrap(fileContent)), fileContent.length,
       makeHeader(fileName), makeMetaData(user), null, null)
       .flatMap(blobsDownloadResponse ->
         blobURL.download())
       .flatMap(blobsDownloadResponse ->
         FlowableUtil.collectBytesInBuffer(blobsDownloadResponse.body(null))
           .doOnSuccess(byteBuffer -> {
-            if (byteBuffer.compareTo(ByteBuffer.wrap(fileContent.getBytes())) != 0) {
+            if (byteBuffer.compareTo(ByteBuffer.wrap(fileContent)) != 0) {
               throw new Exception("The downloaded data does not match the uploaded data.");
             }
           }))
@@ -79,8 +80,31 @@ public class ProductionStorage implements Storage {
     return Objects.requireNonNull(restTemplate.getForObject(url, String.class));
   }
 
-  private String buildUrlForBlob(String blobName) {
-    return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, blobName);
+  @Override
+  public String getListBlobsUrl() {
+    return String.format("https://%s.blob.core.windows.net/%s?restype=container&comp=list", accountName, containerName);
+  }
+
+  public List<BlobMetaData> getBlobMetadata() {
+    ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
+    BlobListDetails details = new BlobListDetails();
+    details.withMetadata(true);
+    listBlobsOptions.withDetails(details);
+    List<BlobMetaData> meta = makeContainerUrl()
+      .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment()
+      .blobItems()
+      .stream().map(
+        x -> new BlobMetaData(
+          x.name(),
+          buildUrlForBlob(x.name()),
+          x.properties().contentLength()
+        ))
+      .collect(Collectors.toList());
+    return meta;
+  }
+
+  private String buildUrlForBlob(String name) {
+    return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
   }
 
   private ContainerURL makeContainerUrl() {
