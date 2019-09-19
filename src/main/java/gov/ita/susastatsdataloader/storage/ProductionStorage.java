@@ -137,12 +137,14 @@ public class ProductionStorage implements Storage {
   }
 
   private BlobHTTPHeaders makeHeader(String fileName) {
-    String contentType;
+    String contentType = null;
 
-    if (fileName.contains(".csv"))
-      contentType = "text/csv";
-    else
+    if (fileName.endsWith(".zip"))
+      contentType = "application/zip";
+    if (fileName.endsWith(".json"))
       contentType = "application/json";
+    if (fileName.endsWith(".csv"))
+      contentType = "text/csv";
 
     BlobHTTPHeaders headers = new BlobHTTPHeaders();
     headers.withBlobContentType(contentType);

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -27,7 +28,8 @@ public class SusaStatsDataloaderInitializer implements ApplicationListener<Conte
       log.info("Initializing storage");
       storage.createContainer();
     }
-    storage.save("configuration.json", getResourceAsString("/fixtures/configuration.json").getBytes(), null);
+    byte[] configBytes = Objects.requireNonNull(getResourceAsString("/fixtures/configuration.json")).getBytes();
+    storage.save("configuration.json", configBytes, null);
   }
 
   private String getResourceAsString(String resource) {
