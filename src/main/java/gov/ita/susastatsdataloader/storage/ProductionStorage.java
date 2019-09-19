@@ -76,31 +76,36 @@ public class ProductionStorage implements Storage {
 
   @Override
   public String getBlobAsString(String blobName) {
-    String url = String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, blobName);
+    String url = makeBaseStorageUrl() + "/" + blobName;
     return Objects.requireNonNull(restTemplate.getForObject(url, String.class));
   }
 
   @Override
   public String getListBlobsUrl() {
-    return String.format("https://%s.blob.core.windows.net/%s?restype=container&comp=list", accountName, containerName);
+    return makeBaseStorageUrl() + "?restype=container&comp=list";
   }
 
+  private String makeBaseStorageUrl() {
+    return String.format("https://%s.blob.core.windows.net/%s", accountName, containerName);
+  }
+
+  @Override
   public List<BlobMetaData> getBlobMetadata() {
     ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
     listBlobsOptions.withDetails(details);
-    List<BlobMetaData> meta = makeContainerUrl()
+    return makeContainerUrl()
       .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment()
       .blobItems()
       .stream().map(
         x -> new BlobMetaData(
           x.name(),
           buildUrlForBlob(x.name()),
-          x.properties().contentLength()
+          x.properties().contentLength(),
+          x.properties().lastModified()
         ))
       .collect(Collectors.toList());
-    return meta;
   }
 
   private String buildUrlForBlob(String name) {

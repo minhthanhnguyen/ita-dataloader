@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -40,8 +38,16 @@ public class SusaStatsController {
     String blobAsString = storage.getBlobAsString("configuration.json");
     SusaStatsConfigResponse susaStatsConfigResponse = objectMapper.readValue(blobAsString, SusaStatsConfigResponse.class);
     SusaStatsConfig susaStatsConfig = susaStatsConfigResponse.susaStatsConfig;
-    storage.save("imf-weodata.csv", restTemplate.getForEntity(susaStatsConfig.imfWeoUrl, byte[].class).getBody(), null);
-    storage.save("worldbank-metadata-countries.csv", getWorldbankEodbiMetadataCountries(susaStatsConfig.worldbankEdbiMetadataCsvZipUrl), null);
+
+    String imfWeoUrl = susaStatsConfig.imfWeoUrl;
+    String imfWeoFileName = getFileNameFromUrl(imfWeoUrl);
+    storage.save(imfWeoFileName, restTemplate.getForEntity(imfWeoUrl, byte[].class).getBody(), null);
+
+    Map<String, ByteArrayOutputStream> worldbankEodbiDataMap = getWorldbankEodbiDataMap(susaStatsConfig.worldbankEdbiCsvZipUrl);
+    for (String fileName : worldbankEodbiDataMap.keySet()) {
+      storage.save(fileName, worldbankEodbiDataMap.get(fileName).toByteArray(), null);
+    }
+
     return "done";
   }
 
@@ -57,7 +63,7 @@ public class SusaStatsController {
 
   private final static int BUFFER_SIZE = 2048;
 
-  private byte[] getWorldbankEodbiMetadataCountries(String csvZipUrl) throws IOException {
+  private Map<String, ByteArrayOutputStream> getWorldbankEodbiDataMap(String csvZipUrl) throws IOException {
     ResponseEntity<byte[]> eodbiMetadataZip = restTemplate.getForEntity(csvZipUrl, byte[].class);
     ByteArrayInputStream bis = new ByteArrayInputStream(Objects.requireNonNull(eodbiMetadataZip.getBody()));
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -70,43 +76,47 @@ public class SusaStatsController {
     bos.flush();
     bos.close();
     bis.close();
-    List<ByteArrayOutputStream> listFiles = unzip(baos, "Metadata_Country");
-
-    return listFiles.get(0).toByteArray();
+    return unzip(baos);
   }
 
-  private static List<ByteArrayOutputStream> unzip(
-    ByteArrayOutputStream zippedFileOS, String prefix) {
+  private static Map<String, ByteArrayOutputStream> unzip(ByteArrayOutputStream zippedFileOS) {
     try {
       ZipInputStream inputStream = new ZipInputStream(
         new BufferedInputStream(new ByteArrayInputStream(
           zippedFileOS.toByteArray())));
       ZipEntry entry;
 
-      List<ByteArrayOutputStream> result = new ArrayList<>();
+      Map<String, ByteArrayOutputStream> result = new HashMap<>();
       while ((entry = inputStream.getNextEntry()) != null) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        if (entry.getName().startsWith(prefix)) {
-          System.out.println("\tExtracting entry: " + entry);
-          int count;
-          byte[] data = new byte[BUFFER_SIZE];
-
-          if (!entry.isDirectory()) {
-            BufferedOutputStream out = new BufferedOutputStream(
-              outputStream, BUFFER_SIZE);
-            while ((count = inputStream.read(data, 0, BUFFER_SIZE)) != -1) {
-              out.write(data, 0, count);
-            }
-            out.flush();
-            out.close();
-            result.add(outputStream);
-          }
+        System.out.println("Extracting entry: " + entry);
+        int count;
+        byte[] data = new byte[BUFFER_SIZE];
+        BufferedOutputStream out = new BufferedOutputStream(
+          outputStream, BUFFER_SIZE);
+        while ((count = inputStream.read(data, 0, BUFFER_SIZE)) != -1) {
+          out.write(data, 0, count);
         }
+        out.flush();
+        out.close();
+        result.put(entry.getName(), outputStream);
       }
       inputStream.close();
       return result;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private String getFileNameFromUrl(String url) {
+    int indexOfLastForwardSlash = 0;
+
+    for (int i = 0; i < url.length(); i++) {
+      if (url.charAt(i) == '/') {
+        indexOfLastForwardSlash = i;
+      }
+    }
+
+    return url.substring(indexOfLastForwardSlash + 1);
   }
 }
