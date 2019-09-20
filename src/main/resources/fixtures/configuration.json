@@ -6,8 +6,8 @@
     },
     {
       "url": "http://api.worldbank.org/v2/en/indicator/IC.BUS.EASE.XQ?downloadformat=csv",
-      "destinationFileName": "WORLDBANK_EASE_INDICATOR.zip",
-      "zipFileContent": [
+      "destinationFileName": "WORLDBANK_EASE_INDICATOR_CSV.zip",
+      "zipFileConfigs": [
         {
           "originalFileName": "API_IC.BUS.EASE.XQ_DS2_en_csv_v2_153215.csv",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv"

@@ -8,5 +8,5 @@ import java.util.List;
 public class DataSourceConfig {
   String url;
   String destinationFileName;
-  List<ZipFileContent> zipFileContent;
+  List<ZipFileConfig> zipFileConfigs;
 }

@@ -104,7 +104,7 @@ public class ProductionStorage implements Storage {
           buildUrlForBlob(x.name()),
           x.properties().contentLength(),
           x.properties().lastModified()
-        ))
+        )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
       .collect(Collectors.toList());
   }
 
@@ -145,6 +145,8 @@ public class ProductionStorage implements Storage {
       contentType = "application/json";
     if (fileName.endsWith(".csv"))
       contentType = "text/csv";
+    if (fileName.endsWith(".xml"))
+      contentType = "application/xml";
 
     BlobHTTPHeaders headers = new BlobHTTPHeaders();
     headers.withBlobContentType(contentType);

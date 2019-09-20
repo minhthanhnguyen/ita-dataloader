@@ -3,15 +3,14 @@ package gov.ita.susastatsdataloader.ingest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.susastatsdataloader.configuration.DataSourceConfig;
 import gov.ita.susastatsdataloader.configuration.SusaStatsConfigResponse;
-import gov.ita.susastatsdataloader.configuration.ZipFileContent;
+import gov.ita.susastatsdataloader.configuration.ZipFileConfig;
 import gov.ita.susastatsdataloader.storage.BlobMetaData;
 import gov.ita.susastatsdataloader.storage.Storage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,22 +43,35 @@ public class SusaStatsController {
   @GetMapping("/api/save-datasets")
   public String saveDatasets() throws IOException {
     List<DataSourceConfig> dataSourceConfigs = getSusaStatsCongig();
+    byte[] fileContent;
+    
     for (DataSourceConfig dsc : dataSourceConfigs) {
-      byte[] fileContent = httpGetBytes(dsc.getUrl());
+      fileContent = httpGetBytes(dsc.getUrl());
       storage.save(dsc.getDestinationFileName(), fileContent, null);
-      if (dsc.getZipFileContent() != null) {
+
+      if (dsc.getZipFileConfigs() != null) {
         Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileContent);
         for (String fileName : fileMap.keySet()) {
-          String destinationFileName = dsc.getZipFileContent().stream()
-            .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
-            .collect(Collectors.toList())
-            .get(0).getDestinationFileName();
-          storage.save(destinationFileName, fileMap.get(fileName).toByteArray(), null);
+          ZipFileConfig zipFileConfig = getZipFileConfig(dsc, fileName);
+          byte[] transformedFile = removeTrailingComma(fileMap.get(fileName).toByteArray());
+          storage.save(zipFileConfig.getDestinationFileName(), transformedFile, null);
         }
       }
     }
 
     return "done";
+  }
+
+  private byte[] removeTrailingComma(byte[] fileBytes) {
+    String fileContent = new String(fileBytes);
+    return fileContent.replaceAll(",\r\n", "\r\n").getBytes();
+  }
+
+  private ZipFileConfig getZipFileConfig(DataSourceConfig dsc, String fileName) {
+    return dsc.getZipFileConfigs().stream()
+      .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
+      .collect(Collectors.toList())
+      .get(0);
   }
 
   @GetMapping("/api/storage-content-url")
