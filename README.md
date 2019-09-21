@@ -7,11 +7,21 @@ A tool that helps import (stage) data for reporting purposes
 - /api/storage-content-url: Returns a url that returns a list of all files in storage
 - /api/storage-content: Returns a list of urls to the files in storage
 
-## Deployment
-- A database stub named select_usa must exist prior to deploying this project. 
-  - For an Azure deployment, run the following query against the master database: ```CREATE DATABASE select_usa (EDITION = 'datawarehouse', SERVICE_OBJECTIVE='DW100c');```
-- Flyway doesn't currently work with Azure SQL Data Warehouse, so the scripts in the /src/main/resources/db/migrations directory will need to be run manually against the database.
-- Connection parameters for the database must be stored in the following environment variables:
-        - FLYWAY_URL: The jdbc url to use to connect to the database
-        - FLYWAY_USER: The user to use to connect to the database
-        - FLYWAY_PASSWORD: The password to use to connect to the database
+## Build
+```./build.sh```
+
+## Deploy
+```./deploy.sh```
+
+## Production Deployment Notes
+ - An Azure Blob Storage account needs to exist
+ - An Azure AD App Registration needs to be made to procure an OAuth Client ID and Client Secret
+ - The following environment variables need to exist:
+    - AZURE_OAUTH_CLIENT_ID: Active Directory Client ID
+    - AZURE_OAUTH_CLIENT_SECRET: Active Directory Client Secret
+    - AZURE_STORAGE_ACCOUNT: Data Lake Storage Account
+    - AZURE_STORAGE_ACCOUNT_KEY: Data Lake Storage Account Key
+    
+## Notes
+ - The data-pipeline directory is not utilized in this project, it's a temporary backup of the Azure data-pipeline
+ - Flyway does not yet work with Azure SQL Data Warehouse; so the scripts need to be manually executed for the data pipeline to work
