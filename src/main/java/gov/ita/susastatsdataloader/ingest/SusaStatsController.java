@@ -1,10 +1,10 @@
 package gov.ita.susastatsdataloader.ingest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.susastatsdataloader.configuration.DataSourceConfig;
-import gov.ita.susastatsdataloader.configuration.ReplaceValue;
-import gov.ita.susastatsdataloader.configuration.SusaStatsConfigResponse;
-import gov.ita.susastatsdataloader.configuration.ZipFileConfig;
+import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfig;
+import gov.ita.susastatsdataloader.ingest.configuration.ReplaceValue;
+import gov.ita.susastatsdataloader.ingest.configuration.SusaStatsConfigResponse;
+import gov.ita.susastatsdataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.susastatsdataloader.storage.BlobMetaData;
 import gov.ita.susastatsdataloader.storage.Storage;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,18 +36,18 @@ public class SusaStatsController {
   }
 
   @GetMapping("/api/config")
-  private List<DataSourceConfig> getSusaStatsCongig() throws IOException {
+  private List<DataSetConfig> getSusaStatsCongig() throws IOException {
     String blobAsString = storage.getBlobAsString("configuration.json");
     SusaStatsConfigResponse susaStatsConfigResponse = objectMapper.readValue(blobAsString, SusaStatsConfigResponse.class);
-    return susaStatsConfigResponse.getDataSourceConfigs();
+    return susaStatsConfigResponse.getDataSetConfigs();
   }
 
   @GetMapping("/api/save-data")
   public String saveData() throws IOException {
-    List<DataSourceConfig> dataSourceConfigs = getSusaStatsCongig();
+    List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig();
     byte[] fileBytes;
 
-    for (DataSourceConfig dsc : dataSourceConfigs) {
+    for (DataSetConfig dsc : dataSourceConfigs) {
       fileBytes = httpGetBytes(dsc.getUrl());
       processAndSaveDataSource(dsc.getDestinationFileName(), fileBytes, dsc.getReplaceValues());
 
@@ -76,7 +76,7 @@ public class SusaStatsController {
     return new String(fileBytes).replaceAll(replace, with).getBytes();
   }
 
-  private ZipFileConfig getZipFileConfig(DataSourceConfig dsc, String fileName) {
+  private ZipFileConfig getZipFileConfig(DataSetConfig dsc, String fileName) {
     return dsc.getZipFileConfigs().stream()
       .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
       .collect(Collectors.toList())
