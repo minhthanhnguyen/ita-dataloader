@@ -8,5 +8,6 @@ import java.util.List;
 public class DataSourceConfig {
   String url;
   String destinationFileName;
+  List<ReplaceValue> replaceValues;
   List<ZipFileConfig> zipFileConfigs;
 }

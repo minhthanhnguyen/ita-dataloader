@@ -2,11 +2,18 @@
   "dataSourceConfigs": [
     {
       "url": "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019alla.xls",
-      "destinationFileName": "WEODATA.csv"
+      "destinationFileName": "WEODATA.csv",
+      "replaceValues": null
     },
     {
       "url": "http://api.worldbank.org/v2/en/indicator/IC.BUS.EASE.XQ?downloadformat=csv",
       "destinationFileName": "WORLDBANK_EASE_INDICATOR_CSV.zip",
+      "replaceValues": [
+        {
+          "replace": ",\r\n",
+          "with": "\r\n"
+        }
+      ],
       "zipFileConfigs": [
         {
           "originalFileName": "API_IC.BUS.EASE.XQ_DS2_en_csv_v2_153215.csv",

@@ -2,6 +2,7 @@ package gov.ita.susastatsdataloader.ingest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.susastatsdataloader.configuration.DataSourceConfig;
+import gov.ita.susastatsdataloader.configuration.ReplaceValue;
 import gov.ita.susastatsdataloader.configuration.SusaStatsConfigResponse;
 import gov.ita.susastatsdataloader.configuration.ZipFileConfig;
 import gov.ita.susastatsdataloader.storage.BlobMetaData;
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,18 +45,17 @@ public class SusaStatsController {
   @GetMapping("/api/save-datasets")
   public String saveDatasets() throws IOException {
     List<DataSourceConfig> dataSourceConfigs = getSusaStatsCongig();
-    byte[] fileContent;
-    
+    byte[] fileBytes;
+
     for (DataSourceConfig dsc : dataSourceConfigs) {
-      fileContent = httpGetBytes(dsc.getUrl());
-      storage.save(dsc.getDestinationFileName(), fileContent, null);
+      fileBytes = httpGetBytes(dsc.getUrl());
+      processAndSaveDataSource(dsc.getDestinationFileName(), fileBytes, dsc.getReplaceValues());
 
       if (dsc.getZipFileConfigs() != null) {
-        Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileContent);
+        Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileBytes);
         for (String fileName : fileMap.keySet()) {
-          ZipFileConfig zipFileConfig = getZipFileConfig(dsc, fileName);
-          byte[] transformedFile = removeTrailingComma(fileMap.get(fileName).toByteArray());
-          storage.save(zipFileConfig.getDestinationFileName(), transformedFile, null);
+          ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
+          processAndSaveDataSource(zfc.getDestinationFileName(), fileMap.get(fileName).toByteArray(), dsc.getReplaceValues());
         }
       }
     }
@@ -62,9 +63,17 @@ public class SusaStatsController {
     return "done";
   }
 
-  private byte[] removeTrailingComma(byte[] fileBytes) {
-    String fileContent = new String(fileBytes);
-    return fileContent.replaceAll(",\r\n", "\r\n").getBytes();
+  private void processAndSaveDataSource(String fileName, byte[] fileBytes, List<ReplaceValue> replaceValues) {
+    if (replaceValues != null) {
+      for (ReplaceValue rv : replaceValues) {
+        fileBytes = replace(fileBytes, rv.getReplace(), rv.getWith());
+      }
+    }
+    storage.save(fileName, fileBytes, null);
+  }
+
+  private byte[] replace(byte[] fileBytes, String replace, String with) {
+    return new String(fileBytes).replaceAll(replace, with).getBytes();
   }
 
   private ZipFileConfig getZipFileConfig(DataSourceConfig dsc, String fileName) {
