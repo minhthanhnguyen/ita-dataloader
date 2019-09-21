@@ -1,6 +1,6 @@
-DROP TABLE IMF_WEODATA; --REMOVE WHEN GOING TO PROD
+begin try drop table IMF_WEODATA end try begin catch end catch --REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.IMF_WEODATA', 'U') IS NULL
-BEGIN
+begin
     CREATE TABLE IMF_WEODATA (
         [WEO Country Group Code] varchar(3),
         [WEO Subject Code] varchar(255),
@@ -57,13 +57,13 @@ BEGIN
         [2024] varchar(25),
         [Estimates Start After] varchar(255)
     )
-END
+end
 
 ------------------------------------------------
 
-DROP TABLE WORLDBANK_EASE_COUNTRY_METADATA; --REMOVE WHEN GOING TO PROD
+begin try drop table WORLDBANK_EASE_COUNTRY_METADATA end try begin catch end catch --REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.WORLDBANK_EASE_COUNTRY_METADATA', 'U') IS NULL
-BEGIN
+begin
     CREATE TABLE WORLDBANK_EASE_COUNTRY_METADATA (
         COUNTRY_CODE VARCHAR(50),
         REGION VARCHAR(255),
@@ -71,4 +71,78 @@ BEGIN
         SPECIAL_NOTES VARCHAR(1500),
         TABLE_NAME VARCHAR(100)
     )
-END
+end
+
+------------------------------------------------
+
+begin try drop table WORLDBANK_EASE_COUNTRY_INDEX end try begin catch end catch --REMOVE WHEN GOING TO PROD
+IF OBJECT_ID('dbo.WORLDBANK_EASE_COUNTRY_INDEX', 'U') IS NULL
+begin
+    CREATE TABLE WORLDBANK_EASE_COUNTRY_INDEX (
+        [Country Name] VARCHAR(255),
+        [Country Code] VARCHAR(255),
+        [Indicator Name] VARCHAR(255),
+        [Indicator Code] VARCHAR(255),
+        [1960] INT,
+        [1961] INT,
+        [1962] INT,
+        [1963] INT,
+        [1964] INT,
+        [1965] INT,
+        [1966] INT,
+        [1967] INT,
+        [1968] INT,
+        [1969] INT,
+        [1970] INT,
+        [1971] INT,
+        [1972] INT,
+        [1973] INT,
+        [1974] INT,
+        [1975] INT,
+        [1976] INT,
+        [1977] INT,
+        [1978] INT,
+        [1979] INT,
+        [1980] INT,
+        [1981] INT,
+        [1982] INT,
+        [1983] INT,
+        [1984] INT,
+        [1985] INT,
+        [1986] INT,
+        [1987] INT,
+        [1988] INT,
+        [1989] INT,
+        [1990] INT,
+        [1991] INT,
+        [1992] INT,
+        [1993] INT,
+        [1994] INT,
+        [1995] INT,
+        [1996] INT,
+        [1997] INT,
+        [1998] INT,
+        [1999] INT,
+        [2000] INT,
+        [2001] INT,
+        [2002] INT,
+        [2003] INT,
+        [2004] INT,
+        [2005] INT,
+        [2006] INT,
+        [2007] INT,
+        [2008] INT,
+        [2009] INT,
+        [2010] INT,
+        [2011] INT,
+        [2012] INT,
+        [2013] INT,
+        [2014] INT,
+        [2015] INT,
+        [2016] INT,
+        [2017] INT,
+        [2018] INT
+    )
+end
+
+------------------------------------------------
