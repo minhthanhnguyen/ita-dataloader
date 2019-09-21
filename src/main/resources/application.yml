@@ -5,6 +5,10 @@ spring:
 spring:
   profiles:
     active: staging
+  datasource:
+    url: ${SELECTUSA_DB_URL}
+    username: ${SELECTUSA_DB_USERNAME}
+    password: ${SELECTUSA_DB_PASSWORD}
 tarifftooldataloader:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
@@ -12,6 +16,10 @@ tarifftooldataloader:
 ---
 spring:
   profiles: production
+  datasource:
+    url: ${SELECTUSA_DB_URL}
+    username: ${SELECTUSA_DB_USERNAME}
+    password: ${SELECTUSA_DB_PASSWORD}
   security:
     oauth2:
       client:

@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.8.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-	id 'org.flywaydb.flyway' version '5.2.4'
+//	id 'org.flywaydb.flyway' version '5.2.4'
 	id 'java'
 }
 
@@ -16,6 +16,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
 	implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter:2.1.6'
@@ -26,8 +27,9 @@ dependencies {
 	implementation 'com.microsoft.rest.v2:client-runtime:2.1.1'
 	implementation 'commons-io:commons-io:2.4'
 	implementation 'org.apache.commons:commons-csv:1.5'
-	implementation 'org.flywaydb:flyway-core'
+//	implementation 'org.flywaydb:flyway-core'
 	compile 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
