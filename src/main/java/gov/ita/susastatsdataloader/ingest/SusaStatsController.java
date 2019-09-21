@@ -42,8 +42,8 @@ public class SusaStatsController {
     return susaStatsConfigResponse.getDataSourceConfigs();
   }
 
-  @GetMapping("/api/save-datasets")
-  public String saveDatasets() throws IOException {
+  @GetMapping("/api/save-data")
+  public String saveData() throws IOException {
     List<DataSourceConfig> dataSourceConfigs = getSusaStatsCongig();
     byte[] fileBytes;
 
