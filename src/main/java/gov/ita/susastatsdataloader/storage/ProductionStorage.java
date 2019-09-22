@@ -70,7 +70,7 @@ public class ProductionStorage implements Storage {
   @Override
   public void createContainer() {
     makeContainerUrl()
-      .create(makeMetaData(accountName), PublicAccessType.BLOB, null)
+      .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
       .blockingGet();
   }
 
