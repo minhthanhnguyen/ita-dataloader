@@ -33,6 +33,10 @@
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv"
         }
       ]
+    },
+    {
+      "url": "https://apps.bea.gov/api/data/?DataSetName=NIPA&Frequency=A&ResultFormat=json&ShowMillions=N&TableName=T60400D&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Year=X&method=GetData",
+      "destinationFileName": "BEA_NIPA.json"
     }
   ]
 }

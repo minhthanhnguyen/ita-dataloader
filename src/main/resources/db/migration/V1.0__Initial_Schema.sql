@@ -146,3 +146,20 @@ begin
 end
 
 ------------------------------------------------
+
+begin try drop table BEA_NIPA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+IF OBJECT_ID('dbo.BEA_NIPA', 'U') IS NULL
+begin
+    CREATE TABLE BEA_NIPA (
+        [TableName] VARCHAR(255),
+        [SeriesCode] VARCHAR(255),
+        [LineNumber] INT,
+        [LineDescription] VARCHAR(255),
+        [TimePeriod] INT,
+        [METRIC_NAME] VARCHAR(255),
+        [CL_UNIT] VARCHAR(255),
+        [UNIT_MULT] INT,
+        [DataValue] INT,
+        [NoteRef] INT
+    )
+end
