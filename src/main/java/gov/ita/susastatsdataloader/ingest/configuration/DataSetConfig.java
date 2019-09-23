@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class DataSetConfig {
+  boolean enabled;
   String url;
   String destinationFileName;
   List<ReplaceValue> replaceValues;

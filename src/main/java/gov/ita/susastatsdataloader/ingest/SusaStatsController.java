@@ -48,14 +48,16 @@ public class SusaStatsController {
     byte[] fileBytes;
 
     for (DataSetConfig dsc : dataSourceConfigs) {
-      fileBytes = httpGetBytes(dsc.getUrl());
-      processAndSaveDataSource(dsc.getDestinationFileName(), fileBytes, dsc.getReplaceValues());
+      if (dsc.isEnabled()) {
+        fileBytes = httpGetBytes(dsc.getUrl());
+        processAndSaveDataSource(dsc.getDestinationFileName(), fileBytes, dsc.getReplaceValues());
 
-      if (dsc.getZipFileConfigs() != null) {
-        Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileBytes);
-        for (String fileName : fileMap.keySet()) {
-          ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
-          processAndSaveDataSource(zfc.getDestinationFileName(), fileMap.get(fileName).toByteArray(), dsc.getReplaceValues());
+        if (dsc.getZipFileConfigs() != null) {
+          Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileBytes);
+          for (String fileName : fileMap.keySet()) {
+            ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
+            processAndSaveDataSource(zfc.getDestinationFileName(), fileMap.get(fileName).toByteArray(), dsc.getReplaceValues());
+          }
         }
       }
     }
