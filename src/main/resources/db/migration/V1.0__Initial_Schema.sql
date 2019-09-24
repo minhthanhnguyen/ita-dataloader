@@ -183,3 +183,23 @@ begin
         [DataValue] VARCHAR(255)
     )
 end
+
+------------------------------------------------
+begin try drop table BEA_MNE_COUNTRY_BY_INDUSTRY end try begin catch end catch --REMOVE WHEN GOING TO PROD
+IF OBJECT_ID('dbo.BEA_MNE_COUNTRY_BY_INDUSTRY', 'U') IS NULL
+begin
+    CREATE TABLE BEA_MNE_COUNTRY_BY_INDUSTRY (
+        [DIRECTIONOFINVESTMENT] VARCHAR(255),
+        [OwnershipLevel] INT,
+        [Year] INT,
+        [SeriesID] INT,
+        [SeriesName] VARCHAR(255),
+        [Row] VARCHAR(255),
+        [Column] VARCHAR(255),
+        [RowCode] VARCHAR(255),
+        [ColumnCode] VARCHAR(255),
+        [TableScale] VARCHAR(255),
+        [DataValueUnformatted] VARCHAR(255),
+        [DataValue] VARCHAR(255)
+    )
+end
