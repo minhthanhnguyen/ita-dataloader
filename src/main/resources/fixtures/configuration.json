@@ -63,6 +63,11 @@
     },
     {
       "enabled": false,
+      "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=MNE&Year=ALL&Country=ALL&DirectionOfInvestment=State&Classification=Country&SeriesId=8&OwnershipLevel=0&NonbankAffiliatesOnly=0&state=all&ResultFormat=json",
+      "fileName": "bea-mne-country/BEA_MNE_C_STATE.json"
+    },
+    {
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=MNE&Year=ALL&Country=ALL&DirectionOfInvestment=inward&Industry=ALL&Classification=CountrybyIndustry&SeriesId=1,4,6,8&OwnershipLevel=0&NonbankAffiliatesOnly=0&GetFootnotes=No&ResultFormat=json",
       "fileName": "bea-mne-country-by-industry/BEA_MNE_C_I_IN_0.json"
     },
@@ -143,18 +148,13 @@
     },
     {
       "enabled": false,
-      "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=MNE&Year=ALL&Country=ALL&DirectionOfInvestment=State&Classification=Country&SeriesId=8&OwnershipLevel=0&NonbankAffiliatesOnly=0&state=all&ResultFormat=json",
-      "fileName": "bea-mne/BEA_MNE_C_STATE.json"
-    },
-    {
-      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=MNE&Year=ALL&DirectionOfInvestment=inward&Classification=Industry&SeriesId=22&ResultFormat=json",
-      "fileName": "bea-mne/BEA_MNE_I_IN_22.json"
+      "fileName": "bea-mne-industry/BEA_MNE_I_IN_22.json"
     },
     {
       "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=MNE&Year=ALL&DirectionOfInvestment=State&Classification=Industry&Industry=all&SeriesId=ALL&OwnershipLevel=0&NonbankAffiliatesOnly=0&State=ALL&ResultFormat=json",
-      "fileName": "bea-mne/BEA_MNE_I_STATE.json"
+      "fileName": "bea-mne-industry/BEA_MNE_I_STATE.json"
     },
     {
       "enabled": false,
