@@ -8,7 +8,7 @@ import java.util.List;
 public class DataSetConfig {
   boolean enabled;
   String url;
-  String destinationFileName;
+  String fileName;
   List<ReplaceValue> replaceValues;
   List<ZipFileConfig> zipFileConfigs;
 }

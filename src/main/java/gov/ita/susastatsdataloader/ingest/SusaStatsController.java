@@ -7,6 +7,7 @@ import gov.ita.susastatsdataloader.ingest.configuration.SusaStatsConfigResponse;
 import gov.ita.susastatsdataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.susastatsdataloader.storage.BlobMetaData;
 import gov.ita.susastatsdataloader.storage.Storage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 public class SusaStatsController {
 
@@ -42,15 +44,16 @@ public class SusaStatsController {
     return susaStatsConfigResponse.getDataSetConfigs();
   }
 
-  @GetMapping("/api/save-data")
-  public String saveData() throws IOException {
+  @GetMapping("/api/ingest")
+  public String startIngestProcess() throws IOException, InterruptedException {
     List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig();
     byte[] fileBytes;
 
     for (DataSetConfig dsc : dataSourceConfigs) {
       if (dsc.isEnabled()) {
+        log.info("Importing file {} from {}", dsc.getFileName(), dsc.getUrl());
         fileBytes = httpGetBytes(dsc.getUrl());
-        processAndSaveDataSource(dsc.getDestinationFileName(), fileBytes, dsc.getReplaceValues());
+        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues());
 
         if (dsc.getZipFileConfigs() != null) {
           Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileBytes);
@@ -59,10 +62,13 @@ public class SusaStatsController {
             processAndSaveDataSource(zfc.getDestinationFileName(), fileMap.get(fileName).toByteArray(), dsc.getReplaceValues());
           }
         }
+        Thread.sleep(3000);
       }
     }
 
-    return "done";
+    String successMessage = "Ingest process complete";
+    log.info(successMessage);
+    return successMessage;
   }
 
   private void processAndSaveDataSource(String fileName, byte[] fileBytes, List<ReplaceValue> replaceValues) {
