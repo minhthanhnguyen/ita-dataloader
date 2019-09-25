@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@Profile({"staging", "development"})
-public class DevelopmentDatabaseInitializer implements DatabaseInitializer {
+@Profile({"development"})
+public class DevelopmentDatabaseInitializer extends DatabaseInitializer {
+
   @Override
   public void init() {
-    log.info("Skipping database initialization");
   }
+
 }

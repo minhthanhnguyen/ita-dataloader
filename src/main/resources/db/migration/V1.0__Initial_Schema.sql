@@ -1,3 +1,38 @@
+begin try DROP TABLE data_set_config end try begin catch end catch --REMOVE WHEN GOING TO PROD
+CREATE TABLE data_set_config (
+    [ID] BIGINT IDENTITY,
+    [URL] VARCHAR(1000),
+    [ENABLED] BIT,
+    [FILE_NAME] VARCHAR(255),
+    [CONTAINER_NAME] VARCHAR(255)
+)
+
+begin try DROP TABLE data_set_config_replace_values end try begin catch end catch --REMOVE WHEN GOING TO PROD
+CREATE TABLE data_set_config_replace_values (
+    [DATA_SET_CONFIG_ID] BIGINT,
+    [REPLACE_VALUES_ID] BIGINT
+)
+
+begin try DROP TABLE data_set_config_zip_file_configs end try begin catch end catch --REMOVE WHEN GOING TO PROD
+CREATE TABLE data_set_config_zip_file_configs (
+    [DATA_SET_CONFIG_ID] BIGINT,
+    [ZIP_FILE_CONFIGS_ID] BIGINT
+)
+
+begin try DROP TABLE replace_value end try begin catch end catch --REMOVE WHEN GOING TO PROD
+CREATE TABLE replace_value (
+    [ID] BIGINT IDENTITY,
+    [REPLACE_THIS] VARCHAR(255),
+    [WITH_THIS] VARCHAR(255)
+)
+
+begin try DROP TABLE zip_file_config end try begin catch end catch --REMOVE WHEN GOING TO PROD
+CREATE TABLE zip_file_config (
+    [ID] BIGINT IDENTITY,
+    [ORIGINAL_FILE_NAME] VARCHAR(255),
+    [DESTINATION_FILE_NAME] VARCHAR(255)
+)
+------------------------------------------------
 begin try drop table IMF_WEODATA end try begin catch end catch --REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.IMF_WEODATA', 'U') IS NULL
 begin
@@ -233,7 +268,6 @@ begin
         [DataValue] VARCHAR(255)
     )
 end
-
 ------------------------------------------------
 begin try drop table BEA_ITA end try begin catch end catch --REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_ITA', 'U') IS NULL

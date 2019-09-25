@@ -3,13 +3,11 @@ package gov.ita.susastatsdataloader.storage;
 import java.util.List;
 
 public interface Storage {
-  void init();
+  void initContainer(String containerName);
 
-  void save(String fileName, byte[] fileContent, String user);
+  void save(String fileName, byte[] fileContent, String user, String containerName);
 
-  String getBlobAsString(String blobName);
+  String getListBlobsUrl(String containerName);
 
-  String getListBlobsUrl();
-
-  List<BlobMetaData> getBlobMetadata();
+  List<BlobMetaData> getBlobMetadata(String containerName);
 }

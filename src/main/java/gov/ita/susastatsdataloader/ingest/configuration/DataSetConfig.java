@@ -2,13 +2,23 @@ package gov.ita.susastatsdataloader.ingest.configuration;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Data
+@Entity
 public class DataSetConfig {
-  boolean enabled;
-  String url;
-  String fileName;
-  List<ReplaceValue> replaceValues;
-  List<ZipFileConfig> zipFileConfigs;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String url;
+  private boolean enabled;
+  private String fileName;
+  private String containerName;
+
+  @OneToMany
+  private List<ReplaceValue> replaceValues;
+
+  @OneToMany
+  private List<ZipFileConfig> zipFileConfigs;
 }

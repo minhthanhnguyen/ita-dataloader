@@ -2,8 +2,17 @@ package gov.ita.susastatsdataloader.ingest.configuration;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 @Data
+@Entity
 public class ReplaceValue {
-  String replace;
-  String with;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  Long id;
+  String replaceThis;
+  String withThis;
 }

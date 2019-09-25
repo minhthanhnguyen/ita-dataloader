@@ -4,48 +4,44 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 @Profile("development")
 public class DevelopmentStorage implements Storage {
 
-  @Override
-  public void init() {
-    log.info("Skipping storage initialization");
-  }
+  private Map<String, byte[]> storageContent = new HashMap<>();
 
   @Override
-  public void save(String fileName, byte[] fileContent, String user) {
-    System.out.println(user);
-    System.out.println(fileName);
-    System.out.println(Arrays.toString(fileContent));
-  }
-
-  public boolean containerExists() {
-    return false;
-  }
-
-  public void createContainer() {
-
+  public void initContainer(String containerName) {
+    log.info("Initializing container: {}", containerName);
   }
 
   @Override
-  public String getBlobAsString(String blobName) {
-    return "Blob as string";
+  public void save(String fileName, byte[] fileContent, String user, String containerName) {
+    log.info("Saving blob: {}, {}, {}", fileName, containerName, user);
+    storageContent.put(fileName, fileContent);
   }
 
   @Override
-  public String getListBlobsUrl() {
-    return "blobs url";
+  public String getListBlobsUrl(String containerName) {
+    return "http://cool.io";
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata() {
-    return Collections.emptyList();
-  }
+  public List<BlobMetaData> getBlobMetadata(String containerName) {
+    List<BlobMetaData> blobMetaDataList = new ArrayList<>();
 
+    for (String fileName : storageContent.keySet()) {
+      byte[] fileContent = storageContent.get(fileName);
+      BlobMetaData blobMetaData = new BlobMetaData(fileName, "http://" + fileName, 123L, null);
+      blobMetaDataList.add(blobMetaData);
+    }
+
+    return blobMetaDataList;
+  }
 }

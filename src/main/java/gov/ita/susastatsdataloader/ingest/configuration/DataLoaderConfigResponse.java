@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SusaStatsConfigResponse {
+public class DataLoaderConfigResponse {
   public List<DataSetConfig> dataSetConfigs;
 }

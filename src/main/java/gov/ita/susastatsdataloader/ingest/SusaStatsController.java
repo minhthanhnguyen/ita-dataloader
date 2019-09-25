@@ -1,14 +1,14 @@
 package gov.ita.susastatsdataloader.ingest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfig;
+import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfigRepository;
 import gov.ita.susastatsdataloader.ingest.configuration.ReplaceValue;
-import gov.ita.susastatsdataloader.ingest.configuration.SusaStatsConfigResponse;
 import gov.ita.susastatsdataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.susastatsdataloader.storage.BlobMetaData;
 import gov.ita.susastatsdataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,61 +23,65 @@ import java.util.stream.Collectors;
 public class SusaStatsController {
 
   private Storage storage;
-  private ObjectMapper objectMapper;
   private RestTemplate restTemplate;
   private ZipFileExtractor zipFileExtractor;
+  private DataSetConfigRepository dataSetConfigRepository;
 
   public SusaStatsController(Storage storage,
-                             ObjectMapper objectMapper,
                              RestTemplate restTemplate,
-                             ZipFileExtractor zipFileExtractor) {
+                             ZipFileExtractor zipFileExtractor,
+                             DataSetConfigRepository dataSetConfigRepository) {
     this.storage = storage;
-    this.objectMapper = objectMapper;
     this.restTemplate = restTemplate;
     this.zipFileExtractor = zipFileExtractor;
+    this.dataSetConfigRepository = dataSetConfigRepository;
   }
 
-  @GetMapping("/api/config")
-  private List<DataSetConfig> getSusaStatsCongig() throws IOException {
-    String blobAsString = storage.getBlobAsString("configuration.json");
-    SusaStatsConfigResponse susaStatsConfigResponse = objectMapper.readValue(blobAsString, SusaStatsConfigResponse.class);
-    return susaStatsConfigResponse.getDataSetConfigs();
+  @GetMapping("/api/configuration")
+  private List<DataSetConfig> getSusaStatsCongig() {
+    return dataSetConfigRepository.findAll();
   }
 
   @GetMapping("/api/ingest")
-  public String startIngestProcess() throws IOException, InterruptedException {
-    List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig();
-    byte[] fileBytes;
+  public String startIngestProcess(@RequestParam("container-name") String containerName) throws IOException, InterruptedException {
+    storage.initContainer(containerName);
 
+    List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig()
+      .stream().filter(dsc -> dsc.getContainerName().equals(containerName)).collect(Collectors.toList());
+
+    byte[] fileBytes;
     for (DataSetConfig dsc : dataSourceConfigs) {
       if (dsc.isEnabled()) {
         log.info("Importing file {} from {}", dsc.getFileName(), dsc.getUrl());
         fileBytes = httpGetBytes(dsc.getUrl());
-        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues());
+        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName());
 
         if (dsc.getZipFileConfigs() != null) {
           Map<String, ByteArrayOutputStream> fileMap = zipFileExtractor.extract(fileBytes);
           for (String fileName : fileMap.keySet()) {
             ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
-            processAndSaveDataSource(zfc.getDestinationFileName(), fileMap.get(fileName).toByteArray(), dsc.getReplaceValues());
+            processAndSaveDataSource(
+              zfc.getDestinationFileName(),
+              fileMap.get(fileName).toByteArray(),
+              dsc.getReplaceValues(),
+              dsc.getContainerName());
           }
         }
         Thread.sleep(3000);
       }
     }
 
-    String successMessage = "Ingest process complete";
-    log.info(successMessage);
-    return successMessage;
+    log.info("Ingest process complete for container: {}", containerName);
+    return "done";
   }
 
-  private void processAndSaveDataSource(String fileName, byte[] fileBytes, List<ReplaceValue> replaceValues) {
+  private void processAndSaveDataSource(String fileName, byte[] fileBytes, List<ReplaceValue> replaceValues, String containerName) {
     if (replaceValues != null) {
       for (ReplaceValue rv : replaceValues) {
-        fileBytes = replace(fileBytes, rv.getReplace(), rv.getWith());
+        fileBytes = replace(fileBytes, rv.getReplaceThis(), rv.getWithThis());
       }
     }
-    storage.save(fileName, fileBytes, null);
+    storage.save(fileName, fileBytes, null, containerName);
   }
 
   private byte[] replace(byte[] fileBytes, String replace, String with) {
@@ -92,13 +96,13 @@ public class SusaStatsController {
   }
 
   @GetMapping("/api/storage-content-url")
-  public String getStorageContentUrl() {
-    return storage.getListBlobsUrl();
+  public String getStorageContentUrl(@RequestParam("container-name") String containerName) {
+    return storage.getListBlobsUrl(containerName);
   }
 
   @GetMapping("/api/storage-content")
-  public List<BlobMetaData> getStorageMetadata() {
-    return storage.getBlobMetadata();
+  public List<BlobMetaData> getStorageMetadata(@RequestParam("container-name") String containerName) {
+    return storage.getBlobMetadata(containerName);
   }
 
   private byte[] httpGetBytes(String url) {

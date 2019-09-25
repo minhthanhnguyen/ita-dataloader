@@ -19,10 +19,7 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static gov.ita.susastatsdataloader.ResourceHelper.getResourceAsString;
 
 @Slf4j
 @Service
@@ -32,31 +29,16 @@ public class ProductionStorage implements Storage {
   @Autowired
   private RestTemplate restTemplate;
 
-  @Value("${tarifftooldataloader.azure-storage-account}")
+  @Value("${storage-params.azure-storage-account}")
   private String accountName;
 
-  @Value("${tarifftooldataloader.azure-storage-account-key}")
+  @Value("${storage-params.azure-storage-account-key}")
   private String accountKey;
 
-  @Value("${tarifftooldataloader.azure-storage-container}")
-  private String containerName;
-
   @Override
-  public void init() {
-    if (!containerExists()) {
-      log.info("Initializing production storage");
-      createContainer();
-    }
-
-    log.info("Saving configuration.json to storage");
-    byte[] configBytes = Objects.requireNonNull(getResourceAsString("/fixtures/configuration.json")).getBytes();
-    save("configuration.json", configBytes, null);
-  }
-
-  @Override
-  public void save(String fileName, byte[] fileContent, String user) {
+  public void save(String fileName, byte[] fileContent, String user, String containerName) {
     if (user == null) user = accountName;
-    ContainerURL containerURL = makeContainerUrl();
+    ContainerURL containerURL = makeContainerUrl(containerName);
     BlockBlobURL blobURL = containerURL.createBlockBlobURL(fileName);
     blobURL.upload(Flowable.just(ByteBuffer.wrap(fileContent)), fileContent.length,
       makeHeader(fileName), makeMetaData(user), null, null)
@@ -72,7 +54,7 @@ public class ProductionStorage implements Storage {
       .blockingGet();
   }
 
-  private boolean containerExists() {
+  private boolean containerExists(String containerName) {
     ServiceURL serviceURL = makeServiceURL();
     assert serviceURL != null;
     List<ContainerItem> containerItems = serviceURL.listContainersSegment(null, null)
@@ -80,51 +62,49 @@ public class ProductionStorage implements Storage {
     return containerItems.stream().anyMatch(containerItem -> containerItem.name().equals(containerName));
   }
 
-  private void createContainer() {
-    makeContainerUrl()
-      .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
-      .blockingGet();
+  @Override
+  public void initContainer(String containerName) {
+    if (!containerExists(containerName)) {
+      log.info("Initializing container: {}", containerName);
+      makeContainerUrl(containerName)
+        .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
+        .blockingGet();
+    }
   }
 
   @Override
-  public String getBlobAsString(String blobName) {
-    String url = makeBaseStorageUrl() + "/" + blobName;
-    return Objects.requireNonNull(restTemplate.getForObject(url, String.class));
+  public String getListBlobsUrl(String containerName) {
+    return makeBaseStorageUrl(containerName) + "?restype=container&comp=list";
   }
 
-  @Override
-  public String getListBlobsUrl() {
-    return makeBaseStorageUrl() + "?restype=container&comp=list";
-  }
-
-  private String makeBaseStorageUrl() {
+  private String makeBaseStorageUrl(String containerName) {
     return String.format("https://%s.blob.core.windows.net/%s", accountName, containerName);
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata() {
+  public List<BlobMetaData> getBlobMetadata(String containerName) {
     ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
     listBlobsOptions.withDetails(details);
-    return makeContainerUrl()
+    return makeContainerUrl(containerName)
       .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment()
       .blobItems()
       .stream().map(
         x -> new BlobMetaData(
           x.name(),
-          buildUrlForBlob(x.name()),
+          buildUrlForBlob(x.name(), containerName),
           x.properties().contentLength(),
           x.properties().lastModified()
         )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
       .collect(Collectors.toList());
   }
 
-  private String buildUrlForBlob(String name) {
+  private String buildUrlForBlob(String name, String containerName) {
     return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
   }
 
-  private ContainerURL makeContainerUrl() {
+  private ContainerURL makeContainerUrl(String containerName) {
     ServiceURL serviceURL = makeServiceURL();
     assert serviceURL != null;
     return serviceURL.createContainerURL(containerName);
