@@ -157,22 +157,22 @@
       "fileName": "bea-mne-industry/BEA_MNE_I_STATE.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpGds.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpServ.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ImpGds.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ImpServ.json"
     }

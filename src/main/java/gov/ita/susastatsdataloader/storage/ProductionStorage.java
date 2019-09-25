@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static gov.ita.susastatsdataloader.ResourceHelper.getResourceAsString;
+
 @Slf4j
 @Service
 @Profile({"production", "staging"})
@@ -38,6 +40,18 @@ public class ProductionStorage implements Storage {
 
   @Value("${tarifftooldataloader.azure-storage-container}")
   private String containerName;
+
+  @Override
+  public void init() {
+    if (!containerExists()) {
+      log.info("Initializing production storage");
+      createContainer();
+    }
+
+    log.info("Saving configuration.json to storage");
+    byte[] configBytes = Objects.requireNonNull(getResourceAsString("/fixtures/configuration.json")).getBytes();
+    save("configuration.json", configBytes, null);
+  }
 
   @Override
   public void save(String fileName, byte[] fileContent, String user) {
@@ -58,8 +72,7 @@ public class ProductionStorage implements Storage {
       .blockingGet();
   }
 
-  @Override
-  public boolean containerExists() {
+  private boolean containerExists() {
     ServiceURL serviceURL = makeServiceURL();
     assert serviceURL != null;
     List<ContainerItem> containerItems = serviceURL.listContainersSegment(null, null)
@@ -67,8 +80,7 @@ public class ProductionStorage implements Storage {
     return containerItems.stream().anyMatch(containerItem -> containerItem.name().equals(containerName));
   }
 
-  @Override
-  public void createContainer() {
+  private void createContainer() {
     makeContainerUrl()
       .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
       .blockingGet();
