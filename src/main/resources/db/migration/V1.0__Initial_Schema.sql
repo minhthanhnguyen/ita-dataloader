@@ -233,3 +233,21 @@ begin
         [DataValue] VARCHAR(255)
     )
 end
+
+------------------------------------------------
+begin try drop table BEA_ITA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+IF OBJECT_ID('dbo.BEA_ITA', 'U') IS NULL
+begin
+    CREATE TABLE BEA_ITA (
+        [Indicator] VARCHAR(255),
+        [AreaOrCountry] VARCHAR(255),
+        [Frequency] VARCHAR(255),
+        [Year] INT,
+        [TimeSeriesId] VARCHAR(255),
+        [TimeSeriesDescription] VARCHAR(255),
+        [TimePeriod] VARCHAR(255),
+        [CL_UNIT] VARCHAR(255),
+        [UNIT_MULT] VARCHAR(255),
+        [DataValue] INT
+    )
+end

@@ -38,7 +38,7 @@
     },
     {
       "enabled": false,
-      "url": "https://apps.bea.gov/api/data/?DataSetName=NIPA&Frequency=A&ResultFormat=json&ShowMillions=N&TableName=T60400D&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Year=X&method=GetData",
+      "url": "https://apps.bea.gov/api/data/?DataSetName=NIPA&Frequency=A&ResultFormat=json&ShowMillions=N&TableName=T60400D&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Year=X&method=GetData&ResultFormat=json",
       "fileName": "BEA_NIPA.json"
     },
     {
@@ -157,24 +157,24 @@
       "fileName": "bea-mne-industry/BEA_MNE_I_STATE.json"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
-      "fileName": "BEA_ITA_ExpGds.json"
+      "fileName": "bea-ita/BEA_ITA_ExpGds.json"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
-      "fileName": "BEA_ITA_ExpServ.json"
+      "fileName": "bea-ita/BEA_ITA_ExpServ.json"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
-      "fileName": "BEA_ITA_ImpGds.json"
+      "fileName": "bea-ita/BEA_ITA_ImpGds.json"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
-      "fileName": "BEA_ITA_ImpServ.json"
+      "fileName": "bea-ita/BEA_ITA_ImpServ.json"
     }
   ]
 }
