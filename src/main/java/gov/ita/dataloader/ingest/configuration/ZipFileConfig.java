@@ -1,4 +1,4 @@
-package gov.ita.dataloader.configuration.business;
+package gov.ita.dataloader.ingest.configuration;
 
 import lombok.Data;
 
@@ -9,10 +9,10 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class BusinessUnit {
+public class ZipFileConfig {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
-  String businessName;
-  String containerName;
+  String originalFileName;
+  String destinationFileName;
 }

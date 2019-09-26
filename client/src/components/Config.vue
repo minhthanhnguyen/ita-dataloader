@@ -7,7 +7,7 @@
           <md-icon class="fa fa-angle-double-left"></md-icon>
         </md-button>
       </div>
-      <md-list>
+      <!-- <md-list>
         <li v-for="country in countries" v-bind:key="country.code" v-bind:value="country.code">
           <div class="layout-item country-code">
             <md-field>
@@ -25,7 +25,7 @@
             <md-switch v-model="country.visible"></md-switch>
           </div>
         </li>
-      </md-list>
+      </md-list> -->
       <div v-if="loading" class="loading">loading...</div>
     </div>
   </div>
@@ -45,27 +45,27 @@ import Header from "./Header";
 
 export default {
   name: "Config",
-  props: {
-    tariffRepository: Object
-  },
+  props: ['containerName', 'dataloaderRepository'],
   components: {
     "dataloader-header": Header
   },
   async created() {
     this.loading = true;
-    this.countries = await this.tariffRepository._getCountries();
+    this.dataSetConfigs = await this.dataloaderRepository._getDataSetConfigs(this.containerName);
     this.loading = false;
   },
   data() {
     return {
-      countries: [],
+      dataSetConfigs: [],
       loading: true
     };
   },
   methods: {
     async goToTariffUpload() {
-      await this.tariffRepository._saveCountries(this.countries);
-      this.$router.push({ name: "TariffsUpload" });
+      // await this.tariffRepository._saveCountries(this.countries);
+      this.$router.push({
+        name: "Upload"
+      });
     }
   }
 };

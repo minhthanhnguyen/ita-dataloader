@@ -1,4 +1,4 @@
-package gov.ita.dataloader.configuration;
+package gov.ita.dataloader.ingest.configuration;
 
 import lombok.Data;
 

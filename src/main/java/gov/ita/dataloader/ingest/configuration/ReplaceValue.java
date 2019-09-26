@@ -1,4 +1,4 @@
-package gov.ita.dataloader.configuration;
+package gov.ita.dataloader.ingest.configuration;
 
 import lombok.Data;
 
@@ -9,10 +9,10 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class ZipFileConfig {
+public class ReplaceValue {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
-  String originalFileName;
-  String destinationFileName;
+  String replaceThis;
+  String withThis;
 }

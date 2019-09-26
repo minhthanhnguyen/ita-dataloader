@@ -1,7 +1,7 @@
 package gov.ita.dataloader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.dataloader.configuration.DataLoaderConfigResponse;
+import gov.ita.dataloader.ingest.configuration.DataLoaderConfigResponse;
 import gov.ita.dataloader.datawarehouse.DataWarehouseInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

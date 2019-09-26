@@ -1,4 +1,4 @@
-package gov.ita.dataloader.configuration;
+package gov.ita.dataloader.ingest.configuration.business;
 
 import lombok.Data;
 
@@ -9,10 +9,10 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class ReplaceValue {
+public class BusinessUnit {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
-  String replaceThis;
-  String withThis;
+  String businessName;
+  String containerName;
 }

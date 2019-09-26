@@ -1,6 +1,6 @@
-package gov.ita.dataloader.configuration;
+package gov.ita.dataloader.ingest.configuration;
 
-import gov.ita.dataloader.configuration.business.BusinessUnit;
+import gov.ita.dataloader.ingest.configuration.business.BusinessUnit;
 import lombok.Data;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package gov.ita.dataloader.configuration.business;
+package gov.ita.dataloader.ingest.configuration.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

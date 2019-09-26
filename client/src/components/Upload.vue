@@ -19,10 +19,16 @@
           </md-select>
         </md-field>
       </div>
-      <div class="md-layout-item md-size-30">
+      <div class="md-layout-item md-size-20">
         <md-field>
           <label>Select file</label>
-          <md-file v-model="fileName" @md-change="onFileSelection($event)"></md-file>
+          <md-file @md-change="onFileSelection($event)"></md-file>
+        </md-field>
+      </div>
+      <div class="md-layout-item md-size-40">
+        <md-field>
+          <label>Destination file name</label>
+          <md-input v-model="destinationFileName"></md-input>
         </md-field>
       </div>
       <div class="md-layout-item md-size-10">
@@ -38,7 +44,7 @@
       </div>
       <div v-if="uploading">Uploading...</div>
       <div v-if="uploadSuccessful" class="success">
-        <p>{{this.fileName}} was uploaded successfully!</p>
+        <p>{{this.originalFileName}} was successfully uploaded as {{this.destinationFileName}}!</p>
       </div>
     </div>
   </div>
@@ -63,14 +69,14 @@ import { read, utils } from "xlsx";
 export default {
   name: "Upload",
   props: {
-    businessUnitRepository: Object
+    dataloaderRepository: Object
   },
   components: {
     "dataloader-header": Header
   },
   async created() {
     this.loading = true;
-    this.businessUnits = await this.businessUnitRepository._getBusinessUnits();
+    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
     this.containerName = this.businessUnits[0].containerName;
     this.loading = false;
   },
@@ -78,7 +84,8 @@ export default {
     return {
       containerName: null,
       businessUnits: [],
-      fileName: null,
+      originalFileName: null,
+      destinationFileName: null,
       errorOccured: false,
       errorMessages: [],
       uploadSuccessful: false,
@@ -89,71 +96,31 @@ export default {
   },
   methods: {
     onFileSelection(event) {
-      this.errorMessages = [];
-      this.uploadSuccessful = false;
-      this.fileType = null;
-      if (event[0].name.endsWith(".xlsx")) {
-        this.fileType = "xlsx";
-        this.fileBlob = event[0];
-      } else if (event[0].name.endsWith(".csv")) {
-        this.fileType = "csv";
-        this.fileBlob = event[0];
-      } else {
-        this.fileType = null;
-        this.errorOccured = true;
-      }
+      this.fileBlob = event[0];
+      this.originalFileName = event[0].name;
     },
     async uploadFile() {
       this.uploading = true;
       this.errorMessages = [];
-      if (!this.fileType) {
+      if (!this.fileBlob) {
+        this.setErrorState(["Please select a file to be uploaded."]);
+        return;
+      }
+
+      if (!this.destinationFileName) {
         this.setErrorState([
-          "Please select a .xlsx or .csv file to be uploaded."
+          "Please select a destination file name for the upload."
         ]);
         return;
       }
 
-      let csv = null;
-      var headers = [];
       let fileArrayBuffer = await readUploadedFileAsArrayBuffer(this.fileBlob);
-      if (this.fileType === "xlsx") {
-        let workbook = read(new Uint8Array(fileArrayBuffer), { type: "array" });
-        let workSheetName = workbook.SheetNames[0];
-        let workSheet = workbook.Sheets[workSheetName];
-        var range = utils.decode_range(workSheet["!ref"]);
-        for (var colNum = range.s.c; colNum < range.e.c; colNum++) {
-          const cell = workSheet[utils.encode_cell({ r: 0, c: colNum })];
-          if (!cell) {
-            headers.push(null);
-            continue;
-          }
-          headers.push(cell.v);
-        }
-
-        csv = utils.sheet_to_csv(workSheet);
-      }
-
-      if (this.fileType === "csv") {
-        csv = new TextDecoder("utf-8").decode(new Uint8Array(fileArrayBuffer));
-        headers = csv
-          .substring(0, csv.indexOf("\n"))
-          .replace(/"/g, "")
-          .split(",");
-
-      }
-
-      const message = await this.tariffRepository._saveTariffs(
-        this.countryCode,
-        csv
+      const message = await this.fileRepository._save(
+        this.destinationFileName,
+        fileArrayBuffer,
+        this.containerName
       );
-
-      if (message == "success") {
-        this.uploadSuccessful = true;
-        this.errorOccured = false;
-      } else {
-        this.setErrorState([message]);
-      }
-
+      this.uploadSuccessful = true;
       this.uploading = false;
     },
     setErrorState(errorMessages) {
@@ -163,7 +130,10 @@ export default {
       this.uploading = false;
     },
     goToConfig() {
-      this.$router.push({ name: "Config" });
+      this.$router.push({
+        name: "Config",
+        params: { containerName: this.containerName, dataloaderRepository: this.dataloaderRepository }
+      });
     }
   }
 };

@@ -1,15 +1,15 @@
 package gov.ita.dataloader.ingest;
 
-import gov.ita.dataloader.configuration.DataSetConfig;
-import gov.ita.dataloader.configuration.DataSetConfigRepository;
-import gov.ita.dataloader.configuration.ReplaceValue;
-import gov.ita.dataloader.configuration.ZipFileConfig;
+import gov.ita.dataloader.ingest.configuration.DataSetConfig;
+import gov.ita.dataloader.ingest.configuration.DataSetConfigRepository;
+import gov.ita.dataloader.ingest.configuration.ReplaceValue;
+import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.ingest.storage.BlobMetaData;
 import gov.ita.dataloader.ingest.storage.Storage;
+import gov.ita.dataloader.security.AuthenticationFacade;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
@@ -26,28 +26,32 @@ public class SusaStatsController {
   private RestTemplate restTemplate;
   private ZipFileExtractor zipFileExtractor;
   private DataSetConfigRepository dataSetConfigRepository;
+  private AuthenticationFacade authenticationFacade;
 
   public SusaStatsController(Storage storage,
                              RestTemplate restTemplate,
                              ZipFileExtractor zipFileExtractor,
-                             DataSetConfigRepository dataSetConfigRepository) {
+                             DataSetConfigRepository dataSetConfigRepository,
+                             AuthenticationFacade authenticationFacade) {
     this.storage = storage;
     this.restTemplate = restTemplate;
     this.zipFileExtractor = zipFileExtractor;
     this.dataSetConfigRepository = dataSetConfigRepository;
+    this.authenticationFacade = authenticationFacade;
   }
 
+  @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/configuration")
-  private List<DataSetConfig> getSusaStatsCongig() {
-    return dataSetConfigRepository.findAll();
+  private List<DataSetConfig> getSusaStatsCongig(@RequestParam("container-name") String containerName) {
+    return dataSetConfigRepository.findByContainerName(containerName);
   }
 
+  @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
   public String startIngestProcess(@RequestParam("container-name") String containerName) throws IOException, InterruptedException {
     storage.initContainer(containerName);
 
-    List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig()
-      .stream().filter(dsc -> dsc.getContainerName().equals(containerName)).collect(Collectors.toList());
+    List<DataSetConfig> dataSourceConfigs = getSusaStatsCongig(containerName);
 
     byte[] fileBytes;
     for (DataSetConfig dsc : dataSourceConfigs) {
@@ -73,6 +77,24 @@ public class SusaStatsController {
 
     log.info("Ingest process complete for container: {}", containerName);
     return "done";
+  }
+
+  @PreAuthorize("hasRole('ROLE_EDSP')")
+  @PutMapping("/api/save/file")
+  public String saveFile(@RequestBody FileUploadRequest fileUploadRequest) {
+    storage.save(
+      fileUploadRequest.destinationFileName,
+      fileUploadRequest.getFileBytes(),
+      authenticationFacade.getUserName(),
+      fileUploadRequest.containerName);
+    return "success";
+  }
+
+  @PreAuthorize("hasRole('ROLE_EDSP')")
+  @PutMapping("/api/save/configuration")
+  public String saveConfiguration(@RequestBody List<DataSetConfig> dataSetConfigs) {
+    dataSetConfigRepository.saveAll(dataSetConfigs);
+    return "success";
   }
 
   private void processAndSaveDataSource(String fileName, byte[] fileBytes, List<ReplaceValue> replaceValues, String containerName) {

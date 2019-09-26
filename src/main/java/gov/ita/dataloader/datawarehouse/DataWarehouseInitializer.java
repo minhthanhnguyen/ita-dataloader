@@ -1,11 +1,11 @@
 package gov.ita.dataloader.datawarehouse;
 
-import gov.ita.dataloader.configuration.DataSetConfig;
-import gov.ita.dataloader.configuration.DataSetConfigRepository;
-import gov.ita.dataloader.configuration.ReplaceValueRepository;
-import gov.ita.dataloader.configuration.ZipFileConfigRepository;
-import gov.ita.dataloader.configuration.business.BusinessUnit;
-import gov.ita.dataloader.configuration.business.BusinessUnitRepository;
+import gov.ita.dataloader.ingest.configuration.DataSetConfig;
+import gov.ita.dataloader.ingest.configuration.DataSetConfigRepository;
+import gov.ita.dataloader.ingest.configuration.ReplaceValueRepository;
+import gov.ita.dataloader.ingest.configuration.ZipFileConfigRepository;
+import gov.ita.dataloader.ingest.configuration.business.BusinessUnit;
+import gov.ita.dataloader.ingest.configuration.business.BusinessUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
