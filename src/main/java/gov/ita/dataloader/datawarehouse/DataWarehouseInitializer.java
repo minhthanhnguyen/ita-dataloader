@@ -4,6 +4,8 @@ import gov.ita.dataloader.configuration.DataSetConfig;
 import gov.ita.dataloader.configuration.DataSetConfigRepository;
 import gov.ita.dataloader.configuration.ReplaceValueRepository;
 import gov.ita.dataloader.configuration.ZipFileConfigRepository;
+import gov.ita.dataloader.configuration.business.BusinessUnit;
+import gov.ita.dataloader.configuration.business.BusinessUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public abstract class DataWarehouseInitializer {
   @Autowired
   private ZipFileConfigRepository zipFileConfigRepository;
 
+  @Autowired
+  private BusinessUnitRepository businessUnitRepository;
+
   public abstract void init();
 
   public void saveConfiguration(List<DataSetConfig> dataSetConfigs) {
@@ -33,4 +38,7 @@ public abstract class DataWarehouseInitializer {
     dataSetConfigRepository.saveAll(dataSetConfigs);
   }
 
+  public void saveBusinessUnits(List<BusinessUnit> businessUnits) {
+    businessUnitRepository.saveAll(businessUnits);
+  }
 }

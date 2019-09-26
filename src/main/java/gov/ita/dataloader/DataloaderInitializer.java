@@ -31,7 +31,8 @@ public class DataloaderInitializer implements ApplicationListener<ContextRefresh
     try {
       String configJson = getResourceAsString("/fixtures/configuration.json");
       DataLoaderConfigResponse dataLoaderConfigResponse = objectMapper.readValue(configJson, DataLoaderConfigResponse.class);
-      dataWarehouseInitializer.saveConfiguration(dataLoaderConfigResponse.getDataSetConfigs());
+      dataWarehouseInitializer.saveConfiguration(dataLoaderConfigResponse.getDataSetConfigs()); //TODO: Remove after initial deployment
+      dataWarehouseInitializer.saveBusinessUnits(dataLoaderConfigResponse.getBusinessUnits());
     } catch (IOException e) {
       e.printStackTrace();
     }

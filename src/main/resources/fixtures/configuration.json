@@ -206,5 +206,19 @@
       "fileName": "bea-ita/BEA_ITA_ImpServ.json",
       "containerName": "select-usa"
     }
+  ],
+  "businessUnits": [
+    {
+      "businessName": "Select USA",
+      "containerName": "select-usa"
+    },
+    {
+      "businessName": "OTEXA",
+      "containerName": "otexa"
+    },
+    {
+      "businessName": "FTA Tariff Rates",
+      "containerName": "tariff-rates"
+    }
   ]
 }

@@ -26,8 +26,8 @@ dependencies {
 	implementation 'com.microsoft.rest.v2:client-runtime:2.1.1'
 	implementation 'commons-io:commons-io:2.4'
 	implementation 'org.apache.commons:commons-csv:1.5'
-	compile 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
-
+	implementation 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+	implementation 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

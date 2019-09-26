@@ -1,5 +1,5 @@
-begin try DROP TABLE data_set_config end try begin catch end catch --REMOVE WHEN GOING TO PROD
-CREATE TABLE data_set_config (
+begin try DROP TABLE data_set_config end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE data_set_config (
     [ID] BIGINT IDENTITY,
     [URL] VARCHAR(1000),
     [ENABLED] BIT,
@@ -7,33 +7,40 @@ CREATE TABLE data_set_config (
     [CONTAINER_NAME] VARCHAR(255)
 )
 
-begin try DROP TABLE data_set_config_replace_values end try begin catch end catch --REMOVE WHEN GOING TO PROD
-CREATE TABLE data_set_config_replace_values (
+begin try DROP TABLE data_set_config_replace_values end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE data_set_config_replace_values (
     [DATA_SET_CONFIG_ID] BIGINT,
     [REPLACE_VALUES_ID] BIGINT
 )
 
-begin try DROP TABLE data_set_config_zip_file_configs end try begin catch end catch --REMOVE WHEN GOING TO PROD
-CREATE TABLE data_set_config_zip_file_configs (
+begin try DROP TABLE data_set_config_zip_file_configs end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE data_set_config_zip_file_configs (
     [DATA_SET_CONFIG_ID] BIGINT,
     [ZIP_FILE_CONFIGS_ID] BIGINT
 )
 
-begin try DROP TABLE replace_value end try begin catch end catch --REMOVE WHEN GOING TO PROD
-CREATE TABLE replace_value (
+begin try DROP TABLE replace_value end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE replace_value (
     [ID] BIGINT IDENTITY,
     [REPLACE_THIS] VARCHAR(255),
     [WITH_THIS] VARCHAR(255)
 )
 
-begin try DROP TABLE zip_file_config end try begin catch end catch --REMOVE WHEN GOING TO PROD
-CREATE TABLE zip_file_config (
+begin try DROP TABLE zip_file_config end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE zip_file_config (
     [ID] BIGINT IDENTITY,
     [ORIGINAL_FILE_NAME] VARCHAR(255),
     [DESTINATION_FILE_NAME] VARCHAR(255)
 )
+
+begin try DROP TABLE business_unit end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
+create TABLE business_unit (
+    [ID] BIGINT IDENTITY,
+    [BUSINESS_NAME] VARCHAR(255),
+    [CONTAINER_NAME] VARCHAR(255)
+)
 ------------------------------------------------
-begin try drop table IMF_WEODATA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table IMF_WEODATA end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.IMF_WEODATA', 'U') IS NULL
 begin
     CREATE TABLE IMF_WEODATA (
@@ -94,7 +101,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table WORLDBANK_EASE_COUNTRY_METADATA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table WORLDBANK_EASE_COUNTRY_METADATA end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.WORLDBANK_EASE_COUNTRY_METADATA', 'U') IS NULL
 begin
     CREATE TABLE WORLDBANK_EASE_COUNTRY_METADATA (
@@ -106,7 +113,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table WORLDBANK_EASE_COUNTRY_INDEX end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table WORLDBANK_EASE_COUNTRY_INDEX end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.WORLDBANK_EASE_COUNTRY_INDEX', 'U') IS NULL
 begin
     CREATE TABLE WORLDBANK_EASE_COUNTRY_INDEX (
@@ -176,7 +183,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_NIPA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_NIPA end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_NIPA', 'U') IS NULL
 begin
     CREATE TABLE BEA_NIPA (
@@ -193,7 +200,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_MNE_COUNTRY end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_MNE_COUNTRY end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_MNE_COUNTRY', 'U') IS NULL
 begin
     CREATE TABLE BEA_MNE_COUNTRY (
@@ -212,7 +219,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_MNE_COUNTRY_BY_INDUSTRY end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_MNE_COUNTRY_BY_INDUSTRY end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_MNE_COUNTRY_BY_INDUSTRY', 'U') IS NULL
 begin
     CREATE TABLE BEA_MNE_COUNTRY_BY_INDUSTRY (
@@ -231,7 +238,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_MNE_COUNTRY_UBO_BY_INDUSTRY end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_MNE_COUNTRY_UBO_BY_INDUSTRY end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_MNE_COUNTRY_UBO_BY_INDUSTRY', 'U') IS NULL
 begin
     CREATE TABLE BEA_MNE_COUNTRY_UBO_BY_INDUSTRY (
@@ -250,7 +257,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_MNE_INDUSTRY end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_MNE_INDUSTRY end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_MNE_INDUSTRY', 'U') IS NULL
 begin
     CREATE TABLE BEA_MNE_INDUSTRY (
@@ -269,7 +276,7 @@ begin
     )
 end
 ------------------------------------------------
-begin try drop table BEA_ITA end try begin catch end catch --REMOVE WHEN GOING TO PROD
+begin try drop table BEA_ITA end try begin catch end catch --TODO: REMOVE WHEN GOING TO PROD
 IF OBJECT_ID('dbo.BEA_ITA', 'U') IS NULL
 begin
     CREATE TABLE BEA_ITA (

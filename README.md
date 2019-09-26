@@ -6,6 +6,7 @@ A tool that helps import (stage) data for reporting purposes
 - /api/ingest: Saves data sources to storage
 - /api/storage-content-url: Returns a url that returns a list of all files in storage
 - /api/storage-content: Returns a list of urls to the files in storage
+- /api/business-units: Lists the business units that may injest data
 
 ## Build
 ```./build.sh```
