@@ -1,4 +1,4 @@
-# SUSA Stats Dataloader
+# ITA Dataloader
 A tool that helps import (stage) data for reporting purposes
 
 ## APIs
@@ -16,7 +16,7 @@ A tool that helps import (stage) data for reporting purposes
 ## Production Deployment Notes
  - An Azure Blob Storage account is required
  - An Azure AD App Registration is required procure an OAuth Client ID and Client Secret
- - A MS SQL Server Database needs to exist with a stub named select_usa
+ - A MS SQL Server Database needs to exist with a stub named ita-data
  - The following environment variables need to exist:
     - AZURE_OAUTH_CLIENT_ID: Active Directory Client ID
     - AZURE_OAUTH_CLIENT_SECRET: Active Directory Client Secret
