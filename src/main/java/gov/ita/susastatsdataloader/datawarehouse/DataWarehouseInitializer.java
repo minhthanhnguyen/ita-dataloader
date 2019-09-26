@@ -1,14 +1,14 @@
-package gov.ita.susastatsdataloader;
+package gov.ita.susastatsdataloader.datawarehouse;
 
-import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfig;
-import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfigRepository;
-import gov.ita.susastatsdataloader.ingest.configuration.ReplaceValueRepository;
-import gov.ita.susastatsdataloader.ingest.configuration.ZipFileConfigRepository;
+import gov.ita.susastatsdataloader.configuration.DataSetConfig;
+import gov.ita.susastatsdataloader.configuration.DataSetConfigRepository;
+import gov.ita.susastatsdataloader.configuration.ReplaceValueRepository;
+import gov.ita.susastatsdataloader.configuration.ZipFileConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-abstract class DatabaseInitializer {
+public abstract class DataWarehouseInitializer {
 
   @Autowired
   private DataSetConfigRepository dataSetConfigRepository;
@@ -19,9 +19,9 @@ abstract class DatabaseInitializer {
   @Autowired
   private ZipFileConfigRepository zipFileConfigRepository;
 
-  abstract void init();
+  public abstract void init();
 
-  void saveConfiguration(List<DataSetConfig> dataSetConfigs) {
+  public void saveConfiguration(List<DataSetConfig> dataSetConfigs) {
     dataSetConfigs.stream().map(DataSetConfig::getReplaceValues).forEach(replaceValues -> {
       if (replaceValues != null)
         replaceValueRepository.saveAll(replaceValues);

@@ -1,4 +1,4 @@
-package gov.ita.susastatsdataloader.storage;
+package gov.ita.susastatsdataloader.ingest.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

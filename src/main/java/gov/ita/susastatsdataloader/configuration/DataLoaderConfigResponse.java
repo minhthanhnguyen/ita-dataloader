@@ -1,4 +1,4 @@
-package gov.ita.susastatsdataloader.ingest.configuration;
+package gov.ita.susastatsdataloader.configuration;
 
 import lombok.Data;
 

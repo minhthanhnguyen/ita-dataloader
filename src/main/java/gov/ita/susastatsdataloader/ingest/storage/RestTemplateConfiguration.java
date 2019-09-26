@@ -1,4 +1,4 @@
-package gov.ita.susastatsdataloader.storage;
+package gov.ita.susastatsdataloader.ingest.storage;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

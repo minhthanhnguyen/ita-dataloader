@@ -1,8 +1,8 @@
 package gov.ita.susastatsdataloader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.susastatsdataloader.ingest.configuration.DataLoaderConfigResponse;
-import gov.ita.susastatsdataloader.storage.Storage;
+import gov.ita.susastatsdataloader.configuration.DataLoaderConfigResponse;
+import gov.ita.susastatsdataloader.datawarehouse.DataWarehouseInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -18,10 +18,7 @@ import static gov.ita.susastatsdataloader.ResourceHelper.getResourceAsString;
 public class SusaStatsDataloaderInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
   @Autowired
-  private Storage storage;
-
-  @Autowired
-  private DatabaseInitializer databaseInitializer;
+  private DataWarehouseInitializer dataWarehouseInitializer;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -29,12 +26,12 @@ public class SusaStatsDataloaderInitializer implements ApplicationListener<Conte
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     log.info("Initializing database");
-    databaseInitializer.init();
+    dataWarehouseInitializer.init();
 
     try {
       String configJson = getResourceAsString("/fixtures/configuration.json");
       DataLoaderConfigResponse dataLoaderConfigResponse = objectMapper.readValue(configJson, DataLoaderConfigResponse.class);
-      databaseInitializer.saveConfiguration(dataLoaderConfigResponse.getDataSetConfigs());
+      dataWarehouseInitializer.saveConfiguration(dataLoaderConfigResponse.getDataSetConfigs());
     } catch (IOException e) {
       e.printStackTrace();
     }

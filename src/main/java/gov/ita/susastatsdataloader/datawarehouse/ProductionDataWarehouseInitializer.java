@@ -1,5 +1,6 @@
-package gov.ita.susastatsdataloader;
+package gov.ita.susastatsdataloader.datawarehouse;
 
+import gov.ita.susastatsdataloader.SusaStatsDataloaderInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -18,7 +19,7 @@ import static gov.ita.susastatsdataloader.ResourceHelper.getResourceAsString;
 @Slf4j
 @Service
 @Profile({"staging", "production"})
-public class ProductionDatabaseInitializer extends DatabaseInitializer {
+public class ProductionDataWarehouseInitializer extends DataWarehouseInitializer {
 
   @Autowired
   private JdbcTemplate jdbcTemplate;

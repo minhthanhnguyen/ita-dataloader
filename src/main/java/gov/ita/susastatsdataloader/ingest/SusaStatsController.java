@@ -1,11 +1,11 @@
 package gov.ita.susastatsdataloader.ingest;
 
-import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfig;
-import gov.ita.susastatsdataloader.ingest.configuration.DataSetConfigRepository;
-import gov.ita.susastatsdataloader.ingest.configuration.ReplaceValue;
-import gov.ita.susastatsdataloader.ingest.configuration.ZipFileConfig;
-import gov.ita.susastatsdataloader.storage.BlobMetaData;
-import gov.ita.susastatsdataloader.storage.Storage;
+import gov.ita.susastatsdataloader.configuration.DataSetConfig;
+import gov.ita.susastatsdataloader.configuration.DataSetConfigRepository;
+import gov.ita.susastatsdataloader.configuration.ReplaceValue;
+import gov.ita.susastatsdataloader.configuration.ZipFileConfig;
+import gov.ita.susastatsdataloader.ingest.storage.BlobMetaData;
+import gov.ita.susastatsdataloader.ingest.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

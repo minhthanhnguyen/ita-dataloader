@@ -1,4 +1,4 @@
-package gov.ita.susastatsdataloader.storage;
+package gov.ita.susastatsdataloader.ingest.storage;
 
 import com.microsoft.azure.storage.blob.*;
 import com.microsoft.azure.storage.blob.models.BlobHTTPHeaders;
