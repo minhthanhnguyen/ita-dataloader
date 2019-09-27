@@ -15,11 +15,27 @@ export default class DataloaderRepository {
   }
 
   async _getBusinessUnits() {
-    let businessUnitResponse = await axios.get('/api/business-units')
-    return businessUnitResponse.data
+    let businessUnitResponse = await axios.get('/api/business-units');
+    return businessUnitResponse.data;
   }
 
   async _getDataSetConfigs(containerName) {
-    console.log(containerName);
+    let dataSetConfigsResponse = await axios.get('/api/configuration', {
+      params: {
+        containerName
+      }
+    })
+
+    return dataSetConfigsResponse.data;
+  }
+
+  async _getStorageContent(containerName) {
+    let storageContentResponse = await axios.get('/api/storage-content', {
+      params: {
+        containerName
+      }
+    })
+
+    return storageContentResponse.data;
   }
 }

@@ -40,13 +40,13 @@ public class SusaStatsController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/configuration")
-  private List<DataSetConfig> getSusaStatsCongig(@RequestParam("container-name") String containerName) {
+  private List<DataSetConfig> getDataSetCongigs(@RequestParam("containerName") String containerName) {
     return dataSetConfigRepository.findByContainerName(containerName);
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
-  public String startIngestProcess(@RequestParam("container-name") String containerName) {
+  public String startIngestProcess(@RequestParam("containerName") String containerName) {
     storage.initContainer(containerName);
     List<DataSetConfig> dataSourceConfigs = dataSetConfigRepository.findByContainerName(containerName);
     ingestProcessor.process(dataSourceConfigs, containerName, authenticationFacade.getUserName());
@@ -57,6 +57,7 @@ public class SusaStatsController {
   @PutMapping("/api/save/file")
   public String saveFile(@RequestParam("file") MultipartFile file,
                          @RequestParam("containerName") String containerName) throws IOException {
+    storage.initContainer(containerName);
     storage.save(
       file.getOriginalFilename(),
       file.getBytes(),
@@ -72,19 +73,14 @@ public class SusaStatsController {
     return "success";
   }
 
-
-
-
-
   @GetMapping("/api/storage-content-url")
-  public String getStorageContentUrl(@RequestParam("container-name") String containerName) {
+  public String getStorageContentUrl(@RequestParam("containerName") String containerName) {
     return storage.getListBlobsUrl(containerName);
   }
 
   @GetMapping("/api/storage-content")
-  public List<BlobMetaData> getStorageMetadata(@RequestParam("container-name") String containerName) {
+  public List<BlobMetaData> getStorageMetadata(@RequestParam("containerName") String containerName) {
     return storage.getBlobMetadata(containerName);
   }
-
 
 }

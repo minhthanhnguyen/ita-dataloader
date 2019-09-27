@@ -1,9 +1,7 @@
 package gov.ita.dataloader.ingest.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.storage.blob.models.BlobHTTPHeaders;
-import com.microsoft.azure.storage.blob.models.ContainerItem;
-import com.microsoft.azure.storage.blob.models.PublicAccessType;
+import com.microsoft.azure.storage.blob.models.*;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Flowable;
@@ -18,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,17 +86,23 @@ public class ProductionStorage implements Storage {
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
     listBlobsOptions.withDetails(details);
-    return makeContainerUrl(containerName)
-      .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment()
-      .blobItems()
-      .stream().map(
-        x -> new BlobMetaData(
-          x.name(),
-          buildUrlForBlob(x.name(), containerName),
-          x.properties().contentLength(),
-          x.properties().lastModified()
-        )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
-      .collect(Collectors.toList());
+    if (containerExists(containerName)) {
+      BlobFlatListSegment segment = makeContainerUrl(containerName)
+        .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
+      if (segment != null && segment.blobItems().size() > 0) {
+        return segment.blobItems()
+          .stream().map(
+            x -> new BlobMetaData(
+              x.name(),
+              buildUrlForBlob(x.name(), containerName),
+              x.properties().contentLength(),
+              x.properties().lastModified(),
+              x.metadata().get("uploaded_by")
+            )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
+          .collect(Collectors.toList());
+      }
+    }
+    return Collections.emptyList();
   }
 
   private String buildUrlForBlob(String name, String containerName) {

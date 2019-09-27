@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +38,11 @@ public class DevelopmentStorage implements Storage {
     List<BlobMetaData> blobMetaDataList = new ArrayList<>();
 
     for (String fileName : storageContent.keySet()) {
-      byte[] fileContent = storageContent.get(fileName);
-      BlobMetaData blobMetaData = new BlobMetaData(fileName, "http://" + fileName, 123L, null);
+      BlobMetaData blobMetaData = new BlobMetaData(
+        fileName,
+        "http://" + fileName,
+        123L, OffsetDateTime.now(),
+        "TestUser@trade.gov");
       blobMetaDataList.add(blobMetaData);
     }
 

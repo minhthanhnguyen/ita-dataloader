@@ -13,5 +13,6 @@ public class BlobMetaData {
   String name;
   String url;
   Long size;
-  OffsetDateTime modified;
+  OffsetDateTime uploadedAt;
+  String uploadedBy;
 }

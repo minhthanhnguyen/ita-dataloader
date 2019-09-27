@@ -10,7 +10,7 @@
       <div class="md-layout-item md-size-20">
         <md-field>
           <label>Business Unit</label>
-          <md-select v-model="containerName">
+          <md-select v-model="containerName" @md-selected="getStorageFileNames()">
             <md-option
               v-for="business in businessUnits"
               v-bind:key="business.containerName"
@@ -26,10 +26,9 @@
         </md-field>
       </div>
       <div class="md-layout-item md-size-40">
-        <md-field>
+        <md-autocomplete v-model="destinationFileName" :md-options="destinationFileNameOptions">
           <label>Destination file name</label>
-          <md-input v-model="destinationFileName"></md-input>
-        </md-field>
+        </md-autocomplete>
       </div>
       <div class="md-layout-item md-size-10">
         <md-button class="md-secondary md-raised top-btn" @click="uploadFile()">Upload</md-button>
@@ -43,9 +42,33 @@
         </ul>
       </div>
       <div v-if="uploading">Uploading...</div>
-      <div v-if="uploadSuccessful" class="success">
-        <p>{{this.originalFileName}} was successfully uploaded as {{this.destinationFileName}}!</p>
-      </div>
+
+      <md-dialog-alert
+        :md-active.sync="uploadSuccessful"
+        md-content="Your file was uploaded successfully! "
+        md-confirm-text="Close"
+      />
+    </div>
+    <div class="storage-content">
+      <md-table>
+        <md-table-row>
+          <md-table-head>File Name</md-table-head>
+          <md-table-head>URL</md-table-head>
+          <md-table-head>Uploaded At</md-table-head>
+          <md-table-head>Uploaded By</md-table-head>
+          <md-table-head md-numeric>Size</md-table-head>
+        </md-table-row>
+
+        <md-table-row v-for="file in storageContent" v-bind:key="file.name">
+          <md-table-cell>{{file.name}}</md-table-cell>
+          <md-table-cell>
+            <a v-bind:href="file.url">{{file.url}}</a>
+          </md-table-cell>
+          <md-table-cell>{{file.uploadedAt}}</md-table-cell>
+          <md-table-cell>{{file.uploadedBy}}</md-table-cell>
+          <md-table-cell md-numeric>{{file.size}}</md-table-cell>
+        </md-table-row>
+      </md-table>
     </div>
   </div>
 </template>
@@ -78,12 +101,15 @@ export default {
     this.loading = true;
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
     this.containerName = this.businessUnits[0].containerName;
+    await this.getStorageFileNames();
     this.loading = false;
   },
   data() {
     return {
       containerName: null,
       businessUnits: [],
+      storageContent: [],
+      destinationFileNameOptions: [],
       originalFileName: null,
       destinationFileName: null,
       errorOccured: false,
@@ -98,10 +124,12 @@ export default {
     onFileSelection(event) {
       this.fileBlob = event[0];
       this.originalFileName = event[0].name;
-      this.uploadSuccessful = false
+      this.destinationFileName = event[0].name;
+      this.uploadSuccessful = false;
     },
     async uploadFile() {
       this.uploading = true;
+      this.uploadSuccessful = false;
       this.errorMessages = [];
       if (!this.fileBlob) {
         this.setErrorState(["Please select a file to be uploaded."]);
@@ -123,12 +151,23 @@ export default {
       );
       this.uploadSuccessful = true;
       this.uploading = false;
+
+      await this.getStorageFileNames();
     },
     setErrorState(errorMessages) {
       this.errorOccured = true;
       this.errorMessages = errorMessages;
       this.uploadSuccessful = false;
       this.uploading = false;
+    },
+    async getStorageFileNames() {
+      this.storageContent = await this.dataloaderRepository._getStorageContent(
+        this.containerName
+      );
+
+      this.destinationFileNameOptions = this.storageContent.map(
+        file => file.name
+      );
     },
     goToConfig() {
       this.$router.push({
