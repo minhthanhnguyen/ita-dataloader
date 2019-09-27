@@ -25,9 +25,14 @@ spring:
     url: ${AZURE_DB_URL}
     username: ${AZURE_DB_USERNAME}
     password: ${AZURE_DB_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+
 ---
 spring:
   profiles: production
@@ -38,6 +43,10 @@ spring:
     url: ${AZURE_DB_URL}
     username: ${AZURE_DB_USERNAME}
     password: ${AZURE_DB_PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   security:
     oauth2:
       client:
