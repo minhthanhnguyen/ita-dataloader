@@ -98,6 +98,7 @@ export default {
     onFileSelection(event) {
       this.fileBlob = event[0];
       this.originalFileName = event[0].name;
+      this.uploadSuccessful = false
     },
     async uploadFile() {
       this.uploading = true;
@@ -114,11 +115,11 @@ export default {
         return;
       }
 
-      let fileArrayBuffer = await readUploadedFileAsArrayBuffer(this.fileBlob);
-      const message = await this.fileRepository._save(
-        this.destinationFileName,
-        fileArrayBuffer,
-        this.containerName
+      const formData = new FormData();
+      formData.append("file", this.fileBlob, this.destinationFileName);
+      const message = await this.dataloaderRepository._save(
+        this.containerName,
+        formData
       );
       this.uploadSuccessful = true;
       this.uploading = false;
@@ -132,7 +133,10 @@ export default {
     goToConfig() {
       this.$router.push({
         name: "Config",
-        params: { containerName: this.containerName, dataloaderRepository: this.dataloaderRepository }
+        params: {
+          containerName: this.containerName,
+          dataloaderRepository: this.dataloaderRepository
+        }
       });
     }
   }

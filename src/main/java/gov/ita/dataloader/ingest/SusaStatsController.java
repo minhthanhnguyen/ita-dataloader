@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -81,12 +82,12 @@ public class SusaStatsController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @PutMapping("/api/save/file")
-  public String saveFile(@RequestBody FileUploadRequest fileUploadRequest) {
+  public String saveFile(@RequestParam("file") MultipartFile file, @RequestParam("containerName") String containerName) throws IOException {
     storage.save(
-      fileUploadRequest.destinationFileName,
-      fileUploadRequest.getFileBytes(),
+      file.getOriginalFilename(),
+      file.getBytes(),
       authenticationFacade.getUserName(),
-      fileUploadRequest.containerName);
+      containerName);
     return "success";
   }
 

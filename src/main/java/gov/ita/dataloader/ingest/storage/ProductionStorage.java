@@ -139,6 +139,8 @@ public class ProductionStorage implements Storage {
       contentType = "text/csv";
     if (fileName.endsWith(".xml"))
       contentType = "application/xml";
+    if (fileName.endsWith(".txt"))
+      contentType = "text/plain";
 
     BlobHTTPHeaders headers = new BlobHTTPHeaders();
     headers.withBlobContentType(contentType);

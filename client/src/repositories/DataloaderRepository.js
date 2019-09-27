@@ -2,13 +2,14 @@ const axios = require('axios')
 
 export default class DataloaderRepository {
 
-  async _save(destinationFileName, fileArrayBuffer, containerName) {
-    let fileContent = String.fromCharCode.apply(null, new Uint8Array(fileArrayBuffer));
-    let base64FileContent = btoa(fileContent);
-    let fileSaveResponse = await axios.put('/api/save/file', {
-      destinationFileName,
-      base64FileContent,
-      containerName
+  async _save(containerName, file) {
+    let fileSaveResponse = await axios({
+      url: '/api/save/file',
+      method: 'PUT',
+      params: {
+        containerName
+      },
+      data: file
     })
     return fileSaveResponse.data
   }
