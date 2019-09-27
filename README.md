@@ -1,12 +1,24 @@
 # ITA Dataloader
 A tool that helps import (stage) data for reporting purposes
 
-## APIs
-- /api/configuration: Displays configuration urls
-- /api/ingest: Saves data sources to storage
-- /api/storage-content-url: Returns a url that returns a list of all files in storage
-- /api/storage-content: Returns a list of urls to the files in storage
-- /api/business-units: Lists the business units that may injest data
+## Local Development
+Steps to run this application on you local for development purposes
+
+**Prerequisites** 
+ - Java 8
+ - Gradle
+ - NPM (`cd client` then `npm install`)
+
+**Backend** 
+ - `gradle bootRun `, http://localhost:8080
+
+**Frontend** `cd client && npm start`, http://localhost:8081
+
+## Running Tests
+
+**Backend** `./gradlew test`
+
+**Frontend**  `cd client && npm test`
 
 ## Build
 ```./build.sh```
