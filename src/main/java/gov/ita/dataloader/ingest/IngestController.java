@@ -2,36 +2,30 @@ package gov.ita.dataloader.ingest;
 
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.DataSetConfigRepository;
-import gov.ita.dataloader.ingest.configuration.ReplaceValue;
-import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.ingest.storage.BlobMetaData;
 import gov.ita.dataloader.ingest.storage.Storage;
 import gov.ita.dataloader.security.AuthenticationFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-public class SusaStatsController {
+public class IngestController {
 
   private Storage storage;
   private IngestProcessor ingestProcessor;
   private DataSetConfigRepository dataSetConfigRepository;
   private AuthenticationFacade authenticationFacade;
 
-  public SusaStatsController(Storage storage,
-                             IngestProcessor ingestProcessor,
-                             DataSetConfigRepository dataSetConfigRepository,
-                             AuthenticationFacade authenticationFacade) {
+  public IngestController(Storage storage,
+                          IngestProcessor ingestProcessor,
+                          DataSetConfigRepository dataSetConfigRepository,
+                          AuthenticationFacade authenticationFacade) {
     this.storage = storage;
     this.ingestProcessor = ingestProcessor;
     this.dataSetConfigRepository = dataSetConfigRepository;
@@ -51,6 +45,11 @@ public class SusaStatsController {
     List<DataSetConfig> dataSourceConfigs = dataSetConfigRepository.findByContainerName(containerName);
     ingestProcessor.process(dataSourceConfigs, containerName, authenticationFacade.getUserName());
     return "done";
+  }
+
+  @GetMapping("/api/ingest/status")
+  public IngestProcessorStatus getIngestProcessorStatus(@RequestParam("containerName") String containerName) {
+    return ingestProcessor.getStatus(containerName);
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
@@ -82,5 +81,4 @@ public class SusaStatsController {
   public List<BlobMetaData> getStorageMetadata(@RequestParam("containerName") String containerName) {
     return storage.getBlobMetadata(containerName);
   }
-
 }
