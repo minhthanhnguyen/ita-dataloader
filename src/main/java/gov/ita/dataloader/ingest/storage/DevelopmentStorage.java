@@ -15,7 +15,7 @@ import java.util.Map;
 @Profile("development")
 public class DevelopmentStorage implements Storage {
 
-  private Map<String, byte[]> storageContent = new HashMap<>();
+  private Map<String, Map<String, String>> storageContent = new HashMap<>();
 
   @Override
   public void initContainer(String containerName) {
@@ -25,7 +25,13 @@ public class DevelopmentStorage implements Storage {
   @Override
   public void save(String fileName, byte[] fileContent, String user, String containerName) {
     log.info("Saving blob: {}, {}, {}", fileName, containerName, user);
-    storageContent.put(fileName, fileContent);
+
+    Map<String, String> containerContent = storageContent.get(containerName);
+    if (containerContent == null)
+      containerContent = new HashMap<>();
+
+    containerContent.put(fileName, user);
+    storageContent.put(containerName, containerContent);
   }
 
   @Override
@@ -36,14 +42,18 @@ public class DevelopmentStorage implements Storage {
   @Override
   public List<BlobMetaData> getBlobMetadata(String containerName) {
     List<BlobMetaData> blobMetaDataList = new ArrayList<>();
-
-    for (String fileName : storageContent.keySet()) {
-      BlobMetaData blobMetaData = new BlobMetaData(
-        fileName,
-        "http://" + fileName,
-        123L, OffsetDateTime.now(),
-        "TestUser@trade.gov");
-      blobMetaDataList.add(blobMetaData);
+    for (String container : storageContent.keySet()) {
+      if (container.equals(containerName)) {
+        Map<String, String> containerContent = storageContent.get(container);
+        for (String fileName : containerContent.keySet()) {
+          BlobMetaData blobMetaData = new BlobMetaData(
+            fileName,
+            String.format("http://some-cloud-strage-url.com/%s/%s", containerName, fileName),
+            123L, OffsetDateTime.now(),
+            containerContent.get(fileName));
+          blobMetaDataList.add(blobMetaData);
+        }
+      }
     }
 
     return blobMetaDataList;

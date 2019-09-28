@@ -168,6 +168,9 @@ export default {
       this.destinationFileNameOptions = this.storageContent.map(
         file => file.name
       );
+
+      this.destinationFileName = null;
+      this.fileBlob = null;
     },
     goToConfig() {
       this.$router.push({

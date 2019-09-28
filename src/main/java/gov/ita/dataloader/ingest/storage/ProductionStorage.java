@@ -89,7 +89,7 @@ public class ProductionStorage implements Storage {
     if (containerExists(containerName)) {
       BlobFlatListSegment segment = makeContainerUrl(containerName)
         .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
-      if (segment != null && segment.blobItems().size() > 0) {
+      if (segment != null && segment.blobItems() != null) {
         return segment.blobItems()
           .stream().map(
             x -> new BlobMetaData(
@@ -97,7 +97,7 @@ public class ProductionStorage implements Storage {
               buildUrlForBlob(x.name(), containerName),
               x.properties().contentLength(),
               x.properties().lastModified(),
-              x.metadata().get("uploaded_by")
+              x.metadata() != null ? x.metadata().getOrDefault("uploaded_by", "---") : "---"
             )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
           .collect(Collectors.toList());
       }
