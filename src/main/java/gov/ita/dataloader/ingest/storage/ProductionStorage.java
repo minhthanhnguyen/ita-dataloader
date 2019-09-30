@@ -1,7 +1,10 @@
 package gov.ita.dataloader.ingest.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.storage.blob.models.*;
+import com.microsoft.azure.storage.blob.models.BlobFlatListSegment;
+import com.microsoft.azure.storage.blob.models.BlobHTTPHeaders;
+import com.microsoft.azure.storage.blob.models.ContainerItem;
+import com.microsoft.azure.storage.blob.models.PublicAccessType;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Flowable;
@@ -16,8 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,6 +35,14 @@ public class ProductionStorage implements Storage {
 
   @Value("${storage-params.azure-storage-account-key}")
   private String accountKey;
+
+  @Override
+  public void createContainer(String containerName) {
+    log.info("Initializing container: {}", containerName);
+    makeContainerUrl(containerName)
+      .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
+      .blockingGet();
+  }
 
   @Override
   public void save(String fileName, byte[] fileContent, String user, String containerName) {
@@ -53,24 +63,6 @@ public class ProductionStorage implements Storage {
       .blockingGet();
   }
 
-  private boolean containerExists(String containerName) {
-    ServiceURL serviceURL = makeServiceURL();
-    assert serviceURL != null;
-    List<ContainerItem> containerItems = serviceURL.listContainersSegment(null, null)
-      .blockingGet().body().containerItems();
-    return containerItems.stream().anyMatch(containerItem -> containerItem.name().equals(containerName));
-  }
-
-  @Override
-  public void initContainer(String containerName) {
-    if (!containerExists(containerName)) {
-      log.info("Initializing container: {}", containerName);
-      makeContainerUrl(containerName)
-        .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
-        .blockingGet();
-    }
-  }
-
   @Override
   public String getListBlobsUrl(String containerName) {
     return makeBaseStorageUrl(containerName) + "?restype=container&comp=list";
@@ -86,23 +78,38 @@ public class ProductionStorage implements Storage {
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
     listBlobsOptions.withDetails(details);
-    if (containerExists(containerName)) {
-      BlobFlatListSegment segment = makeContainerUrl(containerName)
-        .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
-      if (segment != null && segment.blobItems() != null) {
-        return segment.blobItems()
-          .stream().map(
-            x -> new BlobMetaData(
-              x.name(),
-              buildUrlForBlob(x.name(), containerName),
-              x.properties().contentLength(),
-              x.properties().lastModified(),
-              x.metadata() != null ? x.metadata().getOrDefault("uploaded_by", "---") : "---"
-            )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
-          .collect(Collectors.toList());
-      }
+    BlobFlatListSegment segment = makeContainerUrl(containerName)
+      .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
+    if (segment != null && segment.blobItems() != null) {
+      return segment.blobItems()
+        .stream().map(
+          x -> new BlobMetaData(
+            x.name(),
+            buildUrlForBlob(x.name(), containerName),
+            x.properties().contentLength(),
+            x.properties().lastModified(),
+            x.metadata() != null ? x.metadata().getOrDefault("uploaded_by", "---") : "---"
+          )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
+        .collect(Collectors.toList());
     }
+
     return Collections.emptyList();
+  }
+
+  @Override
+  public Set<String> getContainerNames() {
+    return Objects.requireNonNull(makeServiceURL()).listContainersSegment(null, null)
+      .blockingGet().body()
+      .containerItems().stream().map(ContainerItem::name)
+      .collect(Collectors.toSet());
+  }
+
+  @Override
+  public byte[] getBlob(String containerName, String blobName) {
+    Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getName().equals(blobName)).findFirst();
+    if (blobMetaData.isPresent())
+      return restTemplate.getForEntity(blobMetaData.get().getUrl(), byte[].class).getBody();
+    return null;
   }
 
   private String buildUrlForBlob(String name, String containerName) {

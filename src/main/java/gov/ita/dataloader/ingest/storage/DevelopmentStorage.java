@@ -5,32 +5,29 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
 @Profile("development")
 public class DevelopmentStorage implements Storage {
 
-  private Map<String, Map<String, String>> storageContent = new HashMap<>();
+  private Map<String, Map<String, byte[]>> storageContent = new HashMap<>();
 
   @Override
-  public void initContainer(String containerName) {
-    log.info("Initializing container: {}", containerName);
+  public void createContainer(String containerName) {
+
   }
 
   @Override
   public void save(String fileName, byte[] fileContent, String user, String containerName) {
     log.info("Saving blob: {}, {}, {}", fileName, containerName, user);
 
-    Map<String, String> containerContent = storageContent.get(containerName);
+    Map<String, byte[]> containerContent = storageContent.get(containerName);
     if (containerContent == null)
       containerContent = new HashMap<>();
 
-    containerContent.put(fileName, user);
+    containerContent.put(fileName, fileContent);
     storageContent.put(containerName, containerContent);
   }
 
@@ -44,18 +41,29 @@ public class DevelopmentStorage implements Storage {
     List<BlobMetaData> blobMetaDataList = new ArrayList<>();
     for (String container : storageContent.keySet()) {
       if (container.equals(containerName)) {
-        Map<String, String> containerContent = storageContent.get(container);
+        Map<String, byte[]> containerContent = storageContent.get(container);
         for (String fileName : containerContent.keySet()) {
           BlobMetaData blobMetaData = new BlobMetaData(
             fileName,
             String.format("http://some-cloud-strage-url.com/%s/%s", containerName, fileName),
-            123L, OffsetDateTime.now(),
-            containerContent.get(fileName));
+            123L,
+            OffsetDateTime.now(),
+            "TestUser@trade.gov");
           blobMetaDataList.add(blobMetaData);
         }
       }
     }
 
     return blobMetaDataList;
+  }
+
+  @Override
+  public Set<String> getContainerNames() {
+    return storageContent.keySet();
+  }
+
+  @Override
+  public byte[] getBlob(String containerName, String blobName) {
+    return storageContent.get(containerName).get(blobName);
   }
 }

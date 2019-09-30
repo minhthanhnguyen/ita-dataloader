@@ -47,7 +47,6 @@
         </ul>
       </div>
       <div v-if="uploading">Uploading...</div>
-
       <md-dialog-alert
         :md-active.sync="uploadSuccessful"
         md-content="Your file was uploaded successfully! "
@@ -159,7 +158,7 @@ export default {
       this.uploadSuccessful = true;
       this.uploading = false;
 
-      await this.getStorageFileNames();
+      await this.updateBusinessUnitContent();
     },
     setErrorState(errorMessages) {
       this.errorOccured = true;
