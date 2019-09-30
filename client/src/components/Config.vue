@@ -1,11 +1,16 @@
 <template>
   <div>
-    <dataloader-header />
+    <dataloader-header v-bind:businessUnitName="businessUnitName" />
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-5">
-        <md-button class="md-icon-button" @click="goToTariffUpload()">
-          <md-icon class="fa fa-angle-double-left"></md-icon>
-        </md-button>
+        <div class="nav-btns">
+          <md-button class="md-icon-button" @click="goToFileUpload()">
+            <md-icon class="fa fa-angle-double-left"></md-icon>
+          </md-button>
+          <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestLog()">
+            <md-icon class="fa fa-bars"></md-icon>
+          </md-button>
+        </div>
       </div>
       <!-- <md-list>
         <li v-for="country in countries" v-bind:key="country.code" v-bind:value="country.code">
@@ -25,7 +30,7 @@
             <md-switch v-model="country.visible"></md-switch>
           </div>
         </li>
-      </md-list> -->
+      </md-list>-->
       <div v-if="loading" class="loading">loading...</div>
     </div>
   </div>
@@ -45,26 +50,32 @@ import Header from "./Header";
 
 export default {
   name: "Config",
-  props: ['containerName', 'dataloaderRepository'],
+  props: ["businessUnitName", "dataloaderRepository"],
   components: {
     "dataloader-header": Header
   },
   async created() {
     this.loading = true;
+    this.containerName = this.$route.params['containerName'];
     this.dataSetConfigs = await this.dataloaderRepository._getDataSetConfigs(this.containerName);
     this.loading = false;
   },
   data() {
     return {
       dataSetConfigs: [],
-      loading: true
+      loading: true,
+      containerName: null
     };
   },
   methods: {
-    async goToTariffUpload() {
-      // await this.tariffRepository._saveCountries(this.countries);
+    async goToFileUpload() {
       this.$router.push({
-        name: "Upload"
+        name: "Upload",
+        params: {
+          containerName: this.containerName,
+          dataloaderRepository: this.dataloaderRepository,
+          businessUnitName: this.businessUnitName
+        }
       });
     }
   }

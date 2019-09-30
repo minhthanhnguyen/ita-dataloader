@@ -30,4 +30,7 @@ export default {
   margin-top: 15px;
 }
 
+.nav-btns {
+  display: flex;
+}
 </style>

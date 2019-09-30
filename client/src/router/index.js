@@ -19,7 +19,9 @@ export default new Router({
       path: '/config/:containerName',
       name: 'Config',
       component: Config,
-      props: true
+      props: {
+        dataloaderRepository: new DataloaderRepository()
+      }
     }
   ]
 })

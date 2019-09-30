@@ -1,16 +1,21 @@
 <template>
   <div>
-    <dataloader-header />
+    <dataloader-header v-bind:businessUnitName="businessUnitName" />
     <div class="md-layout md-gutter">
-      <div class="md-layout-item md-size-5">
-        <md-button class="md-icon-button config-btn" @click="goToConfig()">
-          <md-icon class="fa fa-cog"></md-icon>
-        </md-button>
+      <div class="md-layout-item md-size-10">
+        <div class="nav-btns">
+          <md-button class="md-icon-button url-config-btn" @click="goToUrlIngestConfig()">
+            <md-icon class="fa fa-cog"></md-icon>
+          </md-button>
+          <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestLog()">
+            <md-icon class="fa fa-bars"></md-icon>
+          </md-button>
+        </div>
       </div>
       <div class="md-layout-item md-size-20">
         <md-field>
           <label>Business Unit</label>
-          <md-select v-model="containerName" @md-selected="getStorageFileNames()">
+          <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()">
             <md-option
               v-for="business in businessUnits"
               v-bind:key="business.containerName"
@@ -101,12 +106,14 @@ export default {
     this.loading = true;
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
     this.containerName = this.businessUnits[0].containerName;
-    await this.getStorageFileNames();
+    this.businessUnitName = this.businessUnits[0].businessName;
+    await this.updateBusinessUnitContent();
     this.loading = false;
   },
   data() {
     return {
       containerName: null,
+      businessUnitName: null,
       businessUnits: [],
       storageContent: [],
       destinationFileNameOptions: [],
@@ -160,7 +167,7 @@ export default {
       this.uploadSuccessful = false;
       this.uploading = false;
     },
-    async getStorageFileNames() {
+    async updateBusinessUnitContent() {
       this.storageContent = await this.dataloaderRepository._getStorageContent(
         this.containerName
       );
@@ -169,15 +176,18 @@ export default {
         file => file.name
       );
 
+      this.businessUnitName = this.businessUnits.find(
+        b => b.containerName === this.containerName
+      ).businessName;
       this.destinationFileName = null;
       this.fileBlob = null;
     },
-    goToConfig() {
+    goToUrlIngestConfig() {
       this.$router.push({
         name: "Config",
         params: {
           containerName: this.containerName,
-          dataloaderRepository: this.dataloaderRepository
+          businessUnitName: this.businessUnitName
         }
       });
     }
