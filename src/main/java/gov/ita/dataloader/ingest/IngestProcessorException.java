@@ -2,11 +2,14 @@ package gov.ita.dataloader.ingest;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-public class IngestProcessorException extends Exception {
+import java.time.LocalDateTime;
 
-  public IngestProcessorException(String message) {
-    super(message);
+@Slf4j
+class IngestProcessorException extends Exception {
+
+  IngestProcessorException(String message) {
+    super(LocalDateTime.now() + " " + message);
     log.error(message);
   }
+
 }

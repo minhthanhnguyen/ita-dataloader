@@ -223,6 +223,24 @@
       "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=industrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
       "fileName": "bea-mne-industry-by-type/BEA13_I_TYPE_IN.json",
       "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://stats.oecd.org/SDMX-JSON/data/PDB_LV/AUS+AUT+BEL+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+EA19+EU28+G-7+OECD+NMEC+BRA+CHN+COL+IND+IDN+RUS+ZAF+BRIICS.T_GDP+T_POPTOT+T_GDPPOP+T_HRSTO+T_HRSAV+T_GDPHRS+T_EMPTO+T_GDPEMP+T_HRSPOP+T_GPGDPO+T_GPHRPO+T_GPGDHR.C+CPC+VPVOB+PEHRS+GAP+PCTUS/all?startTime=1970&endTime=2018&dimensionAtObservation=allDimensions&pid=d404f369-f43a-4cf4-9e00-d8a75d85eae0",
+      "fileName": "OECD_GDP.json",
+      "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://stats.oecd.org/SDMX-JSON/data/EPL_OV/AUS+AUT+BEL+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+COL+CRI+LVA+LTU+ALB+ARG+BHS+BRB+BOL+BIH+BRA+CHN+HRV+DOM+ECU+SLV+MKD+GTM+HND+IND+IDN+JAM+KAZ+XKX+MYS+MNE+NIC+PAN+PRY+PER+RUS+SAU+SRB+ZAF+THA+TUN+URY+VEN.EPRC_V1+EPRC_V2+EPRC_V3/all?startTime=1990&endTime=2015&dimensionAtObservation=allDimensions&pid=d404f369-f43a-4cf4-9e00-d8a75d85eae0",
+      "fileName": "OECD_STRICTNESS_OF_EMPLOYMENT_PROTECTION.json",
+      "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://stats.oecd.org/SDMX-JSON/data/ANHRS/AUS+AUT+BEL+CAN+CHL+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA+OECD+CRI+RUS.DE+TE.A/all?startTime=2000&endTime=2018&dimensionAtObservation=allDimensions&pid=d404f369-f43a-4cf4-9e00-d8a75d85eae0",
+      "fileName": "OECD_AVERGAGE_ANNUAL_HOURS_WORKED_PER_WORKER.json",
+      "containerName": "select-usa"
     }
   ]
 }

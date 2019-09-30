@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -17,7 +16,7 @@ class ZipFileExtractor {
   private final static int BUFFER_SIZE = 2048;
 
   Map<String, ByteArrayOutputStream> extract(byte[] zipFile) throws IOException {
-    ByteArrayInputStream bis = new ByteArrayInputStream(Objects.requireNonNull(zipFile));
+    ByteArrayInputStream bis = new ByteArrayInputStream(zipFile);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     BufferedOutputStream bos = new BufferedOutputStream(baos);
 

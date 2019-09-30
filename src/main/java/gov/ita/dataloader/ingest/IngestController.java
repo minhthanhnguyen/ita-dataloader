@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,7 +50,7 @@ public class IngestController {
   @GetMapping("/api/ingest")
   public String startIngestProcess(@RequestParam("containerName") String containerName) {
     ingestProcessor.process(
-      Objects.requireNonNull(getDataloaderConfig(containerName)).getDataSetConfigs(),
+      getDataloaderConfig(containerName).getDataSetConfigs(),
       containerName,
       authenticationFacade.getUserName());
     return "done";
@@ -93,21 +92,21 @@ public class IngestController {
   }
 
   @GetMapping("/api/business-units")
-  public List<BusinessUnit> getBusinessUnits() throws IOException {
+  public List<BusinessUnit> getBusinessUnits() throws Exception {
     byte[] dataloaderConfig = storage.getBlob("dataloader", "configuration.json");
     BusinessUnitConfigResponse buc = objectMapper.readValue(dataloaderConfig, BusinessUnitConfigResponse.class);
     return buc.getBusinessUnits();
   }
 
   private DataLoaderConfigResponse getDataloaderConfig(String containerName) {
-    byte[] blob = storage.getBlob(containerName, "configuration.json");
-    if (blob != null) {
-      try {
-        return objectMapper.readValue(blob, DataLoaderConfigResponse.class);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+
+    try {
+      return objectMapper.readValue(storage.getBlob(containerName, "configuration.json"), DataLoaderConfigResponse.class);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+
     return null;
   }
+
 }

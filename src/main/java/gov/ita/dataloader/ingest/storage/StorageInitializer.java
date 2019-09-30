@@ -21,8 +21,9 @@ public class StorageInitializer {
     for (String configFile : configurationFiles.keySet()) {
       String containerName = configFile.replace(".json", "");
       if (!containers.contains(containerName)) {
+        String path = configurationFiles.get(configFile);
         storage.createContainer(containerName);
-        storage.save("configuration.json", getResourceAsString(configurationFiles.get(configFile)).getBytes(), null, containerName);
+        storage.save("configuration.json", getResourceAsString(path).getBytes(), null, containerName);
       }
     }
   }

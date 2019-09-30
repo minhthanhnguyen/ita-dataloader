@@ -9,26 +9,26 @@ import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.util.FlowableUtil;
 import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static gov.ita.dataloader.ingest.HttpHelper.getBytes;
 
 @Slf4j
 @Service
 @Profile({"production", "staging"})
 public class ProductionStorage implements Storage {
-
-  @Autowired
-  private RestTemplate restTemplate;
 
   @Value("${storage-params.azure-storage-account}")
   private String accountName;
@@ -98,7 +98,7 @@ public class ProductionStorage implements Storage {
 
   @Override
   public Set<String> getContainerNames() {
-    return Objects.requireNonNull(makeServiceURL()).listContainersSegment(null, null)
+    return makeServiceURL().listContainersSegment(null, null)
       .blockingGet().body()
       .containerItems().stream().map(ContainerItem::name)
       .collect(Collectors.toSet());
@@ -107,8 +107,13 @@ public class ProductionStorage implements Storage {
   @Override
   public byte[] getBlob(String containerName, String blobName) {
     Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getName().equals(blobName)).findFirst();
-    if (blobMetaData.isPresent())
-      return restTemplate.getForEntity(blobMetaData.get().getUrl(), byte[].class).getBody();
+    if (blobMetaData.isPresent()) {
+      try {
+        return getBytes(blobMetaData.get().getUrl());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
     return null;
   }
 

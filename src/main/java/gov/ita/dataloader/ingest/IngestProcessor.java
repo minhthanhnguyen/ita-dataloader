@@ -6,8 +6,6 @@ import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.ingest.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,18 +16,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static gov.ita.dataloader.ingest.HttpHelper.getBytes;
+
 @Slf4j
 @Service
 public class IngestProcessor {
 
   private ZipFileExtractor zipFileExtractor;
-  private RestTemplate restTemplate;
   private Storage storage;
   private Map<String, IngestProcessorStatus> status;
 
-  public IngestProcessor(ZipFileExtractor zipFileExtractor, RestTemplate restTemplate, Storage storage) {
+  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage) {
     this.zipFileExtractor = zipFileExtractor;
-    this.restTemplate = restTemplate;
     this.storage = storage;
     status = new HashMap<>();
   }
@@ -43,7 +41,9 @@ public class IngestProcessor {
     try {
       for (DataSetConfig dsc : enabledConfigs) {
         log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
-        fileBytes = httpGetBytes(dsc.getUrl());
+
+        fileBytes = getBytes(dsc.getUrl());
+
         processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName(), userName);
 
         if (dsc.getZipFileConfigs() != null) {
@@ -66,16 +66,17 @@ public class IngestProcessor {
               userName);
           }
 
-          updateStatus(dsc, ingestProcessorStatus);
-
           try {
             Thread.sleep(5000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
         }
+
+        updateStatus(dsc, ingestProcessorStatus);
+
       }
-    } catch (IngestProcessorException e) {
+    } catch (Exception e) {
       ingestProcessorStatus.getLog().add(e.getMessage());
     } finally {
       ingestProcessorStatus.getLog().add(String.format("%s Ingest process complete", LocalDateTime.now()));
@@ -128,12 +129,4 @@ public class IngestProcessor {
     }
   }
 
-  private byte[] httpGetBytes(String url) throws IngestProcessorException {
-    try {
-      return restTemplate.getForEntity(url, byte[].class).getBody();
-    } catch (ResourceAccessException e) {
-      e.printStackTrace();
-      throw new IngestProcessorException("Failed to retrieve data from url: " + url);
-    }
-  }
 }

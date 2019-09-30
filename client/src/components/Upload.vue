@@ -32,7 +32,7 @@
       </div>
       <div class="md-layout-item md-size-40">
         <md-autocomplete v-model="destinationFileName" :md-options="destinationFileNameOptions">
-          <label>Destination file name</label>
+          <label>File name</label>
         </md-autocomplete>
       </div>
       <div class="md-layout-item md-size-10">
@@ -178,8 +178,6 @@ export default {
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
-      this.destinationFileName = null;
-      this.fileBlob = null;
     },
     goToUrlIngestConfig() {
       this.$router.push({
