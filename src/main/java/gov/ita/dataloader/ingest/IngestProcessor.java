@@ -60,15 +60,16 @@ public class IngestProcessor {
             dsc.getContainerName(),
             userName);
         }
+
+        updateStatus(containerName);
+
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
 
-      updateStatus(containerName);
-
-      try {
-        Thread.sleep(2000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
     }
     log.info("Ingest process complete for container: {}", containerName);
   }
