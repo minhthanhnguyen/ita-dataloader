@@ -31,47 +31,60 @@ public class IngestProcessor {
     status = new HashMap<>();
   }
 
-  void process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName) {
+  public Map<String, String> process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName) {
+    Map<String, String> results = new HashMap<>();
+
     log.info("Starting ingest process for container: {}", containerName);
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
     initializeStatus(containerName, enabledConfigs.size());
 
     byte[] fileBytes;
-    for (DataSetConfig dsc : enabledConfigs) {
-      log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
-      fileBytes = httpGetBytes(dsc.getUrl());
-      processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName(), userName);
 
-      if (dsc.getZipFileConfigs() != null) {
-        Map<String, ByteArrayOutputStream> fileMap = null;
-        try {
-          fileMap = zipFileExtractor.extract(fileBytes);
-        } catch (IOException e) {
-          log.error("Could not extract zip file");
-          e.printStackTrace();
-        }
-        assert fileMap != null;
-        for (String fileName : fileMap.keySet()) {
-          ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
-          processAndSaveDataSource(
-            zfc.getDestinationFileName(),
-            fileMap.get(fileName).toByteArray(),
-            dsc.getReplaceValues(),
-            dsc.getContainerName(),
-            userName);
+    try {
+      for (DataSetConfig dsc : enabledConfigs) {
+        log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
+        fileBytes = httpGetBytes(dsc.getUrl());
+        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName(), userName);
+
+        if (dsc.getZipFileConfigs() != null) {
+          Map<String, ByteArrayOutputStream> fileMap;
+          try {
+            fileMap = zipFileExtractor.extract(fileBytes);
+          } catch (IOException e) {
+            e.printStackTrace();
+            String message = String.format("Could not extract zip file from %s", dsc.getUrl());
+            throw new IngestProcessorException(message);
+          }
+          assert fileMap != null;
+          for (String fileName : fileMap.keySet()) {
+            ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
+            processAndSaveDataSource(
+              zfc.getDestinationFileName(),
+              fileMap.get(fileName).toByteArray(),
+              dsc.getReplaceValues(),
+              dsc.getContainerName(),
+              userName);
+          }
+
+          updateStatus(containerName);
+
+          try {
+            Thread.sleep(2000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
 
-        updateStatus(containerName);
-
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
       }
-
+    } catch (IngestProcessorException e) {
+      results.put("error", e.getMessage());
     }
+
     log.info("Ingest process complete for container: {}", containerName);
+    if (results.get("error") != null) return results;
+
+    results.put("success", "Ingest process succeeded");
+    return results;
   }
 
   private void initializeStatus(String containerName, int totalApiCalls) {
@@ -104,11 +117,16 @@ public class IngestProcessor {
     storage.save(fileName, fileBytes, userName, containerName);
   }
 
-  private ZipFileConfig getZipFileConfig(DataSetConfig dsc, String fileName) {
-    return dsc.getZipFileConfigs().stream()
-      .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
-      .collect(Collectors.toList())
-      .get(0);
+  private ZipFileConfig getZipFileConfig(DataSetConfig dsc, String fileName) throws IngestProcessorException {
+    try {
+      return dsc.getZipFileConfigs().stream()
+        .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
+        .collect(Collectors.toList())
+        .get(0);
+    } catch (IndexOutOfBoundsException e) {
+      String message = String.format("The file %s could not be found in the zip file from from: %s", fileName, dsc.getUrl());
+      throw new IngestProcessorException(message);
+    }
   }
 
   private byte[] httpGetBytes(String url) {

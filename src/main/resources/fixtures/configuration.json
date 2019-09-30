@@ -1,7 +1,7 @@
 {
   "dataSetConfigs": [
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019alla.xls",
       "fileName": "WEODATA.csv",
       "containerName": "select-usa",
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "http://api.worldbank.org/v2/en/indicator/IC.BUS.EASE.XQ?downloadformat=csv",
       "fileName": "WORLDBANK_EASE_INDICATOR_CSV.zip",
       "containerName": "select-usa",
@@ -25,21 +25,21 @@
       ],
       "zipFileConfigs": [
         {
-          "originalFileName": "API_IC.BUS.EASE.XQ_DS2_en_csv_v2_153215.csv",
+          "originalFileName": "API_IC.BUS.EASE.XQ_DS2_en_csv_v2_199992.csv",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv"
         },
         {
-          "originalFileName": "Metadata_Indicator_API_IC.BUS.EASE.XQ_DS2_en_csv_v2_153215.csv",
+          "originalFileName": "Metadata_Indicator_API_IC.BUS.EASE.XQ_DS2_en_csv_v2_199992.csv",
           "destinationFileName": "WORLDBANK_EASE_INDICATOR_DESCRIPTION.csv"
         },
         {
-          "originalFileName": "Metadata_Country_API_IC.BUS.EASE.XQ_DS2_en_csv_v2_153215.csv",
+          "originalFileName": "Metadata_Country_API_IC.BUS.EASE.XQ_DS2_en_csv_v2_199992.csv",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv"
         }
       ]
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://apps.bea.gov/api/data/?DataSetName=NIPA&Frequency=A&ResultFormat=json&ShowMillions=N&TableName=T60400D&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Year=X&method=GetData&ResultFormat=json",
       "fileName": "BEA_NIPA.json",
       "containerName": "select-usa"
@@ -183,13 +183,13 @@
       "containerName": "select-usa"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpGds.json",
       "containerName": "select-usa"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpServ.json",
       "containerName": "select-usa"
