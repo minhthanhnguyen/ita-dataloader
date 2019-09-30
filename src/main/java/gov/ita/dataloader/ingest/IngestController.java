@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -35,16 +34,17 @@ public class IngestController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/configuration")
-  private List<DataSetConfig> getDataSetCongigs(@RequestParam("containerName") String containerName) {
+  private List<DataSetConfig> getDataSetConfigs(@RequestParam("containerName") String containerName) {
     return dataSetConfigRepository.findByContainerName(containerName);
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
-  public Map<String, String> startIngestProcess(@RequestParam("containerName") String containerName) {
+  public String startIngestProcess(@RequestParam("containerName") String containerName) {
     storage.initContainer(containerName);
     List<DataSetConfig> dataSourceConfigs = dataSetConfigRepository.findByContainerName(containerName);
-    return ingestProcessor.process(dataSourceConfigs, containerName, authenticationFacade.getUserName());
+    ingestProcessor.process(dataSourceConfigs, containerName, authenticationFacade.getUserName());
+    return "done";
   }
 
   @GetMapping("/api/ingest/status")

@@ -1,5 +1,6 @@
 package gov.ita.dataloader.ingest;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Slf4j
 @Service
 class ZipFileExtractor {
 
@@ -39,7 +41,7 @@ class ZipFileExtractor {
       Map<String, ByteArrayOutputStream> result = new HashMap<>();
       while ((entry = inputStream.getNextEntry()) != null) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.out.println("Extracting entry: " + entry);
+        log.info("Extracting entry: " + entry);
         int count;
         byte[] data = new byte[BUFFER_SIZE];
         BufferedOutputStream out = new BufferedOutputStream(

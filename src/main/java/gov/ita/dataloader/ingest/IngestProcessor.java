@@ -10,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +33,12 @@ public class IngestProcessor {
     status = new HashMap<>();
   }
 
-  public Map<String, String> process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName) {
-    Map<String, String> results = new HashMap<>();
-
+  public void process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName) {
     log.info("Starting ingest process for container: {}", containerName);
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
-    initializeStatus(containerName, enabledConfigs.size());
+    IngestProcessorStatus ingestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
 
     byte[] fileBytes;
-
     try {
       for (DataSetConfig dsc : enabledConfigs) {
         log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
@@ -52,8 +51,8 @@ public class IngestProcessor {
             fileMap = zipFileExtractor.extract(fileBytes);
           } catch (IOException e) {
             e.printStackTrace();
-            String message = String.format("Could not extract zip file from %s", dsc.getUrl());
-            throw new IngestProcessorException(message);
+            throw new IngestProcessorException(
+              String.format("%s Could not extract zip file from %s", LocalDateTime.now(), dsc.getUrl()));
           }
           assert fileMap != null;
           for (String fileName : fileMap.keySet()) {
@@ -66,7 +65,7 @@ public class IngestProcessor {
               userName);
           }
 
-          updateStatus(containerName);
+          updateStatus(dsc, ingestProcessorStatus);
 
           try {
             Thread.sleep(2000);
@@ -74,26 +73,25 @@ public class IngestProcessor {
             e.printStackTrace();
           }
         }
-
       }
     } catch (IngestProcessorException e) {
-      results.put("error", e.getMessage());
+      ingestProcessorStatus.getLog().add(e.getMessage());
+    } finally {
+      ingestProcessorStatus.getLog().add(String.format("%s Ingest process complete", LocalDateTime.now()));
+      ingestProcessorStatus.setProcessing(false);
+      log.info("Ingest process complete for container: {}", containerName);
     }
-
-    log.info("Ingest process complete for container: {}", containerName);
-    if (results.get("error") != null) return results;
-
-    results.put("success", "Ingest process succeeded");
-    return results;
   }
 
-  private void initializeStatus(String containerName, int totalApiCalls) {
-    status.put(containerName, new IngestProcessorStatus(totalApiCalls, 0));
+  private IngestProcessorStatus initializeStatus(String containerName, int totalApiCalls) {
+    IngestProcessorStatus ips = new IngestProcessorStatus(totalApiCalls, 0, true, new ArrayList<>());
+    status.put(containerName, ips);
+    return ips;
   }
 
-  private void updateStatus(String containerName) {
-    IngestProcessorStatus ips = status.get(containerName);
-    ips.setProcessedApiCalls(ips.getProcessedApiCalls() + 1);
+  private void updateStatus(DataSetConfig dataSetConfig, IngestProcessorStatus ingestProcessorStatus) {
+    ingestProcessorStatus.setProcessedUrlCalls(ingestProcessorStatus.getProcessedUrlCalls() + 1);
+    ingestProcessorStatus.getLog().add(String.format("%s Completed ingest of URL: %s", LocalDateTime.now(), dataSetConfig.getUrl()));
   }
 
   IngestProcessorStatus getStatus(String containerName) {
@@ -124,7 +122,7 @@ public class IngestProcessor {
         .collect(Collectors.toList())
         .get(0);
     } catch (IndexOutOfBoundsException e) {
-      String message = String.format("The file %s could not be found in the zip file from from: %s", fileName, dsc.getUrl());
+      String message = String.format("Error: The file %s could not be found in the zip file from from: %s", fileName, dsc.getUrl());
       throw new IngestProcessorException(message);
     }
   }
