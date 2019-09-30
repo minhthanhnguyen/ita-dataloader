@@ -13,7 +13,7 @@
       ]
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "http://api.worldbank.org/v2/en/indicator/IC.BUS.EASE.XQ?downloadformat=csv",
       "fileName": "WORLDBANK_EASE_INDICATOR_CSV.zip",
       "containerName": "select-usa",
@@ -39,7 +39,7 @@
       ]
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://apps.bea.gov/api/data/?DataSetName=NIPA&Frequency=A&ResultFormat=json&ShowMillions=N&TableName=T60400D&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Year=X&method=GetData&ResultFormat=json",
       "fileName": "BEA_NIPA.json",
       "containerName": "select-usa"
@@ -183,27 +183,45 @@
       "containerName": "select-usa"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpGds.json",
       "containerName": "select-usa"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ExpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ExpServ.json",
       "containerName": "select-usa"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpGds&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ImpGds.json",
       "containerName": "select-usa"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://www.bea.gov/api/data/?&UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&method=GetData&DataSetName=ITA&Indicator=ImpServ&AreaOrCountry=ALL&Frequency=A&Year=ALL&ResultFormat=json",
       "fileName": "bea-ita/BEA_ITA_ImpServ.json",
+      "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=countrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
+      "fileName": "bea-mne-country-by-type/BEA13_C_TYPE_IN.json",
+      "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=statebytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
+      "fileName": "bea-mne-state-by-type/BEA13_S_TYPE_IN.json",
+      "containerName": "select-usa"
+    },
+    {
+      "enabled": true,
+      "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=industrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
+      "fileName": "bea-mne-industry-by-type/BEA13_I_TYPE_IN.json",
       "containerName": "select-usa"
     }
   ],

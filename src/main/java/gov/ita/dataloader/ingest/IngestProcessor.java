@@ -6,6 +6,7 @@ import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.ingest.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
@@ -68,7 +69,7 @@ public class IngestProcessor {
           updateStatus(dsc, ingestProcessorStatus);
 
           try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
           } catch (InterruptedException e) {
             e.printStackTrace();
           }
@@ -127,7 +128,12 @@ public class IngestProcessor {
     }
   }
 
-  private byte[] httpGetBytes(String url) {
-    return restTemplate.getForEntity(url, byte[].class).getBody();
+  private byte[] httpGetBytes(String url) throws IngestProcessorException {
+    try {
+      return restTemplate.getForEntity(url, byte[].class).getBody();
+    } catch (ResourceAccessException e) {
+      e.printStackTrace();
+      throw new IngestProcessorException("Failed to retrieve data from url: " + url);
+    }
   }
 }
