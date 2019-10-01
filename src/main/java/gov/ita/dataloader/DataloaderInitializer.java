@@ -1,7 +1,6 @@
 package gov.ita.dataloader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.dataloader.datawarehouse.DataWarehouseInitializer;
 import gov.ita.dataloader.ingest.storage.StorageInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import org.springframework.stereotype.Component;
 public class DataloaderInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
   @Autowired
-  private DataWarehouseInitializer dataWarehouseInitializer;
-
-  @Autowired
   private ObjectMapper objectMapper;
 
   @Autowired
@@ -24,9 +20,6 @@ public class DataloaderInitializer implements ApplicationListener<ContextRefresh
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    log.info("Initializing database");
-    dataWarehouseInitializer.init();
-
     log.info("Initializing storage");
     storageInitializer.init();
   }
