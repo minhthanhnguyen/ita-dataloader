@@ -104,8 +104,13 @@ export default {
   async created() {
     this.loading = true;
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    this.containerName = this.businessUnits[0].containerName;
-    this.businessUnitName = this.businessUnits[0].businessName;
+
+    if (this.$route.params["containerName"]) {
+      this.containerName = this.$route.params["containerName"];
+    } else {
+      this.containerName = this.businessUnits[0].containerName;
+    }
+
     await this.updateBusinessUnitContent();
     this.loading = false;
   },
@@ -127,6 +132,19 @@ export default {
     };
   },
   methods: {
+    async updateBusinessUnitContent() {
+      this.storageContent = await this.dataloaderRepository._getStorageContent(
+        this.containerName
+      );
+
+      this.destinationFileNameOptions = this.storageContent.map(
+        file => file.name
+      );
+
+      this.businessUnitName = this.businessUnits.find(
+        b => b.containerName === this.containerName
+      ).businessName;
+    },
     onFileSelection(event) {
       this.fileBlob = event[0];
       this.originalFileName = event[0].name;
@@ -166,25 +184,19 @@ export default {
       this.uploadSuccessful = false;
       this.uploading = false;
     },
-    async updateBusinessUnitContent() {
-      this.storageContent = await this.dataloaderRepository._getStorageContent(
-        this.containerName
-      );
-
-      this.destinationFileNameOptions = this.storageContent.map(
-        file => file.name
-      );
-
-      this.businessUnitName = this.businessUnits.find(
-        b => b.containerName === this.containerName
-      ).businessName;
-    },
     goToUrlIngestConfig() {
       this.$router.push({
         name: "Config",
         params: {
-          containerName: this.containerName,
-          businessUnitName: this.businessUnitName
+          containerName: this.containerName
+        }
+      });
+    },
+    goToUrlIngestLog() {
+      this.$router.push({
+        name: "Log",
+        params: {
+          containerName: this.containerName
         }
       });
     }

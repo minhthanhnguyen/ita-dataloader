@@ -7,30 +7,30 @@
           <md-button class="md-icon-button" @click="goToFileUpload()">
             <md-icon class="fa fa-angle-double-left"></md-icon>
           </md-button>
-          <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestLog()">
-            <md-icon class="fa fa-bars"></md-icon>
+          <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestConfig()">
+            <md-icon class="fa fa-cog"></md-icon>
           </md-button>
         </div>
       </div>
-      <div class="md-layout-item md-size-75"></div>
-      <div class="md-layout-item md-size-10">
-        <md-button class="md-secondary md-raised top-btn" @click="saveConfiguration()">
-          <label>Save</label>
-        </md-button>
-      </div>
-      <div class="md-layout-item md-size-10">
-        <md-button class="md-primary md-raised top-btn" @click="startIngestProcess()">
-          <label>Ingest</label>
-        </md-button>
-      </div>
-      <div class="md-layout md-gutter">
-        <div class="md-layout-item md-size-10"></div>
-        <div class="md-layout-item md-size-90">
-          <md-field>
-            <textarea v-model="dataloaderConfig" rows="200" cols="150"></textarea>
-          </md-field>
-        </div>
-      </div>
+      <!-- <md-list>
+        <li v-for="country in countries" v-bind:key="country.code" v-bind:value="country.code">
+          <div class="layout-item country-code">
+            <md-field>
+              <label>Code</label>
+              <md-input v-model="country.code" disabled></md-input>
+            </md-field>
+          </div>
+          <div class="layout-item">
+            <md-field>
+              <label>Country</label>
+              <md-input v-model="country.name"></md-input>
+            </md-field>
+          </div>
+          <div class="layout-item">
+            <md-switch v-model="country.visible"></md-switch>
+          </div>
+        </li>
+      </md-list>-->
       <div v-if="loading" class="loading">loading...</div>
     </div>
   </div>
@@ -49,7 +49,7 @@
 import Header from "./Header";
 
 export default {
-  name: "Config",
+  name: "Log",
   props: ["dataloaderRepository"],
   components: {
     "dataloader-header": Header
@@ -57,9 +57,6 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.dataloaderConfig = JSON.stringify(
-      await this.dataloaderRepository._getDataloaderConfig(this.containerName)
-    );
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
     this.businessUnitName = this.businessUnits.find(
       b => b.containerName === this.containerName
@@ -70,14 +67,10 @@ export default {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null,
-      dataloaderConfig: null
+      businessUnitName: null
     };
   },
   methods: {
-    startIngestProcess() {
-      this.dataloaderRepository._startIngestProcess();
-    },
     async goToFileUpload() {
       this.$router.push({
         name: "Upload",
@@ -86,9 +79,9 @@ export default {
         }
       });
     },
-    async goToUrlIngestLog() {
+    async goToUrlIngestConfig() {
       this.$router.push({
-        name: "Log",
+        name: "Config",
         params: {
           containerName: this.containerName
         }

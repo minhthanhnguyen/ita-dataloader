@@ -1,9 +1,10 @@
 package gov.ita.dataloader.ingest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.dataloader.ingest.configuration.BusinessUnit;
 import gov.ita.dataloader.ingest.configuration.BusinessUnitConfigResponse;
-import gov.ita.dataloader.ingest.configuration.DataLoaderConfigResponse;
+import gov.ita.dataloader.ingest.configuration.DataLoaderConfig;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.storage.BlobMetaData;
 import gov.ita.dataloader.ingest.storage.Storage;
@@ -39,20 +40,19 @@ public class IngestController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/configuration")
-  private List<DataSetConfig> getDataSetConfigs(@RequestParam("containerName") String containerName) {
-    DataLoaderConfigResponse dataloaderConfig = getDataloaderConfig(containerName);
-    if (dataloaderConfig != null)
-      return dataloaderConfig.getDataSetConfigs();
-    return Collections.emptyList();
+  private DataLoaderConfig getDataSetConfigs(@RequestParam("containerName") String containerName) {
+    return getDataloaderConfig(containerName);
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
   public String startIngestProcess(@RequestParam("containerName") String containerName) {
-    ingestProcessor.process(
-      getDataloaderConfig(containerName).getDataSetConfigs(),
-      containerName,
-      authenticationFacade.getUserName());
+    IngestProcessorStatus status = ingestProcessor.getStatus(containerName);
+    if (status == null || !status.isProcessing())
+      ingestProcessor.process(
+        getDataloaderConfig(containerName).getDataSetConfigs(),
+        containerName,
+        authenticationFacade.getUserName());
     return "done";
   }
 
@@ -75,8 +75,10 @@ public class IngestController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @PutMapping("/api/save/configuration")
-  public String saveConfiguration(@RequestBody List<DataSetConfig> dataSetConfigs) {
-    return "success";
+  public void saveConfiguration(@RequestBody DataLoaderConfig dataLoaderConfig,
+                                @RequestParam("containerName") String containerName) throws JsonProcessingException {
+    byte[] dataSetConfigsJsonBytes = objectMapper.writeValueAsString(dataLoaderConfig).getBytes();
+    storage.save("configuration.json", dataSetConfigsJsonBytes, authenticationFacade.getUserName(), containerName);
   }
 
   @GetMapping("/api/storage-content-url")
@@ -98,10 +100,10 @@ public class IngestController {
     return buc.getBusinessUnits();
   }
 
-  private DataLoaderConfigResponse getDataloaderConfig(String containerName) {
+  private DataLoaderConfig getDataloaderConfig(String containerName) {
 
     try {
-      return objectMapper.readValue(storage.getBlob(containerName, "configuration.json"), DataLoaderConfigResponse.class);
+      return objectMapper.readValue(storage.getBlob(containerName, "configuration.json"), DataLoaderConfig.class);
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class DataLoaderConfigResponse {
+public class DataLoaderConfig {
   public List<DataSetConfig> dataSetConfigs;
 }

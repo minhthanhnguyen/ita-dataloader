@@ -10,6 +10,6 @@ import java.util.List;
 class IngestProcessorStatus {
   Integer totalUrlCallsQueued;
   Integer processedUrlCalls;
-  Boolean processing;
+  boolean processing;
   List<String> log;
 }
