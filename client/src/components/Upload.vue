@@ -36,7 +36,7 @@
         </md-autocomplete>
       </div>
       <div class="md-layout-item md-size-10">
-        <md-button class="md-secondary md-raised top-btn" @click="uploadFile()">Upload</md-button>
+        <md-button class="md-primary md-raised top-btn" @click="uploadFile()">Upload</md-button>
       </div>
     </div>
     <div v-if="loading" class="loading">loading...</div>
@@ -91,7 +91,6 @@
 <script>
 import { readUploadedFileAsArrayBuffer } from "./FileHelper";
 import Header from "./Header";
-import { read, utils } from "xlsx";
 
 export default {
   name: "Upload",

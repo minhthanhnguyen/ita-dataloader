@@ -19,34 +19,47 @@
         </md-button>
       </div>
       <div class="md-layout-item md-size-10">
-        <md-button class="md-primary md-raised top-btn" @click="startIngestProcess()">
+        <md-button
+          v-if="!ingesting"
+          class="md-primary md-raised top-btn"
+          @click="startIngestProcess()"
+        >
           <label>Ingest</label>
         </md-button>
-      </div>
-      <div class="md-layout md-gutter">
-        <div class="md-layout-item md-size-10"></div>
-        <div class="md-layout-item md-size-90">
-          <md-field>
-            <textarea v-model="dataloaderConfig" rows="200" cols="150"></textarea>
-          </md-field>
+        <div class="ingesting-message">
+          <md-progress-spinner v-if="ingesting" md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
         </div>
       </div>
+      <div class="config-text">
+        <md-field>
+          <textarea v-model="dataloaderConfig" rows="200" cols="195" wrap="off"></textarea>
+        </md-field>
+      </div>
+      <md-dialog-alert
+        :md-active.sync="configSaved"
+        md-content="The configuration was saved successfully! "
+        md-confirm-text="Close"
+      />
+      <md-dialog-alert
+        :md-active.sync="ingestClicked"
+        md-content="The ingest process started successfully! View the Log check it's progress."
+        md-confirm-text="Close"
+      />
       <div v-if="loading" class="loading">loading...</div>
     </div>
   </div>
 </template>
 <style>
-.layout-item {
-  display: inline-block;
-  margin-right: 20px;
+.config-text {
+  margin-left: 30px;
 }
-.country-code {
-  padding-left: 20px;
-  width: 50px;
+.ingesting-message {
+  margin-top: 20px;
 }
 </style>
 <script>
 import Header from "./Header";
+import beautify from "json-beautify";
 
 export default {
   name: "Config",
@@ -57,8 +70,11 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.dataloaderConfig = JSON.stringify(
-      await this.dataloaderRepository._getDataloaderConfig(this.containerName)
+    this.dataloaderConfig = beautify(
+      await this.dataloaderRepository._getDataloaderConfig(this.containerName),
+      null,
+      2,
+      100
     );
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
     this.businessUnitName = this.businessUnits.find(
@@ -71,12 +87,18 @@ export default {
       loading: true,
       containerName: null,
       businessUnitName: null,
-      dataloaderConfig: null
+      dataloaderConfig: null,
+      configSaved: false,
+      ingestClicked: false,
+      ingesting: false
     };
   },
   methods: {
-    startIngestProcess() {
-      this.dataloaderRepository._startIngestProcess();
+    async startIngestProcess() {
+      this.ingesting = true;
+      this.ingestClicked = true;
+      await this.dataloaderRepository._startIngestProcess();
+      this.ingesting = false;
     },
     async goToFileUpload() {
       this.$router.push({
@@ -93,6 +115,14 @@ export default {
           containerName: this.containerName
         }
       });
+    },
+    async saveConfiguration() {
+      let configSaveResponse = await this.dataloaderRepository._saveDataloaderConfig(
+        this.dataloaderConfig,
+        this.containerName
+      );
+
+      if (configSaveResponse.status === 200) this.configSaved = true;
     }
   }
 };

@@ -16,14 +16,14 @@ export default new Router({
       props: {
         dataloaderRepository: new DataloaderRepository()
       }
-    },{
+    }, {
       path: '/config/:containerName',
       name: 'Config',
       component: Config,
       props: {
         dataloaderRepository: new DataloaderRepository()
       }
-    },{
+    }, {
       path: '/log/:containerName',
       name: 'Log',
       component: Log,
