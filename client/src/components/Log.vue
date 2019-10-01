@@ -29,13 +29,13 @@
         <strong>Total datasets saved:</strong>
         <span>{{injestStatus.processedUrlCalls}}</span>
       </p>
-      <md-list>
+      <ul>
         <li
           v-for="message in injestStatus.log"
           v-bind:key="message"
           v-bind:value="message"
         >{{message}}</li>
-      </md-list>
+      </ul>
     </div>
 
     <div v-if="loading" class="loading">loading...</div>

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static gov.ita.dataloader.ingest.HttpHelper.getBytes;
 
 @Slf4j
 @Service
@@ -24,11 +23,13 @@ public class IngestProcessor {
 
   private ZipFileExtractor zipFileExtractor;
   private Storage storage;
+  private HttpHelper httpHelper;
   private Map<String, IngestProcessorStatus> status;
 
-  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage) {
+  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage, HttpHelper httpHelper) {
     this.zipFileExtractor = zipFileExtractor;
     this.storage = storage;
+    this.httpHelper = httpHelper;
     status = new HashMap<>();
   }
 
@@ -42,7 +43,7 @@ public class IngestProcessor {
       for (DataSetConfig dsc : enabledConfigs) {
         log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
 
-        fileBytes = getBytes(dsc.getUrl());
+        fileBytes = httpHelper.getBytes(dsc.getUrl());
 
         processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName(), userName);
 
@@ -65,16 +66,15 @@ public class IngestProcessor {
               dsc.getContainerName(),
               userName);
           }
-
-          try {
-            Thread.sleep(5000);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
         }
 
         updateStatus(dsc, ingestProcessorStatus);
 
+        try {
+          Thread.sleep(5000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
     } catch (Exception e) {
       ingestProcessorStatus.getLog().add(e.getMessage());

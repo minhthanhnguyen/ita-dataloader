@@ -7,8 +7,10 @@ import com.microsoft.azure.storage.blob.models.ContainerItem;
 import com.microsoft.azure.storage.blob.models.PublicAccessType;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.util.FlowableUtil;
+import gov.ita.dataloader.ingest.HttpHelper;
 import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static gov.ita.dataloader.ingest.HttpHelper.getBytes;
-
 @Slf4j
 @Service
 @Profile({"production", "staging"})
@@ -35,6 +35,9 @@ public class ProductionStorage implements Storage {
 
   @Value("${storage-params.azure-storage-account-key}")
   private String accountKey;
+
+  @Autowired
+  private HttpHelper httpHelper;
 
   @Override
   public void createContainer(String containerName) {
@@ -109,7 +112,7 @@ public class ProductionStorage implements Storage {
     Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getName().equals(blobName)).findFirst();
     if (blobMetaData.isPresent()) {
       try {
-        return getBytes(blobMetaData.get().getUrl());
+        return httpHelper.getBytes(blobMetaData.get().getUrl());
       } catch (Exception e) {
         e.printStackTrace();
       }
