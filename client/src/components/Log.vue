@@ -12,27 +12,33 @@
           </md-button>
         </div>
       </div>
-      <!-- <md-list>
-        <li v-for="country in countries" v-bind:key="country.code" v-bind:value="country.code">
-          <div class="layout-item country-code">
-            <md-field>
-              <label>Code</label>
-              <md-input v-model="country.code" disabled></md-input>
-            </md-field>
-          </div>
-          <div class="layout-item">
-            <md-field>
-              <label>Country</label>
-              <md-input v-model="country.name"></md-input>
-            </md-field>
-          </div>
-          <div class="layout-item">
-            <md-switch v-model="country.visible"></md-switch>
-          </div>
-        </li>
-      </md-list>-->
-      <div v-if="loading" class="loading">loading...</div>
+      <div class="md-layout-item md-size-95"></div>
     </div>
+
+    <div class="log-details">
+      <h3>Log Details for Latest Ingestion:</h3>
+      <p>
+        <strong>Processing:</strong>
+        <span>{{injestStatus.processing}}</span>
+      </p>
+      <p>
+        <strong>Total datasets queued:</strong>
+        <span>{{injestStatus.totalUrlCallsQueued}}</span>
+      </p>
+      <p>
+        <strong>Total datasets saved:</strong>
+        <span>{{injestStatus.processedUrlCalls}}</span>
+      </p>
+      <md-list>
+        <li
+          v-for="message in injestStatus.log"
+          v-bind:key="message"
+          v-bind:value="message"
+        >{{message}}</li>
+      </md-list>
+    </div>
+
+    <div v-if="loading" class="loading">loading...</div>
   </div>
 </template>
 <style>
@@ -40,9 +46,9 @@
   display: inline-block;
   margin-right: 20px;
 }
-.country-code {
-  padding-left: 20px;
-  width: 50px;
+
+.log-details {
+  margin-left: 20px;
 }
 </style>
 <script>
@@ -61,13 +67,22 @@ export default {
     this.businessUnitName = this.businessUnits.find(
       b => b.containerName === this.containerName
     ).businessName;
+    this.injestStatus = await this.dataloaderRepository._getIngestStatus(
+      this.containerName
+    );
     this.loading = false;
   },
   data() {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null
+      businessUnitName: null,
+      injestStatus: {
+        processing: false,
+        totalUrlCallsQueued: 0,
+        processedUrlCalls: 0,
+        log: []
+      }
     };
   },
   methods: {

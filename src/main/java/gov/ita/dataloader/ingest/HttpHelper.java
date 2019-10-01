@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 public class HttpHelper {
   public static byte[] getBytes(String url) throws Exception {
@@ -13,7 +14,7 @@ public class HttpHelper {
       return IOUtils.toByteArray(con.getInputStream());
     } catch (IOException e) {
       e.printStackTrace();
-      throw new Exception("Failed to retrieve data from url: " + url);
+      throw new Exception(LocalDateTime.now() + " Failed to retrieve data from URL: " + url);
     }
   }
 }

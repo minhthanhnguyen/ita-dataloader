@@ -53,7 +53,7 @@
         md-confirm-text="Close"
       />
     </div>
-    <div class="storage-content">
+    <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
       <md-table>
         <md-table-row>
           <md-table-head>File Name</md-table-head>
@@ -87,6 +87,9 @@
 .success {
   color: green;
 }
+/* .storage-content {
+  width: 500px;
+} */
 </style>
 <script>
 import { readUploadedFileAsArrayBuffer } from "./FileHelper";

@@ -30,6 +30,8 @@
           <md-progress-spinner v-if="ingesting" md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
         </div>
       </div>
+    </div>
+    <div class="md-layout md-alignment-top-center">
       <div class="config-text">
         <md-field>
           <textarea v-model="dataloaderConfig" rows="200" cols="195" wrap="off"></textarea>
@@ -42,11 +44,11 @@
       />
       <md-dialog-alert
         :md-active.sync="ingestClicked"
-        md-content="The ingest process started successfully! View the Log check it's progress."
+        md-content="The ingest process was started successfully! To view its progress, see the log."
         md-confirm-text="Close"
       />
-      <div v-if="loading" class="loading">loading...</div>
     </div>
+    <div v-if="loading" class="loading">loading...</div>
   </div>
 </template>
 <style>
@@ -97,7 +99,7 @@ export default {
     async startIngestProcess() {
       this.ingesting = true;
       this.ingestClicked = true;
-      await this.dataloaderRepository._startIngestProcess();
+      await this.dataloaderRepository._startIngestProcess(this.containerName);
       this.ingesting = false;
     },
     async goToFileUpload() {
