@@ -35,9 +35,6 @@ Steps to run this application on you local for development purposes
     - AZURE_OAUTH_CLIENT_SECRET: Active Directory Client Secret
     - AZURE_STORAGE_ACCOUNT: Data Lake Storage Account
     - AZURE_STORAGE_ACCOUNT_KEY: Data Lake Storage Account Key
-    - AZURE_DB_URL: MS SQL Database jdbc connection url
-    - AZURE_DB_USERNAME: MS SQL Database username
-    - AZURE_DB_PASSWORD: MS SQL Database password
 
 ## General Notes
  - The data-pipeline directory is not utilized in this project, it's a temporary backup of the Azure data-pipeline
