@@ -16,9 +16,13 @@ export default {
 
 <style lang="scss">
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
-@include md-register-theme("default", (
-  primary: #3e4853, // The primary color of your brand
-));
+@include md-register-theme(
+  "default",
+  (
+    primary: #3e4853,
+    // The primary color of your brand
+  )
+);
 @import "~vue-material/dist/theme/all"; // Apply the theme
 
 .top-btn {
@@ -32,5 +36,11 @@ export default {
 
 .nav-btns {
   display: flex;
+}
+
+.spinner {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 </style>

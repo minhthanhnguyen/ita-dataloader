@@ -36,7 +36,14 @@
         </md-autocomplete>
       </div>
       <div class="md-layout-item md-size-10">
-        <md-button class="md-primary md-raised top-btn" @click="uploadFile()">Upload</md-button>
+        <md-button
+          v-if="!uploading"
+          class="md-primary md-raised top-btn"
+          @click="uploadFile()"
+        >Upload</md-button>
+        <div v-if="uploading" class="spinner">
+          <md-progress-spinner md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
+        </div>
       </div>
     </div>
     <div v-if="loading" class="loading">loading...</div>
@@ -46,7 +53,6 @@
           <li v-for="message in errorMessages" v-bind:key="message">{{message}}</li>
         </ul>
       </div>
-      <div v-if="uploading">Uploading...</div>
       <md-dialog-alert
         :md-active.sync="uploadSuccessful"
         md-content="Your file was uploaded successfully! "
@@ -87,9 +93,11 @@
 .success {
   color: green;
 }
-/* .storage-content {
-  width: 500px;
-} */
+.uploading {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
 </style>
 <script>
 import { readUploadedFileAsArrayBuffer } from "./FileHelper";

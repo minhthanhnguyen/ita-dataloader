@@ -26,8 +26,8 @@
         >
           <label>Ingest</label>
         </md-button>
-        <div class="ingesting-message">
-          <md-progress-spinner v-if="ingesting" md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
+        <div v-if="ingesting" class="spinner">
+          <md-progress-spinner md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
         </div>
       </div>
     </div>
@@ -54,9 +54,6 @@
 <style>
 .config-text {
   margin-left: 30px;
-}
-.ingesting-message {
-  margin-top: 20px;
 }
 </style>
 <script>
