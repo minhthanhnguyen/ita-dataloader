@@ -30,23 +30,23 @@
           <md-progress-spinner md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
         </div>
       </div>
-    </div>
-    <div class="md-layout md-alignment-top-center">
-      <div class="config-text">
-        <md-field>
-          <textarea v-model="dataloaderConfig" rows="200" cols="195" wrap="off"></textarea>
-        </md-field>
+      <div class="md-layout md-alignment-top-center">
+        <div class="config-text">
+          <md-field>
+            <textarea v-model="dataloaderConfig" rows="200" cols="195" wrap="off"></textarea>
+          </md-field>
+        </div>
+        <md-dialog-alert
+          :md-active.sync="configSaved"
+          md-content="The configuration was saved successfully! "
+          md-confirm-text="Close"
+        />
+        <md-dialog-alert
+          :md-active.sync="ingestClicked"
+          md-content="The ingest process was started successfully! To view its progress, see the log."
+          md-confirm-text="Close"
+        />
       </div>
-      <md-dialog-alert
-        :md-active.sync="configSaved"
-        md-content="The configuration was saved successfully! "
-        md-confirm-text="Close"
-      />
-      <md-dialog-alert
-        :md-active.sync="ingestClicked"
-        md-content="The ingest process was started successfully! To view its progress, see the log."
-        md-confirm-text="Close"
-      />
     </div>
     <div v-if="loading" class="loading">loading...</div>
   </div>

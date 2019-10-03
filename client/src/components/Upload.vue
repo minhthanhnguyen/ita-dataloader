@@ -60,23 +60,15 @@
       />
     </div>
     <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
-      <md-table>
-        <md-table-row>
-          <md-table-head>File Name</md-table-head>
-          <md-table-head>URL</md-table-head>
-          <md-table-head>Uploaded At</md-table-head>
-          <md-table-head>Uploaded By</md-table-head>
-          <md-table-head md-numeric>Size</md-table-head>
-        </md-table-row>
-
-        <md-table-row v-for="file in storageContent" v-bind:key="file.name">
-          <md-table-cell>{{file.name}}</md-table-cell>
-          <md-table-cell>
-            <a v-bind:href="file.url">{{file.url}}</a>
+      <md-table v-model="storageContent" md-sort="name" md-sort-order="asc">
+        <md-table-row slot-scope="{ item }" slot="md-table-row">
+          <md-table-cell md-label="File Name" md-sort-by="name">{{item.name}}</md-table-cell>
+          <md-table-cell md-label="URL">
+            <a v-bind:href="item.url">{{item.url}}</a>
           </md-table-cell>
-          <md-table-cell>{{file.uploadedAt}}</md-table-cell>
-          <md-table-cell>{{file.uploadedBy}}</md-table-cell>
-          <md-table-cell md-numeric>{{file.size}}</md-table-cell>
+          <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
+          <md-table-cell md-label="Uploaded By" md-sort-by="uploadedBy">{{item.uploadedBy}}</md-table-cell>
+          <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
         </md-table-row>
       </md-table>
     </div>
