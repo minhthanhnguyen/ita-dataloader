@@ -41,11 +41,11 @@ public class IngestProcessor {
     byte[] fileBytes;
     try {
       for (DataSetConfig dsc : enabledConfigs) {
-        log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), dsc.getContainerName());
+        log.info("Importing file {} from {} to container {}", dsc.getFileName(), dsc.getUrl(), containerName);
 
         fileBytes = httpHelper.getBytes(dsc.getUrl());
 
-        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), dsc.getContainerName(), userName);
+        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), containerName, userName);
 
         if (dsc.getZipFileConfigs() != null) {
           Map<String, ByteArrayOutputStream> fileMap;
@@ -63,7 +63,7 @@ public class IngestProcessor {
               zfc.getDestinationFileName(),
               fileMap.get(fileName).toByteArray(),
               dsc.getReplaceValues(),
-              dsc.getContainerName(),
+              containerName,
               userName);
           }
         }

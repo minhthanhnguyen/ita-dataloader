@@ -9,7 +9,6 @@ public class DataSetConfig {
   private String url;
   private boolean enabled;
   private String fileName;
-  private String containerName;
   private List<ReplaceValue> replaceValues;
   private List<ZipFileConfig> zipFileConfigs;
 }

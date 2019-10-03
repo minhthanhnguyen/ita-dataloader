@@ -10,6 +10,9 @@
           <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestConfig()">
             <md-icon class="fa fa-cog"></md-icon>
           </md-button>
+          <md-button class="md-icon-button" @click="refreshLog()">
+            <md-icon class="fa fa-refresh"></md-icon>
+          </md-button>
         </div>
       </div>
       <div class="md-layout-item md-size-95"></div>
@@ -101,6 +104,13 @@ export default {
           containerName: this.containerName
         }
       });
+    },
+    async refreshLog() {
+      this.loading = true;
+      this.injestStatus = await this.dataloaderRepository._getIngestStatus(
+        this.containerName
+      );
+      this.loading = false;
     }
   }
 };
