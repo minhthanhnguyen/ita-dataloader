@@ -23,6 +23,14 @@
             >{{business.businessName}}</md-option>
           </md-select>
         </md-field>
+        <span class="file-stat">
+          <strong>Total files:</strong>
+          {{totalFiles}}
+        </span>
+        <span class="file-stat">
+          <strong>Total from API:</strong>
+          {{totalFilesFromAPIs}}
+        </span>
       </div>
       <div class="md-layout-item md-size-20">
         <md-field>
@@ -60,7 +68,7 @@
       />
     </div>
     <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
-      <md-table v-model="storageContent" md-sort="name" md-sort-order="asc">
+      <md-table v-model="storageMetadata" md-sort="name" md-sort-order="asc">
         <md-table-row slot-scope="{ item }" slot="md-table-row">
           <md-table-cell md-label="File Name" md-sort-by="name">{{item.name}}</md-table-cell>
           <md-table-cell md-label="URL">
@@ -69,6 +77,12 @@
           <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
           <md-table-cell md-label="Uploaded By" md-sort-by="uploadedBy">{{item.uploadedBy}}</md-table-cell>
           <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
+          <md-table-cell v-if="item.fromAPI === 'true'" md-label="API" md-sort-by="fromAPI">
+            <span class="dot api-dot"></span>
+          </md-table-cell>
+          <md-table-cell v-if="item.fromAPI === 'false'" md-label="API" md-sort-by="fromAPI">
+            <span class="dot"></span>
+          </md-table-cell>
         </md-table-row>
       </md-table>
     </div>
@@ -89,6 +103,24 @@
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+.storage-content {
+  padding-top: 10px;
+}
+.file-stat {
+  margin-right: 15px;
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid black;
+}
+
+.dot.api-dot {
+  background-color: #1b51ab;
+  border: 1px solid #1b51ab;
 }
 </style>
 <script>
@@ -121,7 +153,7 @@ export default {
       containerName: null,
       businessUnitName: null,
       businessUnits: [],
-      storageContent: [],
+      storageMetadata: [],
       destinationFileNameOptions: [],
       originalFileName: null,
       destinationFileName: null,
@@ -130,22 +162,39 @@ export default {
       uploadSuccessful: false,
       uploading: false,
       fileBlob: null,
-      loading: true
+      loading: true,
+      totalFiles: 0,
+      totalFilesFromAPIs: 0
     };
   },
   methods: {
     async updateBusinessUnitContent() {
-      this.storageContent = await this.dataloaderRepository._getStorageContent(
+      let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
         this.containerName
       );
 
-      this.destinationFileNameOptions = this.storageContent.map(
-        file => file.name
-      );
+      this.totalFiles = storageMetadata.length;
+
+      this.destinationFileNameOptions = storageMetadata.map(file => file.name);
 
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
+
+      const dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+        this.containerName
+      );
+      let dataSetFileNames = dataloaderConfig.dataSetConfigs.map(
+        config => config.fileName
+      );
+      this.storageMetadata = storageMetadata.map(metadata => {
+        metadata.fromAPI = dataSetFileNames.includes(metadata.name).toString();
+        return metadata;
+      });
+
+      this.totalFilesFromAPIs = this.storageMetadata.filter(
+        metadata => metadata.fromAPI === "true"
+      ).length;
     },
     onFileSelection(event) {
       this.fileBlob = event[0];
