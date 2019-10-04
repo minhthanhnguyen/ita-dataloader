@@ -1,5 +1,5 @@
 {
-  "dataSetConfigs": [
+  "externalDataSetConfigs": [
     {
       "enabled": true,
       "url": "https://www.imf.org/external/pubs/ft/weo/2019/01/weodata/WEOApr2019alla.xls",
@@ -177,17 +177,17 @@
       "fileName": "bea-ita/BEA_ITA_ImpServ.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=countrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
       "fileName": "bea-mne-country-by-type/BEA13_C_TYPE_IN.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=statebytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
       "fileName": "bea-mne-state-by-type/BEA13_S_TYPE_IN.json"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=industrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
       "fileName": "bea-mne-industry-by-type/BEA13_I_TYPE_IN.json"
     },

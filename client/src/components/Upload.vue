@@ -23,14 +23,6 @@
             >{{business.businessName}}</md-option>
           </md-select>
         </md-field>
-        <span class="file-stat">
-          <strong>Total files:</strong>
-          {{totalFiles}}
-        </span>
-        <span class="file-stat">
-          <strong>Total from API:</strong>
-          {{totalFilesFromAPIs}}
-        </span>
       </div>
       <div class="md-layout-item md-size-20">
         <md-field>
@@ -52,6 +44,19 @@
         <div v-if="uploading" class="spinner">
           <md-progress-spinner md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
         </div>
+      </div>
+    </div>
+    <div class="md-layout md-gutter">
+      <div class="md-layout-item md-size-10"></div>
+      <div class="md-layout-item md-size-90">
+        <span class="file-stat">
+          <strong>TOTAL FILES:</strong>
+          {{totalFiles}}
+        </span>
+        <span class="file-stat">
+          <strong>EXTERNAL:</strong>
+          {{totalFilesFromExternalUrls}}
+        </span>
       </div>
     </div>
     <div v-if="loading" class="loading">loading...</div>
@@ -77,10 +82,10 @@
           <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
           <md-table-cell md-label="Uploaded By" md-sort-by="uploadedBy">{{item.uploadedBy}}</md-table-cell>
           <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
-          <md-table-cell v-if="item.fromAPI === 'true'" md-label="API" md-sort-by="fromAPI">
-            <span class="dot api-dot"></span>
+          <md-table-cell v-if="item.external === 'true'" md-label="External" md-sort-by="external">
+            <span class="dot filled"></span>
           </md-table-cell>
-          <md-table-cell v-if="item.fromAPI === 'false'" md-label="API" md-sort-by="fromAPI">
+          <md-table-cell v-if="item.external === 'false'" md-label="External" md-sort-by="external">
             <span class="dot"></span>
           </md-table-cell>
         </md-table-row>
@@ -108,6 +113,7 @@
   padding-top: 10px;
 }
 .file-stat {
+  font-size: 12px;
   margin-right: 15px;
 }
 .dot {
@@ -118,7 +124,7 @@
   border: 1px solid black;
 }
 
-.dot.api-dot {
+.dot.filled {
   background-color: #1b51ab;
   border: 1px solid #1b51ab;
 }
@@ -164,7 +170,7 @@ export default {
       fileBlob: null,
       loading: true,
       totalFiles: 0,
-      totalFilesFromAPIs: 0
+      totalFilesFromExternalUrls: 0
     };
   },
   methods: {
@@ -172,28 +178,32 @@ export default {
       let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
         this.containerName
       );
+      const dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+        this.containerName
+      );
 
       this.totalFiles = storageMetadata.length;
-
-      this.destinationFileNameOptions = storageMetadata.map(file => file.name);
 
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
 
-      const dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
-        this.containerName
-      );
-      let dataSetFileNames = dataloaderConfig.dataSetConfigs.map(
+      let externalDataSetFileNames = dataloaderConfig.externalDataSetConfigs.map(
         config => config.fileName
       );
       this.storageMetadata = storageMetadata.map(metadata => {
-        metadata.fromAPI = dataSetFileNames.includes(metadata.name).toString();
+        metadata.external = externalDataSetFileNames
+          .includes(metadata.name)
+          .toString();
         return metadata;
       });
 
-      this.totalFilesFromAPIs = this.storageMetadata.filter(
-        metadata => metadata.fromAPI === "true"
+      this.destinationFileNameOptions = this.storageMetadata
+        .filter(file => !file.external)
+        .map(file => file.name);
+
+      this.totalFilesFromExternalUrls = this.storageMetadata.filter(
+        metadata => metadata.external === 'true'
       ).length;
     },
     onFileSelection(event) {
