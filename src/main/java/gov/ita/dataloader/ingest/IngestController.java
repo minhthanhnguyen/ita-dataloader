@@ -47,7 +47,7 @@ public class IngestController {
   @GetMapping("/api/ingest")
   public String startIngestProcess(@RequestParam("containerName") String containerName) {
     IngestProcessorStatus status = ingestProcessor.getStatus(containerName);
-    if (status == null || !status.isProcessing())
+    if (status == null || !status.isIngesting())
       ingestProcessor.process(
         getDataloaderConfig(containerName).getExternalDataSetConfigs(),
         containerName,

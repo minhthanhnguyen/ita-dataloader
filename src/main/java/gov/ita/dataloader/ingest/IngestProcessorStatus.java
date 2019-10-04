@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 class IngestProcessorStatus {
-  Integer totalUrlCallsQueued;
-  Integer processedUrlCalls;
-  boolean processing;
-  List<String> log;
+  Integer datasetsQueued;
+  Integer datasetsCompleted;
+  boolean ingesting;
+  List<LogItem> log;
 }

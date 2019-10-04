@@ -49,13 +49,13 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-10"></div>
       <div class="md-layout-item md-size-90">
-        <span class="file-stat">
+        <span class="stats">
           <strong>TOTAL FILES:</strong>
           {{totalFiles}}
         </span>
-        <span class="file-stat">
+        <span class="stats">
           <strong>EXTERNAL:</strong>
-          {{totalFilesFromExternalUrls}}
+          {{totalExternal}}
         </span>
       </div>
     </div>
@@ -112,10 +112,6 @@
 .storage-content {
   padding-top: 10px;
 }
-.file-stat {
-  font-size: 12px;
-  margin-right: 15px;
-}
 .dot {
   height: 10px;
   width: 10px;
@@ -170,7 +166,7 @@ export default {
       fileBlob: null,
       loading: true,
       totalFiles: 0,
-      totalFilesFromExternalUrls: 0
+      totalExternal: 0
     };
   },
   methods: {
@@ -202,8 +198,8 @@ export default {
         .filter(file => !file.external)
         .map(file => file.name);
 
-      this.totalFilesFromExternalUrls = this.storageMetadata.filter(
-        metadata => metadata.external === 'true'
+      this.totalExternal = this.storageMetadata.filter(
+        metadata => metadata.external === "true"
       ).length;
     },
     onFileSelection(event) {

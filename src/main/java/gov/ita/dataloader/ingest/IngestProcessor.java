@@ -77,10 +77,10 @@ public class IngestProcessor {
         }
       }
     } catch (Exception e) {
-      ingestProcessorStatus.getLog().add(e.getMessage());
+      ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
     } finally {
-      ingestProcessorStatus.getLog().add(String.format("%s Ingest process complete", LocalDateTime.now()));
-      ingestProcessorStatus.setProcessing(false);
+      ingestProcessorStatus.getLog().add(new LogItem("Ingest process complete"));
+      ingestProcessorStatus.setIngesting(false);
       log.info("Ingest process complete for container: {}", containerName);
     }
   }
@@ -92,8 +92,8 @@ public class IngestProcessor {
   }
 
   private void updateStatus(DataSetConfig dataSetConfig, IngestProcessorStatus ingestProcessorStatus) {
-    ingestProcessorStatus.setProcessedUrlCalls(ingestProcessorStatus.getProcessedUrlCalls() + 1);
-    ingestProcessorStatus.getLog().add(String.format("%s Completed ingest of URL: %s", LocalDateTime.now(), dataSetConfig.getUrl()));
+    ingestProcessorStatus.setDatasetsCompleted(ingestProcessorStatus.getDatasetsCompleted() + 1);
+    ingestProcessorStatus.getLog().add(new LogItem(String.format("Completed ingest of URL: %s", dataSetConfig.getUrl())));
   }
 
   IngestProcessorStatus getStatus(String containerName) {

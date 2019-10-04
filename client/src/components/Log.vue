@@ -2,7 +2,7 @@
   <div>
     <dataloader-header v-bind:businessUnitName="businessUnitName" />
     <div class="md-layout md-gutter">
-      <div class="md-layout-item md-size-5">
+      <div class="md-layout-item md-size-10">
         <div class="nav-btns">
           <md-button class="md-icon-button" @click="goToFileUpload()">
             <md-icon class="fa fa-angle-double-left"></md-icon>
@@ -15,30 +15,31 @@
           </md-button>
         </div>
       </div>
-      <div class="md-layout-item md-size-95"></div>
+      <div class="md-layout-item md-size-90">
+        <div class="ingest-stats">
+          <span class="stats">
+            <strong>INGESTING:</strong>
+            <span>{{injestStatus.ingesting}}</span>
+          </span>
+          <span class="stats">
+            <strong>QUEUED:</strong>
+            <span>{{injestStatus.datasetsQueued}}</span>
+          </span>
+          <span class="stats">
+            <strong>COMPLETED:</strong>
+            <span>{{injestStatus.datasetsCompleted}}</span>
+          </span>
+        </div>
+      </div>
     </div>
 
     <div class="log-details">
-      <h3>Log Details for Latest Ingestion:</h3>
-      <p>
-        <strong>Processing:</strong>
-        <span>{{injestStatus.processing}}</span>
-      </p>
-      <p>
-        <strong>Total datasets queued:</strong>
-        <span>{{injestStatus.totalUrlCallsQueued}}</span>
-      </p>
-      <p>
-        <strong>Total datasets saved:</strong>
-        <span>{{injestStatus.processedUrlCalls}}</span>
-      </p>
-      <ul>
-        <li
-          v-for="message in injestStatus.log"
-          v-bind:key="message"
-          v-bind:value="message"
-        >{{message}}</li>
-      </ul>
+      <md-table v-model="injestStatus.log" md-sort="time" md-sort-order="asc">
+        <md-table-row slot-scope="{ item }" slot="md-table-row">
+          <md-table-cell md-label="Timestamp">{{item.time}}</md-table-cell>
+          <md-table-cell md-label="Message">{{item.message}}</md-table-cell>
+        </md-table-row>
+      </md-table>
     </div>
 
     <div v-if="loading" class="loading">loading...</div>
@@ -49,9 +50,16 @@
   display: inline-block;
   margin-right: 20px;
 }
-
+.ingest-stats {
+  margin-top: 15px;
+}
 .log-details {
+  margin-top: 10px;
   margin-left: 20px;
+}
+
+.md-table-cell {
+  white-space: nowrap;
 }
 </style>
 <script>

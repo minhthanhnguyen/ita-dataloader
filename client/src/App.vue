@@ -43,4 +43,9 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.stats {
+  font-size: 12px;
+  margin-right: 15px;
+}
 </style>
