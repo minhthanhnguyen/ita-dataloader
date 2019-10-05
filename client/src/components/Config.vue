@@ -14,7 +14,18 @@
       </div>
       <div class="md-layout-item md-size-75"></div>
       <div class="md-layout-item md-size-10">
-        <md-button class="md-secondary md-raised top-btn" @click="saveConfiguration()">
+        <md-button
+          v-if="!editing"
+          class="md-secondary md-raised top-btn"
+          @click="editConfiguration()"
+        >
+          <label>Edit</label>
+        </md-button>
+        <md-button
+          v-if="editing"
+          class="md-secondary md-raised top-btn"
+          @click="saveConfiguration()"
+        >
           <label>Save</label>
         </md-button>
       </div>
@@ -32,8 +43,9 @@
       </div>
       <div class="md-layout md-alignment-top-center">
         <div class="config-text">
-          <md-field>
-            <textarea v-model="dataloaderConfig" rows="200" cols="195" wrap="off"></textarea>
+          <pre v-if="!editing" id="pretty-config-json"></pre>
+          <md-field v-else>
+            <textarea v-model="dataloaderConfigBeautified" rows="200" cols="195" wrap="off"></textarea>
           </md-field>
         </div>
         <md-dialog-alert
@@ -53,12 +65,25 @@
 </template>
 <style>
 .config-text {
-  margin-left: 30px;
+  margin-left: 35px;
+}
+.json-key {
+  color: brown;
+}
+.json-value {
+  color: navy;
+}
+.json-boolean {
+  color: teal;
+}
+.json-string {
+  color: olive;
 }
 </style>
 <script>
 import Header from "./Header";
 import beautify from "json-beautify";
+import prettyPrintJson from "pretty-print-json";
 
 export default {
   name: "Config",
@@ -69,8 +94,11 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.dataloaderConfig = beautify(
-      await this.dataloaderRepository._getDataloaderConfig(this.containerName),
+    this.dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+      this.containerName
+    );
+    this.dataloaderConfigBeautified = beautify(
+      this.dataloaderConfig,
       null,
       2,
       100
@@ -81,15 +109,25 @@ export default {
     ).businessName;
     this.loading = false;
   },
+  updated() {
+    this.$nextTick(function() {
+      if (document.getElementById("pretty-config-json"))
+        document.getElementById(
+          "pretty-config-json"
+        ).innerHTML = prettyPrintJson.toHtml(this.dataloaderConfig);
+    });
+  },
   data() {
     return {
       loading: true,
       containerName: null,
       businessUnitName: null,
       dataloaderConfig: null,
+      dataloaderConfigBeautified: null,
       configSaved: false,
       ingestClicked: false,
-      ingesting: false
+      ingesting: false,
+      editing: false
     };
   },
   methods: {
@@ -116,12 +154,17 @@ export default {
       });
     },
     async saveConfiguration() {
+      this.dataloaderConfig = JSON.parse(this.dataloaderConfigBeautified);
       let configSaveResponse = await this.dataloaderRepository._saveDataloaderConfig(
         this.dataloaderConfig,
         this.containerName
       );
 
       if (configSaveResponse.status === 200) this.configSaved = true;
+      this.editing = false;
+    },
+    editConfiguration() {
+      this.editing = true;
     }
   }
 };

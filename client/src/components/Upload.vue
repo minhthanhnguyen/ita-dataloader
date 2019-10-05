@@ -54,8 +54,8 @@
           {{totalFiles}}
         </span>
         <span class="stats">
-          <strong>EXTERNAL:</strong>
-          {{totalExternal}}
+          <strong>UPLOADS:</strong>
+          {{totalManualUploads}}
         </span>
       </div>
     </div>
@@ -75,17 +75,20 @@
     <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
       <md-table v-model="storageMetadata" md-sort="name" md-sort-order="asc">
         <md-table-row slot-scope="{ item }" slot="md-table-row">
-          <md-table-cell md-label="File Name" md-sort-by="name">{{item.name}}</md-table-cell>
-          <md-table-cell md-label="URL">
-            <a v-bind:href="item.url">{{item.url}}</a>
+          <md-table-cell md-label="File Name" md-sort-by="name">
+            <a v-bind:href="item.url">{{item.name}}</a>
           </md-table-cell>
           <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
           <md-table-cell md-label="Uploaded By" md-sort-by="uploadedBy">{{item.uploadedBy}}</md-table-cell>
           <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
-          <md-table-cell v-if="item.external === 'true'" md-label="External" md-sort-by="external">
+          <md-table-cell
+            v-if="item.manualUpload === 'true'"
+            md-label="Upload"
+            md-sort-by="manualUpload"
+          >
             <span class="dot filled"></span>
           </md-table-cell>
-          <md-table-cell v-if="item.external === 'false'" md-label="External" md-sort-by="external">
+          <md-table-cell v-else md-label="Upload" md-sort-by="manualUpload">
             <span class="dot"></span>
           </md-table-cell>
         </md-table-row>
@@ -166,7 +169,7 @@ export default {
       fileBlob: null,
       loading: true,
       totalFiles: 0,
-      totalExternal: 0
+      totalManualUploads: 0
     };
   },
   methods: {
@@ -184,22 +187,22 @@ export default {
         b => b.containerName === this.containerName
       ).businessName;
 
-      let externalDataSetFileNames = dataloaderConfig.externalDataSetConfigs.map(
+      let dataSetFileNames = dataloaderConfig.dataSetConfigs.map(
         config => config.fileName
       );
       this.storageMetadata = storageMetadata.map(metadata => {
-        metadata.external = externalDataSetFileNames
-          .includes(metadata.name)
-          .toString();
+        metadata.manualUpload = dataSetFileNames.includes(metadata.name)
+          ? "false"
+          : "true";
         return metadata;
       });
 
       this.destinationFileNameOptions = this.storageMetadata
-        .filter(file => !file.external)
+        .filter(file => file.manualUpload === "true")
         .map(file => file.name);
 
-      this.totalExternal = this.storageMetadata.filter(
-        metadata => metadata.external === "true"
+      this.totalManualUploads = this.storageMetadata.filter(
+        metadata => metadata.manualUpload === "true"
       ).length;
     },
     onFileSelection(event) {

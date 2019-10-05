@@ -49,7 +49,7 @@ public class IngestController {
     IngestProcessorStatus status = ingestProcessor.getStatus(containerName);
     if (status == null || !status.isIngesting())
       ingestProcessor.process(
-        getDataloaderConfig(containerName).getExternalDataSetConfigs(),
+        getDataloaderConfig(containerName).getDataSetConfigs(),
         containerName,
         authenticationFacade.getUserName());
     return "done";

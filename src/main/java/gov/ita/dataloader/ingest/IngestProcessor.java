@@ -62,7 +62,7 @@ public class IngestProcessor {
             processAndSaveDataSource(
               zfc.getDestinationFileName(),
               fileMap.get(fileName).toByteArray(),
-              dsc.getReplaceValues(),
+              zfc.getReplaceValues(),
               containerName,
               userName);
           }
@@ -124,7 +124,7 @@ public class IngestProcessor {
         .collect(Collectors.toList())
         .get(0);
     } catch (IndexOutOfBoundsException e) {
-      String message = String.format("Error: The file %s could not be found in the zip file from from: %s", fileName, dsc.getUrl());
+      String message = String.format("Error: The file %s could not be found in the zip configuration for: %s", fileName, dsc.getUrl());
       throw new IngestProcessorException(message);
     }
   }

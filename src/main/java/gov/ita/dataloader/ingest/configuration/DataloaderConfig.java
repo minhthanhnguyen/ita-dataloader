@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class DataloaderConfig {
-  public List<DataSetConfig> externalDataSetConfigs;
+  public List<DataSetConfig> dataSetConfigs;
 }
