@@ -14,6 +14,7 @@ spring:
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+datafactory-status-url: ${DATAFACTORY_STATUS_URL}
 
 ---
 spring:
@@ -36,3 +37,4 @@ azure:
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+datafactory-status-url: ${DATAFACTORY_STATUS_URL}

@@ -7,7 +7,7 @@ import com.microsoft.azure.storage.blob.models.ContainerItem;
 import com.microsoft.azure.storage.blob.models.PublicAccessType;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import com.microsoft.rest.v2.util.FlowableUtil;
-import gov.ita.dataloader.ingest.HttpHelper;
+import gov.ita.dataloader.HttpHelper;
 import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

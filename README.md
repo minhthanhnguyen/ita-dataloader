@@ -35,6 +35,7 @@ Steps to run this application on you local for development purposes
     - AZURE_OAUTH_CLIENT_SECRET: Active Directory Client Secret
     - AZURE_STORAGE_ACCOUNT: Data Lake Storage Account
     - AZURE_STORAGE_ACCOUNT_KEY: Data Lake Storage Account Key
+    - DATAFACTORY_STATUS_URL: The URL that this repository provides when deployed (https://github.com/InternationalTradeAdministration/ita-datafactory-log-extractor)
 
 ## General Notes
  - The data-pipeline directory is not utilized in this project, it's a temporary backup of the Azure data-pipeline

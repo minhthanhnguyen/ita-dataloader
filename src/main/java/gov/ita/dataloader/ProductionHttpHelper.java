@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest;
+package gov.ita.dataloader;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Profile;

@@ -10,6 +10,9 @@
           <md-button class="md-icon-button url-log-btn" @click="goToUrlIngestLog()">
             <md-icon class="fa fa-bars"></md-icon>
           </md-button>
+          <md-button class="md-icon-button" @click="updateBusinessUnitContent()">
+            <md-icon class="fa fa-refresh"></md-icon>
+          </md-button>
         </div>
       </div>
       <div class="md-layout-item md-size-20">
@@ -46,7 +49,8 @@
         </div>
       </div>
     </div>
-    <div class="md-layout md-gutter">
+    <div v-if="loading" class="loading">loading...</div>
+    <div v-if="!loading" class="md-layout md-gutter">
       <div class="md-layout-item md-size-10"></div>
       <div class="md-layout-item md-size-90">
         <span class="stats">
@@ -57,20 +61,14 @@
           <strong>UPLOADS:</strong>
           {{totalManualUploads}}
         </span>
+        <span class="stats">
+          <strong>PIPELINE:</strong>
+          <span v-if="!['Succeeded', 'InProgress', 'n/a'].includes(this.pipelineStatus.status)">
+            <a @click="displayPipelineMessage = true" href="#">Error</a>
+          </span>
+          <span v-else>{{this.pipelineStatus.status}}</span>
+        </span>
       </div>
-    </div>
-    <div v-if="loading" class="loading">loading...</div>
-    <div class="user-feedback">
-      <div class="error" v-if="errorOccured">
-        <ul>
-          <li v-for="message in errorMessages" v-bind:key="message">{{message}}</li>
-        </ul>
-      </div>
-      <md-dialog-alert
-        :md-active.sync="uploadSuccessful"
-        md-content="Your file was uploaded successfully! "
-        md-confirm-text="Close"
-      />
     </div>
     <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
       <md-table v-model="storageMetadata" md-sort="name" md-sort-order="asc">
@@ -94,18 +92,32 @@
         </md-table-row>
       </md-table>
     </div>
+    <div class="user-feedback">
+      <md-dialog-alert
+        :md-active.sync="uploadSuccessful"
+        md-title="Upload Successful!"
+        md-content="Your file was uploaded successfully! "
+        md-confirm-text="Close"
+      />
+      <md-dialog-alert
+        :md-active.sync="errorOccured"
+        md-title="Upload Error!"
+        v-bind:md-content="errorMessage"
+        md-confirm-text="Close"
+      />
+      <md-dialog-alert
+        :md-active.sync="displayPipelineMessage"
+        md-title="Pipeline Error!"
+        v-bind:md-content="pipelineStatus.message"
+        md-confirm-text="Close"
+      />
+    </div>
   </div>
 </template>
 <style>
 .user-feedback {
   display: flex;
   justify-content: center;
-}
-.error {
-  color: red;
-}
-.success {
-  color: green;
 }
 .uploading {
   margin-top: 20px;
@@ -151,6 +163,7 @@ export default {
     }
 
     await this.updateBusinessUnitContent();
+
     this.loading = false;
   },
   data() {
@@ -163,17 +176,23 @@ export default {
       originalFileName: null,
       destinationFileName: null,
       errorOccured: false,
-      errorMessages: [],
+      errorMessage: null,
       uploadSuccessful: false,
       uploading: false,
       fileBlob: null,
       loading: true,
       totalFiles: 0,
-      totalManualUploads: 0
+      totalManualUploads: 0,
+      pipelineStatus: {
+        status: "n/a",
+        message: ""
+      },
+      displayPipelineMessage: false
     };
   },
   methods: {
     async updateBusinessUnitContent() {
+      this.loading = true;
       let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
         this.containerName
       );
@@ -204,6 +223,15 @@ export default {
       this.totalManualUploads = this.storageMetadata.filter(
         metadata => metadata.manualUpload === "true"
       ).length;
+
+      this.pipelineStatus = await this.dataloaderRepository._getPipelineStatus(
+        this.containerName
+      );
+
+      if (this.pipelineStatus == null) {
+        this.pipelineStatus = { status: "n/a", message: "" };
+      }
+      this.loading = false;
     },
     onFileSelection(event) {
       this.fileBlob = event[0];
@@ -214,16 +242,16 @@ export default {
     async uploadFile() {
       this.uploading = true;
       this.uploadSuccessful = false;
-      this.errorMessages = [];
+      this.errorMessage = null;
       if (!this.fileBlob) {
-        this.setErrorState(["Please select a file to be uploaded."]);
+        this.setErrorState("Please select a file to be uploaded.");
         return;
       }
 
       if (!this.destinationFileName) {
-        this.setErrorState([
+        this.setErrorState(
           "Please select a destination file name for the upload."
-        ]);
+        );
         return;
       }
 
@@ -238,9 +266,9 @@ export default {
 
       await this.updateBusinessUnitContent();
     },
-    setErrorState(errorMessages) {
+    setErrorState(errorMessage) {
       this.errorOccured = true;
-      this.errorMessages = errorMessages;
+      this.errorMessage = errorMessage;
       this.uploadSuccessful = false;
       this.uploading = false;
     },

@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest;
+package gov.ita.dataloader;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

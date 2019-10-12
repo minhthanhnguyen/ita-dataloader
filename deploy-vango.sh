@@ -15,6 +15,8 @@ sudo docker push vangoscontainerregistry.azurecr.io/ita-dataloader
      --location eastus --registry-username vangoscontainerregistry --registry-password $AZURE_CONTAINER_KEY \
      --environment-variables 'AZURE_STORAGE_ACCOUNT'=$AZURE_STORAGE_ACCOUNT \
      'AZURE_STORAGE_ACCOUNT_KEY'=$AZURE_STORAGE_ACCOUNT_KEY \
+     'DATAFACTORY_STATUS_URL'=$DATAFACTORY_STATUS_URL
+
 
 #az container logs --resource-group vangos-resources --name ita-dataloader
 
