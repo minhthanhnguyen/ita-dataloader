@@ -45,7 +45,7 @@ public class IngestProcessorTest {
     when(httpHelper.getBytes("http://very-cool.io")).thenReturn(veryRadBytes);
     when(httpHelper.getBytes("http://really-cool.io")).thenReturn(reallyRadBytes);
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -66,7 +66,7 @@ public class IngestProcessorTest {
 
     when(httpHelper.getBytes("http://vango.io")).thenReturn("The best sport is baseball!".getBytes());
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))

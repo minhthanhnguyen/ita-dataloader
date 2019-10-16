@@ -7,6 +7,8 @@ import gov.ita.dataloader.ingest.configuration.BusinessUnitConfigResponse;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
 import gov.ita.dataloader.ingest.storage.BlobMetaData;
 import gov.ita.dataloader.ingest.storage.Storage;
+import gov.ita.dataloader.ingest.translators.Translator;
+import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.security.AuthenticationFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -26,15 +28,18 @@ public class IngestController {
   private IngestProcessor ingestProcessor;
   private AuthenticationFacade authenticationFacade;
   private ObjectMapper objectMapper;
+  private TranslatorFactory translatorFactory;
 
   public IngestController(Storage storage,
                           IngestProcessor ingestProcessor,
                           AuthenticationFacade authenticationFacade,
-                          ObjectMapper objectMapper) {
+                          ObjectMapper objectMapper,
+                          TranslatorFactory translatorFactory) {
     this.storage = storage;
     this.ingestProcessor = ingestProcessor;
     this.authenticationFacade = authenticationFacade;
     this.objectMapper = objectMapper;
+    this.translatorFactory = translatorFactory;
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
@@ -71,6 +76,17 @@ public class IngestController {
       authenticationFacade.getUserName(),
       containerName,
       true);
+
+    Translator translator = translatorFactory.getTranslator(containerName + "#" + file.getOriginalFilename());
+    if (translator != null) {
+      byte[] translatedFile = translator.translate(file.getBytes());
+      storage.save(
+        "translated/" + file.getOriginalFilename(),
+        translatedFile,
+        authenticationFacade.getUserName(),
+        containerName,
+        true);
+    }
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")

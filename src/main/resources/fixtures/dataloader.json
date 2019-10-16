@@ -3,10 +3,12 @@
     {
       "containerName": "select-usa",
       "businessName": "Select USA"
-    },{
+    },
+    {
       "containerName": "otexa",
       "businessName": "OTEXA"
-    },{
+    },
+    {
       "containerName": "fta-tariff-rates",
       "businessName": "FTA Tariff Rates"
     }
