@@ -21,11 +21,13 @@ Steps to run this application on you local for development purposes
 **Frontend**  `cd client && npm test`
 
 ## Build
-```./build.sh```
+ - CI/CD build script ```./build.sh```
+ - Local build script ```./build-local.sh```
 
 ## Deploy
-```./deploy.sh```
-
+ - K8 deploy script ```./deploy.sh```
+ - Container Instance deploy script ```./deploy-vango.sh```
+ 
 ## Production Deployment Notes
  - An Azure Blob Storage account is required
  - An Azure AD App Registration is required procure an OAuth Client ID and Client Secret
