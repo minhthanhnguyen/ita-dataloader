@@ -68,7 +68,8 @@ public class IngestController {
       file.getOriginalFilename(),
       file.getBytes(),
       authenticationFacade.getUserName(),
-      containerName);
+      containerName,
+      true);
     return "success";
   }
 
@@ -77,7 +78,7 @@ public class IngestController {
   public void saveConfiguration(@RequestBody DataloaderConfig dataloaderConfig,
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
     byte[] dataSetConfigsJsonBytes = objectMapper.writeValueAsString(dataloaderConfig).getBytes();
-    storage.save("configuration.json", dataSetConfigsJsonBytes, authenticationFacade.getUserName(), containerName);
+    storage.save("configuration.json", dataSetConfigsJsonBytes, authenticationFacade.getUserName(), containerName, true);
   }
 
   @GetMapping("/api/storage-content-url")

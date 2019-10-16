@@ -43,17 +43,17 @@ public class ProductionStorage implements Storage {
   public void createContainer(String containerName) {
     log.info("Initializing container: {}", containerName);
     makeContainerUrl(containerName)
-      .create(makeMetaData(accountName), PublicAccessType.CONTAINER, null)
+      .create(null, PublicAccessType.CONTAINER, null)
       .blockingGet();
   }
 
   @Override
-  public void save(String fileName, byte[] fileContent, String user, String containerName) {
+  public void save(String fileName, byte[] fileContent, String user, String containerName, Boolean userUpload) {
     if (user == null) user = accountName;
     ContainerURL containerURL = makeContainerUrl(containerName);
     BlockBlobURL blobURL = containerURL.createBlockBlobURL(fileName);
     blobURL.upload(Flowable.just(ByteBuffer.wrap(fileContent)), fileContent.length,
-      makeHeader(fileName), makeMetaData(user), null, null)
+      makeHeader(fileName), makeMetaData(user, userUpload), null, null)
       .flatMap(blobsDownloadResponse ->
         blobURL.download())
       .flatMap(blobsDownloadResponse ->
@@ -91,7 +91,7 @@ public class ProductionStorage implements Storage {
             buildUrlForBlob(x.name(), containerName),
             x.properties().contentLength(),
             x.properties().lastModified(),
-            x.metadata() != null ? x.metadata().getOrDefault("uploaded_by", "---") : "---"
+            x.metadata()
           )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
         .collect(Collectors.toList());
     }
@@ -142,9 +142,10 @@ public class ProductionStorage implements Storage {
     return null;
   }
 
-  private Metadata makeMetaData(String user) {
+  private Metadata makeMetaData(String uploadedBy, Boolean userUpload) {
     Metadata metadata = new Metadata();
-    metadata.put("uploaded_by", user);
+    metadata.put("uploaded_by", uploadedBy);
+    metadata.put("user_upload", userUpload.toString());
     return metadata;
   }
 

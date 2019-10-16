@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,5 @@ public class BlobMetaData {
   String url;
   Long size;
   OffsetDateTime uploadedAt;
-  String uploadedBy;
+  Map<String, String> metadata;
 }

@@ -23,7 +23,7 @@ public class StorageInitializer {
       if (!containers.contains(containerName)) {
         String path = configurationFiles.get(configFile);
         storage.createContainer(containerName);
-        storage.save("configuration.json", getResourceAsString(path).getBytes(), null, containerName);
+        storage.save("configuration.json", getResourceAsString(path).getBytes(), null, containerName, false);
       }
     }
   }

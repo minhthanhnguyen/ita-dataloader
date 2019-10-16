@@ -20,7 +20,7 @@ public class DevelopmentStorage implements Storage {
   }
 
   @Override
-  public void save(String fileName, byte[] fileContent, String user, String containerName) {
+  public void save(String fileName, byte[] fileContent, String user, String containerName, Boolean userUpload) {
     log.info("Saving blob: {}, {}, {}", fileName, containerName, user);
 
     Map<String, byte[]> containerContent = storageContent.get(containerName);
@@ -39,6 +39,10 @@ public class DevelopmentStorage implements Storage {
   @Override
   public List<BlobMetaData> getBlobMetadata(String containerName) {
     List<BlobMetaData> blobMetaDataList = new ArrayList<>();
+
+    Map<String, String> metadata = new HashMap<>();
+    metadata.put("uploaded_by", "TestUser@trade.gov");
+
     for (String container : storageContent.keySet()) {
       if (container.equals(containerName)) {
         Map<String, byte[]> containerContent = storageContent.get(container);
@@ -48,7 +52,8 @@ public class DevelopmentStorage implements Storage {
             String.format("http://some-cloud-strage-url.com/%s/%s", containerName, fileName),
             123L,
             OffsetDateTime.now(),
-            "TestUser@trade.gov");
+            metadata
+          );
           blobMetaDataList.add(blobMetaData);
         }
       }

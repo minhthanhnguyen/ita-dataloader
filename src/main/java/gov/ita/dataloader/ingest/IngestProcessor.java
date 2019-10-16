@@ -115,7 +115,7 @@ public class IngestProcessor {
         fileBytes = replace(fileBytes, rv.getReplaceThis(), rv.getWithThis());
       }
     }
-    storage.save(fileName, fileBytes, userName, containerName);
+    storage.save(fileName, fileBytes, userName, containerName, false);
   }
 
   private ZipFileConfig getZipFileConfig(DataSetConfig dsc, String fileName) throws IngestProcessorException {

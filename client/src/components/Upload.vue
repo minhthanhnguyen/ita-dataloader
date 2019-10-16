@@ -77,17 +77,14 @@
             <a v-bind:href="item.url">{{item.name}}</a>
           </md-table-cell>
           <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
-          <md-table-cell md-label="Uploaded By" md-sort-by="uploadedBy">{{item.uploadedBy}}</md-table-cell>
-          <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
           <md-table-cell
-            v-if="item.manualUpload === 'true'"
-            md-label="Upload"
-            md-sort-by="manualUpload"
-          >
-            <span class="dot filled"></span>
-          </md-table-cell>
-          <md-table-cell v-else md-label="Upload" md-sort-by="manualUpload">
-            <span class="dot"></span>
+            md-label="Uploaded By"
+            md-sort-by="metadata.uploaded_by"
+          >{{item.metadata.uploaded_by}}</md-table-cell>
+          <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
+          <md-table-cell md-label="Upload" md-sort-by="metadata.user_upload">
+            <span v-if="item.metadata.user_upload === 'true'" class="dot filled"></span>
+            <span v-else class="dot"></span>
           </md-table-cell>
         </md-table-row>
       </md-table>
@@ -193,28 +190,15 @@ export default {
   methods: {
     async updateBusinessUnitContent() {
       this.loading = true;
-      let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
-        this.containerName
-      );
-      const dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+      this.storageMetadata = await this.dataloaderRepository._getStorageMetadata(
         this.containerName
       );
 
-      this.totalFiles = storageMetadata.length;
+      this.totalFiles = this.storageMetadata.length;
 
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
-
-      let dataSetFileNames = dataloaderConfig.dataSetConfigs.map(
-        config => config.fileName
-      );
-      this.storageMetadata = storageMetadata.map(metadata => {
-        metadata.manualUpload = dataSetFileNames.includes(metadata.name)
-          ? "false"
-          : "true";
-        return metadata;
-      });
 
       this.destinationFileNameOptions = this.storageMetadata
         .filter(file => file.manualUpload === "true")
