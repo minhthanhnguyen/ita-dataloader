@@ -49,7 +49,9 @@
         </div>
       </div>
     </div>
-    <div v-if="loading" class="loading">loading...</div>
+    <div v-if="loading" class="loading">
+      <md-progress-bar md-mode="indeterminate"></md-progress-bar>
+    </div>
     <div v-if="!loading" class="md-layout md-gutter">
       <div class="md-layout-item md-size-10"></div>
       <div class="md-layout-item md-size-90">

@@ -34,7 +34,7 @@ public class IngestProcessor {
     status = new HashMap<>();
   }
 
-  public void process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName) {
+  public void process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName, long sleepMs) {
     log.info("Starting ingest process for container: {}", containerName);
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
     IngestProcessorStatus ingestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
@@ -72,7 +72,7 @@ public class IngestProcessor {
         updateStatus(dsc, ingestProcessorStatus);
 
         try {
-          Thread.sleep(5000);
+          Thread.sleep(sleepMs);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

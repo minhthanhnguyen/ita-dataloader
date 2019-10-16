@@ -60,7 +60,9 @@
         />
       </div>
     </div>
-    <div v-if="loading" class="loading">loading...</div>
+    <div v-if="loading" class="loading">
+      <md-progress-bar md-mode="indeterminate"></md-progress-bar>
+    </div>
   </div>
 </template>
 <style>

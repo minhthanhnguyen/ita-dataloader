@@ -51,7 +51,8 @@ public class IngestController {
       ingestProcessor.process(
         getDataloaderConfig(containerName).getDataSetConfigs(),
         containerName,
-        authenticationFacade.getUserName());
+        authenticationFacade.getUserName(),
+        5000);
     return "done";
   }
 
@@ -62,15 +63,14 @@ public class IngestController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @PutMapping("/api/save/file")
-  public String saveFile(@RequestParam("file") MultipartFile file,
-                         @RequestParam("containerName") String containerName) throws IOException {
+  public void saveFile(@RequestParam("file") MultipartFile file,
+                       @RequestParam("containerName") String containerName) throws IOException {
     storage.save(
       file.getOriginalFilename(),
       file.getBytes(),
       authenticationFacade.getUserName(),
       containerName,
       true);
-    return "success";
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
