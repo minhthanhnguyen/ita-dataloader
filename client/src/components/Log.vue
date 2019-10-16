@@ -81,6 +81,11 @@ export default {
     this.injestStatus = await this.dataloaderRepository._getIngestStatus(
       this.containerName
     );
+
+    if (!this.injestStatus) {
+      this.injestStatus = this.defaultInjectStatus();
+    }
+
     this.loading = false;
   },
   data() {
@@ -88,12 +93,7 @@ export default {
       loading: true,
       containerName: null,
       businessUnitName: null,
-      injestStatus: {
-        processing: false,
-        totalUrlCallsQueued: 0,
-        processedUrlCalls: 0,
-        log: []
-      }
+      injestStatus: this.defaultInjectStatus()
     };
   },
   methods: {
@@ -119,6 +119,14 @@ export default {
         this.containerName
       );
       this.loading = false;
+    },
+    defaultInjectStatus() {
+      return {
+        processing: false,
+        totalUrlCallsQueued: 0,
+        processedUrlCalls: 0,
+        log: []
+      };
     }
   }
 };
