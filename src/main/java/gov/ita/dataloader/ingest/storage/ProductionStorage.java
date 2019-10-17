@@ -6,18 +6,18 @@ import com.microsoft.azure.storage.blob.models.BlobHTTPHeaders;
 import com.microsoft.azure.storage.blob.models.ContainerItem;
 import com.microsoft.azure.storage.blob.models.PublicAccessType;
 import com.microsoft.rest.v2.http.HttpPipeline;
-import com.microsoft.rest.v2.util.FlowableUtil;
 import gov.ita.dataloader.HttpHelper;
-import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.util.Collections;
 import java.util.List;
@@ -49,21 +49,29 @@ public class ProductionStorage implements Storage {
 
   @Override
   public void save(String fileName, byte[] fileContent, String user, String containerName, Boolean userUpload) {
-    if (user == null) user = accountName;
-    ContainerURL containerURL = makeContainerUrl(containerName);
-    BlockBlobURL blobURL = containerURL.createBlockBlobURL(fileName);
-    blobURL.upload(Flowable.just(ByteBuffer.wrap(fileContent)), fileContent.length,
-      makeHeader(fileName), makeMetaData(user, userUpload), null, null)
-      .flatMap(blobsDownloadResponse ->
-        blobURL.download())
-      .flatMap(blobsDownloadResponse ->
-        FlowableUtil.collectBytesInBuffer(blobsDownloadResponse.body(null))
-          .doOnSuccess(byteBuffer -> {
-            if (byteBuffer.compareTo(ByteBuffer.wrap(fileContent)) != 0) {
-              throw new Exception("The downloaded data does not match the uploaded data.");
-            }
-          }))
-      .blockingGet();
+    try {
+      if (user == null) user = accountName;
+
+      ContainerURL containerURL = makeContainerUrl(containerName);
+      BlockBlobURL blobURL = containerURL.createBlockBlobURL(fileName);
+
+      File tmpFile = File.createTempFile("tmpFile", ".tmp");
+      OutputStream os = new FileOutputStream(tmpFile);
+      os.write(fileContent);
+      os.close();
+
+      AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(Paths.get(tmpFile.getAbsolutePath()));
+      TransferManagerUploadToBlockBlobOptions options =
+        new TransferManagerUploadToBlockBlobOptions(
+          null,
+          makeHeader(fileName),
+          makeMetaData(user, userUpload),
+          null,
+          10);
+      TransferManager.uploadFileToBlockBlob(fileChannel, blobURL, 1000000, 20000000, options).blockingGet();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
