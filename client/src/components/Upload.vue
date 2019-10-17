@@ -69,6 +69,7 @@
             <a @click="displayPipelineMessage = true" href="#">Error</a>
           </span>
           <span v-else>{{this.pipelineStatus.status}}</span>
+          <span> {{this.pipelineStatus.runEnd}}</span>
         </span>
       </div>
     </div>
@@ -184,7 +185,8 @@ export default {
       totalManualUploads: 0,
       pipelineStatus: {
         status: "n/a",
-        message: ""
+        message: "",
+        runEnd: ""
       },
       displayPipelineMessage: false
     };
@@ -203,11 +205,11 @@ export default {
       ).businessName;
 
       this.destinationFileNameOptions = this.storageMetadata
-        .filter(file => file.manualUpload === "true")
+        .filter(file => file.metadata.user_upload === "true")
         .map(file => file.name);
 
       this.totalManualUploads = this.storageMetadata.filter(
-        metadata => metadata.manualUpload === "true"
+        file => file.metadata.user_upload === "true"
       ).length;
 
       this.pipelineStatus = await this.dataloaderRepository._getPipelineStatus(
@@ -215,7 +217,7 @@ export default {
       );
 
       if (this.pipelineStatus == null) {
-        this.pipelineStatus = { status: "n/a", message: "" };
+        this.pipelineStatus = { status: "n/a", message: "", runEnd: ""};
       }
       this.loading = false;
     },
