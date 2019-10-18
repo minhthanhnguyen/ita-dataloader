@@ -173,7 +173,7 @@
 							},
 							{
 								"source": {
-									"name": " CAT_DESCRIPTION",
+									"name": "CAT_DESCRIPTION",
 									"type": "String"
 								},
 								"sink": {
