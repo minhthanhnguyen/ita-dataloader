@@ -1,0 +1,26 @@
+{
+	"name": "OtexaCatDescriptionsDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CAT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CAT_DESCRIPTION",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OTEXA_CAT_REF"
+		}
+	}
+}

@@ -130,6 +130,72 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy Cat Descriptions",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CAT_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAT_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": " CAT_DESCRIPTION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAT_DESCRIPTION",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OtexaCatDescriptionsBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OtexaCatDescriptionsDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
