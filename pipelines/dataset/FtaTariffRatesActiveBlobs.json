@@ -1,0 +1,454 @@
+{
+	"name": "FtaTariffRatesActiveBlobs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VangosBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "australia.csv",
+				"folderPath": "active",
+				"container": "fta-tariff-rates"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\"",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "TL",
+				"type": "String"
+			},
+			{
+				"name": "TL_Desc",
+				"type": "String"
+			},
+			{
+				"name": "HS6",
+				"type": "String"
+			},
+			{
+				"name": "HS6_Desc",
+				"type": "String"
+			},
+			{
+				"name": "Sector_Code",
+				"type": "String"
+			},
+			{
+				"name": "Base_Rate",
+				"type": "String"
+			},
+			{
+				"name": "Base_Rate_Alt",
+				"type": "String"
+			},
+			{
+				"name": "Final_Year",
+				"type": "String"
+			},
+			{
+				"name": "TLs_Per_6_Digit",
+				"type": "String"
+			},
+			{
+				"name": "Staging_Basket",
+				"type": "String"
+			},
+			{
+				"name": "TRQ_Quota",
+				"type": "String"
+			},
+			{
+				"name": "TRQ_Note",
+				"type": "String"
+			},
+			{
+				"name": "Tariff_Eliminated",
+				"type": "String"
+			},
+			{
+				"name": "Product_Type",
+				"type": "String"
+			},
+			{
+				"name": "Pending_Data",
+				"type": "String"
+			},
+			{
+				"name": "Ag_ID",
+				"type": "String"
+			},
+			{
+				"name": "PartnerName",
+				"type": "String"
+			},
+			{
+				"name": "ReporterName",
+				"type": "String"
+			},
+			{
+				"name": "StagingBasket",
+				"type": "String"
+			},
+			{
+				"name": "StagingBasketId",
+				"type": "String"
+			},
+			{
+				"name": "Num_MAR_Columns",
+				"type": "String"
+			},
+			{
+				"name": "PartnerStartYear",
+				"type": "String"
+			},
+			{
+				"name": "ReporterStartYear",
+				"type": "String"
+			},
+			{
+				"name": "PartnerAgreementName",
+				"type": "String"
+			},
+			{
+				"name": "ReporterAgreementName",
+				"type": "String"
+			},
+			{
+				"name": "PartnerAgreementApproved",
+				"type": "String"
+			},
+			{
+				"name": "ReporterAgreementApproved",
+				"type": "String"
+			},
+			{
+				"name": "Rule_Text",
+				"type": "String"
+			},
+			{
+				"name": "QuotaName",
+				"type": "String"
+			},
+			{
+				"name": "ProductType",
+				"type": "String"
+			},
+			{
+				"name": "Y2004",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2004",
+				"type": "String"
+			},
+			{
+				"name": "Y2005",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2005",
+				"type": "String"
+			},
+			{
+				"name": "Y2006",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2006",
+				"type": "String"
+			},
+			{
+				"name": "Y2007",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2007",
+				"type": "String"
+			},
+			{
+				"name": "Y2008",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2008",
+				"type": "String"
+			},
+			{
+				"name": "Y2009",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2009",
+				"type": "String"
+			},
+			{
+				"name": "Y2010",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2010",
+				"type": "String"
+			},
+			{
+				"name": "Y2011",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2011",
+				"type": "String"
+			},
+			{
+				"name": "Y2012",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2012",
+				"type": "String"
+			},
+			{
+				"name": "Y2013",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2013",
+				"type": "String"
+			},
+			{
+				"name": "Y2014",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2014",
+				"type": "String"
+			},
+			{
+				"name": "Y2015",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2015",
+				"type": "String"
+			},
+			{
+				"name": "Y2016",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2016",
+				"type": "String"
+			},
+			{
+				"name": "Y2017",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2017",
+				"type": "String"
+			},
+			{
+				"name": "Y2018",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2018",
+				"type": "String"
+			},
+			{
+				"name": "Y2019",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2019",
+				"type": "String"
+			},
+			{
+				"name": "Y2020",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2020",
+				"type": "String"
+			},
+			{
+				"name": "Y2021",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2021",
+				"type": "String"
+			},
+			{
+				"name": "Y2022",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2022",
+				"type": "String"
+			},
+			{
+				"name": "Y2023",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2023",
+				"type": "String"
+			},
+			{
+				"name": "Y2024",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2024",
+				"type": "String"
+			},
+			{
+				"name": "Y2025",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2025",
+				"type": "String"
+			},
+			{
+				"name": "Y2026",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2026",
+				"type": "String"
+			},
+			{
+				"name": "Y2027",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2027",
+				"type": "String"
+			},
+			{
+				"name": "Y2028",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2028",
+				"type": "String"
+			},
+			{
+				"name": "Y2029",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2029",
+				"type": "String"
+			},
+			{
+				"name": "Y2030",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2030",
+				"type": "String"
+			},
+			{
+				"name": "Y2031",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2031",
+				"type": "String"
+			},
+			{
+				"name": "Y2032",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2032",
+				"type": "String"
+			},
+			{
+				"name": "Y2033",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2033",
+				"type": "String"
+			},
+			{
+				"name": "Y2034",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2034",
+				"type": "String"
+			},
+			{
+				"name": "Y2035",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2035",
+				"type": "String"
+			},
+			{
+				"name": "Y2036",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2036",
+				"type": "String"
+			},
+			{
+				"name": "Y2037",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2037",
+				"type": "String"
+			},
+			{
+				"name": "Y2038",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2038",
+				"type": "String"
+			},
+			{
+				"name": "Y2039",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2039",
+				"type": "String"
+			},
+			{
+				"name": "Y2040",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2040",
+				"type": "String"
+			},
+			{
+				"name": "Y2041",
+				"type": "String"
+			},
+			{
+				"name": "Alt_2041",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

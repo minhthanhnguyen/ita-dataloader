@@ -1,0 +1,128 @@
+{
+	"name": "BEA_NIPA_Blob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VangosBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "BEA_NIPA.json",
+				"container": "select-usa-stats"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"BEAAPI": {
+					"type": "object",
+					"properties": {
+						"Request": {
+							"type": "object",
+							"properties": {
+								"RequestParam": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"ParameterName": {
+												"type": "string"
+											},
+											"ParameterValue": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						},
+						"Results": {
+							"type": "object",
+							"properties": {
+								"Statistic": {
+									"type": "string"
+								},
+								"UTCProductionTime": {
+									"type": "string"
+								},
+								"Dimensions": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Ordinal": {
+												"type": "string"
+											},
+											"Name": {
+												"type": "string"
+											},
+											"DataType": {
+												"type": "string"
+											},
+											"IsValue": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"Data": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"TableName": {
+												"type": "string"
+											},
+											"SeriesCode": {
+												"type": "string"
+											},
+											"LineNumber": {
+												"type": "string"
+											},
+											"LineDescription": {
+												"type": "string"
+											},
+											"TimePeriod": {
+												"type": "string"
+											},
+											"METRIC_NAME": {
+												"type": "string"
+											},
+											"CL_UNIT": {
+												"type": "string"
+											},
+											"UNIT_MULT": {
+												"type": "string"
+											},
+											"DataValue": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"Notes": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"NoteRef": {
+												"type": "string"
+											},
+											"NoteText": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

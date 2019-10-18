@@ -1,0 +1,45 @@
+{
+	"name": "WorldbankEaseCountryMetadataBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VangosBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv",
+				"container": "select-usa-stats"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Country Code",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			},
+			{
+				"name": "IncomeGroup",
+				"type": "String"
+			},
+			{
+				"name": "SpecialNotes",
+				"type": "String"
+			},
+			{
+				"name": "TableName",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

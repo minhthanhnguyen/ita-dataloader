@@ -1,0 +1,69 @@
+{
+	"name": "BeaMneIndustryDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DIRECTIONOFINVESTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "OwnershipLevel",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SeriesID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SeriesName",
+				"type": "varchar"
+			},
+			{
+				"name": "Row",
+				"type": "varchar"
+			},
+			{
+				"name": "Column",
+				"type": "varchar"
+			},
+			{
+				"name": "RowCode",
+				"type": "varchar"
+			},
+			{
+				"name": "ColumnCode",
+				"type": "varchar"
+			},
+			{
+				"name": "TableScale",
+				"type": "varchar"
+			},
+			{
+				"name": "DataValueUnformatted",
+				"type": "varchar"
+			},
+			{
+				"name": "DataValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BEA_MNE_INDUSTRY"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

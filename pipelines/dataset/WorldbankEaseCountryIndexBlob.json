@@ -1,0 +1,24 @@
+{
+	"name": "WorldbankEaseCountryIndexBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VangosBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv",
+				"container": "select-usa-stats"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

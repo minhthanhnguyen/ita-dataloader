@@ -1,0 +1,63 @@
+{
+	"name": "BeaNipaDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "SeriesCode",
+				"type": "varchar"
+			},
+			{
+				"name": "LineNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "LineDescription",
+				"type": "varchar"
+			},
+			{
+				"name": "TimePeriod",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "METRIC_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "CL_UNIT",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIT_MULT",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "DataValue",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NoteRef",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BEA_NIPA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
