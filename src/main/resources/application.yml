@@ -4,6 +4,8 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 ---
 spring:
   profiles: staging
@@ -11,11 +13,14 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  datasource:
+    url: ${FLYWAY_URL}
+    username: ${FLYWAY_USER}
+    password: ${FLYWAY_PASSWORD}
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
 datafactory-status-url: ${DATAFACTORY_STATUS_URL}
-
 ---
 spring:
   profiles: production
@@ -23,6 +28,10 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  datasource:
+    url: ${FLYWAY_URL}
+    username: ${FLYWAY_USER}
+    password: ${FLYWAY_PASSWORD}
   security:
     oauth2:
       client:

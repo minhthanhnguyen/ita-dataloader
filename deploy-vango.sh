@@ -14,9 +14,11 @@ sudo docker push vangoscontainerregistry.azurecr.io/ita-dataloader
      --image vangoscontainerregistry.azurecr.io/ita-dataloader:latest --dns-name-label ita-dataloader --ports 80 \
      --location eastus --registry-username vangoscontainerregistry --registry-password $AZURE_CONTAINER_KEY \
      --environment-variables 'AZURE_STORAGE_ACCOUNT'=$AZURE_STORAGE_ACCOUNT \
-     'AZURE_STORAGE_ACCOUNT_KEY'=$AZURE_STORAGE_ACCOUNT_KEY \
-     'DATAFACTORY_STATUS_URL'=$DATAFACTORY_STATUS_URL
-
+      'AZURE_STORAGE_ACCOUNT_KEY'=$AZURE_STORAGE_ACCOUNT_KEY \
+      'DATAFACTORY_STATUS_URL'=$DATAFACTORY_STATUS_URL \
+      'FLYWAY_URL'=$FLYWAY_URL \
+      'FLYWAY_USER'=$FLYWAY_USER \
+      'FLYWAY_PASSWORD'=$FLYWAY_PASSWORD
 
 #az container logs --resource-group vangos-resources --name ita-dataloader
 
