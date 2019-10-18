@@ -1,38 +1,41 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.8.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+	id 'org.flywaydb.flyway' version '5.2.4'
 }
 
 group = 'gov.ita'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.security:spring-security-oauth2-client'
-	implementation 'org.springframework.security:spring-security-oauth2-jose'
-	implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter:2.1.6'
-	implementation 'com.nimbusds:oauth2-oidc-sdk:5.64.4' // Adal4j 1.6.x requires 5.64 - spring boot / security depends on 6.x by default
-	implementation 'org.projectlombok:lombok:1.18.8'
-	implementation 'com.microsoft.azure:azure-storage-blob:11.0.1'
-	implementation 'com.microsoft.rest.v2:client-runtime:2.1.1'
-	implementation 'commons-io:commons-io:2.4'
-	implementation 'org.apache.commons:commons-csv:1.5'
-	annotationProcessor 'org.projectlombok:lombok:1.18.8'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter:2.1.6'
+    implementation 'com.nimbusds:oauth2-oidc-sdk:5.64.4' // Adal4j 1.6.x requires 5.64 - spring boot / security depends on 6.x by default
+    implementation 'org.projectlombok:lombok:1.18.8'
+    implementation 'com.microsoft.azure:azure-storage-blob:11.0.1'
+    implementation 'com.microsoft.rest.v2:client-runtime:2.1.1'
+    implementation 'commons-io:commons-io:2.4'
+    implementation 'org.apache.commons:commons-csv:1.5'
+	implementation 'org.flywaydb:flyway-core'
+    runtime 'com.microsoft.sqlserver:mssql-jdbc:7.4.1.jre8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 task buildJarAndCopyToDocker(dependsOn: build) {
-	doLast {
-		copy {
-			from 'build/libs/ita-dataloader-0.0.1-SNAPSHOT.jar'
-			into 'docker'
-		}
-	}
+    doLast {
+        copy {
+            from 'build/libs/ita-dataloader-0.0.1-SNAPSHOT.jar'
+            into 'docker'
+        }
+    }
 }
