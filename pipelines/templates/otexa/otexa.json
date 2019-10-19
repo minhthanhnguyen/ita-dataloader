@@ -68,11 +68,11 @@
 									},
 									{
 										"source": {
-											"name": "CAT",
+											"name": "CAT_ID",
 											"type": "String"
 										},
 										"sink": {
-											"name": "CAT",
+											"name": "CAT_ID",
 											"type": "Int32"
 										}
 									},
@@ -94,26 +94,6 @@
 										"sink": {
 											"name": "SYEF",
 											"type": "Decimal"
-										}
-									},
-									{
-										"source": {
-											"name": "YR",
-											"type": "String"
-										},
-										"sink": {
-											"name": "YR",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "Mon",
-											"type": "String"
-										},
-										"sink": {
-											"name": "MON",
-											"type": "Int32"
 										}
 									},
 									{
@@ -230,7 +210,7 @@
 						"precision": 10
 					},
 					{
-						"name": "CAT",
+						"name": "CAT_ID",
 						"type": "int",
 						"precision": 10
 					},
@@ -243,16 +223,6 @@
 						"type": "decimal",
 						"precision": 5,
 						"scale": 2
-					},
-					{
-						"name": "YR",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "MON",
-						"type": "int",
-						"precision": 10
 					},
 					{
 						"name": "HEADER",

@@ -14,7 +14,7 @@
 				"precision": 10
 			},
 			{
-				"name": "CAT",
+				"name": "CAT_ID",
 				"type": "int",
 				"precision": 10
 			},
@@ -27,16 +27,6 @@
 				"type": "decimal",
 				"precision": 5,
 				"scale": 2
-			},
-			{
-				"name": "YR",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "MON",
-				"type": "int",
-				"precision": 10
 			},
 			{
 				"name": "HEADER",

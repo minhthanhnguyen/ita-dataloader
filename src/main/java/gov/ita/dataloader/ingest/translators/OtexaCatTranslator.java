@@ -25,7 +25,7 @@ public class OtexaCatTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("CTRYNUM", "CAT", "CNAME", "SYEF", "YR", "Mon", "header", "val"));
+        .withHeader("CTRYNUM", "CAT_ID", "CNAME", "SYEF", "header", "val"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
@@ -40,16 +40,14 @@ public class OtexaCatTranslator implements Translator {
         .collect(Collectors.toList());
 
       for (CSVRecord csvRecord : csvParser) {
-        String ctrynum = csvRecord.get("CTRYNUM");
-        String cat = csvRecord.get("CAT");
-        String cname = csvRecord.get("CNAME");
+        String ctryNum = csvRecord.get("CTRYNUM");
+        String catId = csvRecord.get("CAT");
+        String cName = csvRecord.get("CNAME");
         String syef = csvRecord.get("SYEF");
-        String yr = csvRecord.get("YR");
-        String mon = csvRecord.get("Mon");
 
         for (String header : valueFields) {
           csvPrinter.printRecord(
-            ctrynum, cat, cname, syef, yr, mon, header, csvRecord.get(header)
+            ctryNum, catId, cName, syef, header, csvRecord.get(header)
           );
         }
       }

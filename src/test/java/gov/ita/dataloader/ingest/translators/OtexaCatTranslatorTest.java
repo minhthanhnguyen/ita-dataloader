@@ -52,7 +52,7 @@ public class OtexaCatTranslatorTest {
 
   @Test
   public void translates_CAT() {
-    assertEquals("0", records.get(0).get("CAT"));
+    assertEquals("0", records.get(0).get("CAT_ID"));
   }
 
   @Test
@@ -63,16 +63,6 @@ public class OtexaCatTranslatorTest {
   @Test
   public void translates_SYEF() {
     assertEquals("1", records.get(0).get("SYEF"));
-  }
-
-  @Test
-  public void translates_YR() {
-    assertEquals("2019", records.get(0).get("YR"));
-  }
-
-  @Test
-  public void translates_MON() {
-    assertEquals("8", records.get(0).get("Mon"));
   }
 
   @Test
