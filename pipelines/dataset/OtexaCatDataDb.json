@@ -9,7 +9,7 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "CTRYNUM",
+				"name": "CTRY_ID",
 				"type": "int",
 				"precision": 10
 			},
@@ -17,10 +17,6 @@
 				"name": "CAT_ID",
 				"type": "int",
 				"precision": 10
-			},
-			{
-				"name": "CNAME",
-				"type": "varchar"
 			},
 			{
 				"name": "SYEF",
@@ -35,8 +31,8 @@
 			{
 				"name": "VAL",
 				"type": "decimal",
-				"precision": 12,
-				"scale": 2
+				"precision": 30,
+				"scale": 10
 			}
 		],
 		"typeProperties": {

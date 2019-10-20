@@ -47,17 +47,12 @@ public class OtexaCatTranslatorTest {
 
   @Test
   public void translates_CTRYNUM() {
-    assertEquals("0", records.get(0).get("CTRYNUM"));
+    assertEquals("8", records.get(0).get("CTRY_ID"));
   }
 
   @Test
   public void translates_CAT() {
     assertEquals("0", records.get(0).get("CAT_ID"));
-  }
-
-  @Test
-  public void translates_CNAME() {
-    assertEquals("VANGO", records.get(0).get("CNAME"));
   }
 
   @Test
@@ -88,7 +83,7 @@ public class OtexaCatTranslatorTest {
 
     //Only checking the first record
     List<CSVRecord> otexaCatRecords =
-      records.stream().filter(r -> r.get("CNAME").equals("VANGO")).collect(Collectors.toList());
+      records.stream().filter(r -> r.get("CTRY_ID").equals("8")).collect(Collectors.toList());
 
     for (CSVRecord r : otexaCatRecords) {
       String header = r.get("header");

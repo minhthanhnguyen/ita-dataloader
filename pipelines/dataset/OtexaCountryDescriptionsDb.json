@@ -1,5 +1,5 @@
 {
-	"name": "OtexaCatDescriptionsDb",
+	"name": "OtexaCountryDescriptionsDb",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase",
@@ -9,18 +9,18 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "CAT_ID",
+				"name": "CTRY_ID",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "CAT_DESCRIPTION",
+				"name": "CTRY_DESCRIPTION",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "OTEXA_CATEGORY_REF"
+			"table": "OTEXA_COUNTRY_REF"
 		}
 	}
 }

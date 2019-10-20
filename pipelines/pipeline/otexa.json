@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy Cat Data",
+				"name": "Copy Category Data",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -37,11 +37,11 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "CTRYNUM",
+									"name": "CTRY_ID",
 									"type": "String"
 								},
 								"sink": {
-									"name": "CTRYNUM",
+									"name": "CTRY_ID",
 									"type": "Int32"
 								}
 							},
@@ -53,16 +53,6 @@
 								"sink": {
 									"name": "CAT_ID",
 									"type": "Int32"
-								}
-							},
-							{
-								"source": {
-									"name": "CNAME",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CNAME",
-									"type": "String"
 								}
 							},
 							{
@@ -92,7 +82,7 @@
 								},
 								"sink": {
 									"name": "VAL",
-									"type": "String"
+									"type": "Decimal"
 								}
 							}
 						]
@@ -112,7 +102,7 @@
 				]
 			},
 			{
-				"name": "Copy Cat Descriptions",
+				"name": "Copy Category Descriptions",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -136,7 +126,8 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE TABLE OTEXA_CAT_REF;"
+						"preCopyScript": "TRUNCATE TABLE OTEXA_CATEGORY_REF;",
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
@@ -174,6 +165,74 @@
 				"outputs": [
 					{
 						"referenceName": "OtexaCatDescriptionsDb",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy Country Descriptions",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OTEXA_COUNTRY_REF;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CTRY_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CTRY_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CTYR_NAME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CTRY_DESCRIPTION",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OtexaCountryDescriptionsBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OtexaCountryDescriptionsDb",
 						"type": "DatasetReference"
 					}
 				]

@@ -1,5 +1,5 @@
 {
-	"name": "OtexaCatDataBlob",
+	"name": "OtexaCountryDescriptionsBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "VangosBlobStorage",
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "OTEXA_DATA_SET_CAT.csv",
-				"folderPath": "translated",
+				"fileName": "COUNTRY_DESCRIPTIONS.csv",
 				"container": "otexa"
 			},
 			"columnDelimiter": ",",
@@ -21,26 +20,11 @@
 		},
 		"schema": [
 			{
-				"name": "CTRY_ID",
 				"type": "String"
 			},
 			{
-				"name": "CAT_ID",
-				"type": "String"
-			},
-			{
-				"name": "SYEF",
-				"type": "String"
-			},
-			{
-				"name": "header",
-				"type": "String"
-			},
-			{
-				"name": "val",
 				"type": "String"
 			}
 		]
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }
