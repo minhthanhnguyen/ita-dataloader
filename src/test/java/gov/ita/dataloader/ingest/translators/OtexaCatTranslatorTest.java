@@ -26,38 +26,29 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles("development")
 public class OtexaCatTranslatorTest {
 
-  private List<CSVRecord> records;
+  private List<CSVRecord> results;
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() {
     OtexaCatTranslator otexaCatTranslator = new OtexaCatTranslator();
-    String csv = IOUtils.toString(
-      this.getClass().getResourceAsStream("/fixtures/OTEXA_DATA_SET_CAT.csv")
-    );
-
-    byte[] translatedBytes = otexaCatTranslator.translate(csv.getBytes());
-    Reader reader = new CharSequenceReader(new String(translatedBytes));
-    CSVParser csvParser;
-    csvParser = new CSVParser(
-      reader,
-      CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withNullString("").withIgnoreHeaderCase());
-
-    records = csvParser.getRecords();
+    byte[] translatedBytes = otexaCatTranslator.translate(getSampleData());
+    results = formattedResults(translatedBytes);
   }
 
   @Test
   public void translates_CTRYNUM() {
-    assertEquals("8", records.get(0).get("CTRY_ID"));
+
+    assertEquals("8", results.get(0).get("CTRY_ID"));
   }
 
   @Test
   public void translates_CAT() {
-    assertEquals("0", records.get(0).get("CAT_ID"));
+    assertEquals("0", results.get(0).get("CAT_ID"));
   }
 
   @Test
   public void translates_SYEF() {
-    assertEquals("1", records.get(0).get("SYEF"));
+    assertEquals("1", results.get(0).get("SYEF"));
   }
 
   @Test
@@ -83,12 +74,37 @@ public class OtexaCatTranslatorTest {
 
     //Only checking the first record
     List<CSVRecord> otexaCatRecords =
-      records.stream().filter(r -> r.get("CTRY_ID").equals("8")).collect(Collectors.toList());
+      results.stream().filter(r -> r.get("CTRY_ID").equals("8")).collect(Collectors.toList());
 
     for (CSVRecord r : otexaCatRecords) {
-      String header = r.get("header");
-      String val = r.get("val");
+      String header = r.get("HEADER_ID");
+      String val = r.get("VAL");
       assertEquals("Expected " + header + " to have value of " + expected.get(val), expected.get(header), val);
     }
+  }
+
+  private byte[] getSampleData() {
+    try {
+      return IOUtils.toString(
+        this.getClass().getResourceAsStream("/fixtures/OTEXA_DATA_SET_CAT.csv")
+      ).getBytes();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private List<CSVRecord> formattedResults(byte[] translatedBytes) {
+    Reader reader = new CharSequenceReader(new String(translatedBytes));
+    CSVParser csvParser;
+    try {
+      csvParser = new CSVParser(
+        reader,
+        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withNullString("").withIgnoreHeaderCase());
+      return csvParser.getRecords();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

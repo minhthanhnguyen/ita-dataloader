@@ -22,7 +22,7 @@ public class OtexaCatTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("CTRY_ID", "CAT_ID", "SYEF", "header", "val"));
+        .withHeader("CTRY_ID", "CAT_ID", "SYEF", "HEADER_ID", "VAL"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
