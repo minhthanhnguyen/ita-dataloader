@@ -25,18 +25,18 @@ Steps to run this application on you local for development purposes
  - Local build script ```./build-local.sh```
 
 ## Deployment Configuration Notes
-1. Create a Blob Storage Account (Don't enable Hierarchical Namespace)
+1. Create a Blob Storage Account (Don't enable Hierarchical Namespace i.e. we don't want Data Lake Gen 2)
 1. An Azure AD App Registration is required procure an OAuth Client ID and Client Secret
 1. Create a SQL Database
 1. Create a Data Factory and deploy the configuration in the `pipelines` directory
 1. Create an App Registration for the Data Factory with the Contributor Role
-1. Deploy https://github.com/InternationalTradeAdministration/ita-datafactory-log-extractor
+1. Deploy ITA Data Factory Log Extractor (see section below)
 1. Create a Container Registry
 1. The following environment variables need to exist:
     - AZURE_OAUTH_CLIENT_ID: Active Directory Client ID
     - AZURE_OAUTH_CLIENT_SECRET: Active Directory Client Secret
-    - AZURE_STORAGE_ACCOUNT: Data Lake Storage Account
-    - AZURE_STORAGE_ACCOUNT_KEY: Data Lake Storage Account Key
+    - AZURE_STORAGE_ACCOUNT: Blob Storage Account
+    - AZURE_STORAGE_ACCOUNT_KEY: Blob Storage Account Key
     - DATAFACTORY_STATUS_URL: The URL to this ITA Data Factory Log Extractor - App Function
     - FLYWAY_URL: The jdbc connection to a AZURE SQL Database
     - FLYWAY_USER: Username to the AZURE SQL Database
@@ -48,7 +48,9 @@ Steps to run this application on you local for development purposes
 
 ## Data Factory Log Extractor
 This App Function allows us to retrieve the last known status of a given pipeline within a given data factory:
-    https://github.com/InternationalTradeAdministration/ita-datafactory-log-extractor
+    <https://github.com/InternationalTradeAdministration/ita-datafactory-log-extractor>
+ - Data factory pipelines and storage containers must have the same name to retrieve the pipeline status
+ - Deploying this project will result in a URL to perform HTTP requests, use that URL when populating the DATAFACTORY_STATUS_URL environment variable
 
 ## Database Notes
  - Flyway is used to manage the state of the database, that's all. This application does not otherwise interact with the database
