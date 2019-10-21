@@ -236,6 +236,94 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy Header Descriptions",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OTEXA_HEADER_REF;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "HEADER",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HEADER_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "YR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "YR",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HEADER_DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HEADER_TYPE",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OtexaHeaderDescriptionsBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OtexaHeaderDescriptionsDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []

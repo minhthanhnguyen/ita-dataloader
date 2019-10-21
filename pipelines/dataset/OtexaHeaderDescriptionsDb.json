@@ -1,0 +1,34 @@
+{
+	"name": "OtexaHeaderDescriptionsDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "HEADER_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "YR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "HEADER_DESCRIPTION",
+				"type": "varchar"
+			},
+			{
+				"name": "HEADER_TYPE",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OTEXA_HEADER_REF"
+		}
+	}
+}

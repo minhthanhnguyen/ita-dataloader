@@ -1,5 +1,5 @@
 {
-	"name": "OtexaCatDescriptionsBlob",
+	"name": "OtexaHeaderDescriptionsBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "VangosBlobStorage",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "CATEGORY_DESCRIPTIONS.csv",
+				"fileName": "HEADER_DESCRIPTIONS.csv",
 				"container": "otexa"
 			},
 			"columnDelimiter": ",",
@@ -20,11 +20,19 @@
 		},
 		"schema": [
 			{
-				"name": "CAT_ID",
+				"name": "HEADER",
 				"type": "String"
 			},
 			{
-				"name": "CAT_DESCRIPTION",
+				"name": "YR",
+				"type": "String"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "String"
+			},
+			{
+				"name": "TYPE",
 				"type": "String"
 			}
 		]

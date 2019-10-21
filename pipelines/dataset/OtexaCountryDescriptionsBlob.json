@@ -20,9 +20,11 @@
 		},
 		"schema": [
 			{
+				"name": "CTRY_ID",
 				"type": "String"
 			},
 			{
+				"name": "CTYR_NAME",
 				"type": "String"
 			}
 		]
