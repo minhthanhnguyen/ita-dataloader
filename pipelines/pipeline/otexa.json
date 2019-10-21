@@ -67,17 +67,17 @@
 							},
 							{
 								"source": {
-									"name": "header",
+									"name": "HEADER_ID",
 									"type": "String"
 								},
 								"sink": {
-									"name": "HEADER",
+									"name": "HEADER_ID",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "val",
+									"name": "VAL",
 									"type": "String"
 								},
 								"sink": {

@@ -33,11 +33,11 @@
 				"type": "String"
 			},
 			{
-				"name": "header",
+				"name": "HEADER_ID",
 				"type": "String"
 			},
 			{
-				"name": "val",
+				"name": "VAL",
 				"type": "String"
 			}
 		]
