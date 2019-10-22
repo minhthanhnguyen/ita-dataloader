@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest.storage;
+package gov.ita.dataloader.storage;
 
 import com.microsoft.azure.storage.blob.*;
 import com.microsoft.azure.storage.blob.models.BlobFlatListSegment;
@@ -98,6 +98,7 @@ public class ProductionStorage implements Storage {
             x.name(),
             buildUrlForBlob(x.name(), containerName),
             x.properties().contentLength(),
+            containerName,
             x.properties().lastModified(),
             x.metadata()
           )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))

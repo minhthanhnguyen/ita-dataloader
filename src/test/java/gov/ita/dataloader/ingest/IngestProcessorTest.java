@@ -4,7 +4,7 @@ import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
 import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
-import gov.ita.dataloader.ingest.storage.Storage;
+import gov.ita.dataloader.storage.Storage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

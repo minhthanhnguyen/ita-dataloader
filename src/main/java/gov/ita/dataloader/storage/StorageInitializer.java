@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest.storage;
+package gov.ita.dataloader.storage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

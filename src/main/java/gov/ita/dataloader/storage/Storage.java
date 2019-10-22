@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest.storage;
+package gov.ita.dataloader.storage;
 
 import java.util.List;
 import java.util.Set;

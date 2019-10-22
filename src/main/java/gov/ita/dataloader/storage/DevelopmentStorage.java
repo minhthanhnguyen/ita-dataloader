@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest.storage;
+package gov.ita.dataloader.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -51,6 +51,7 @@ public class DevelopmentStorage implements Storage {
             fileName,
             String.format("http://some-cloud-strage-url.com/%s/%s", containerName, fileName),
             123L,
+            containerName,
             OffsetDateTime.now(),
             metadata
           );

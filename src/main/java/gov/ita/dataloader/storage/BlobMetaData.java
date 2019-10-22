@@ -1,4 +1,4 @@
-package gov.ita.dataloader.ingest.storage;
+package gov.ita.dataloader.storage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +14,7 @@ public class BlobMetaData {
   String name;
   String url;
   Long size;
+  String containerName;
   OffsetDateTime uploadedAt;
   Map<String, String> metadata;
 }

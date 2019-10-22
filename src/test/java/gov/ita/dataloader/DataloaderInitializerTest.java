@@ -1,6 +1,6 @@
 package gov.ita.dataloader;
 
-import gov.ita.dataloader.ingest.storage.StorageInitializer;
+import gov.ita.dataloader.storage.StorageInitializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

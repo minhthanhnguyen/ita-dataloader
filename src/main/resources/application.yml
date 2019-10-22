@@ -21,6 +21,12 @@ storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
 datafactory-status-url: ${DATAFACTORY_STATUS_URL}
+tariff-docs:
+  access-token-url: ${TARIFF_DOCS_ACCESS_TOKEN_URL}
+  client-id: ${TARIFF_DOCS_CLIENT_ID}
+  client-secret: ${TARIFF_DOCS_CLIENT_SECRET}
+  metadata-url: ${TARIFF_DOCS_METADATA_URL}
+
 ---
 spring:
   profiles: production
@@ -47,3 +53,8 @@ storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
 datafactory-status-url: ${DATAFACTORY_STATUS_URL}
+tariff-docs:
+  access-token-url: ${TARIFF_DOCS_ACCESS_TOKEN_URL}
+  client-id: ${TARIFF_DOCS_CLIENT_ID}
+  client-secret: ${TARIFF_DOCS_CLIENT_SECRET}
+  metadata-url: ${TARIFF_DOCS_METADATA_URL}

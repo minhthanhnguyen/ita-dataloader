@@ -37,7 +37,6 @@ public class OtexaCatTranslatorTest {
 
   @Test
   public void translates_CTRYNUM() {
-
     assertEquals("8", results.get(0).get("CTRY_ID"));
   }
 
@@ -86,7 +85,7 @@ public class OtexaCatTranslatorTest {
   private byte[] getSampleData() {
     try {
       return IOUtils.toString(
-        this.getClass().getResourceAsStream("/fixtures/OTEXA_DATA_SET_CAT.csv")
+        this.getClass().getResourceAsStream("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv")
       ).getBytes();
     } catch (IOException e) {
       e.printStackTrace();

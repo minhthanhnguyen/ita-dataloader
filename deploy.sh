@@ -18,7 +18,11 @@ sudo docker push vangoscontainerregistry.azurecr.io/ita-dataloader
       'DATAFACTORY_STATUS_URL'=$DATAFACTORY_STATUS_URL \
       'FLYWAY_URL'=$FLYWAY_URL \
       'FLYWAY_USER'=$FLYWAY_USER \
-      'FLYWAY_PASSWORD'=$FLYWAY_PASSWORD
+      'FLYWAY_PASSWORD'=$FLYWAY_PASSWORD \
+      'TARIFF_DOCS_ACCESS_TOKEN_URL'=$TARIFF_DOCS_ACCESS_TOKEN_URL \
+      'TARIFF_DOCS_CLIENT_ID'=$TARIFF_DOCS_CLIENT_ID \
+      'TARIFF_DOCS_CLIENT_SECRET'=$TARIFF_DOCS_CLIENT_SECRET \
+      'TARIFF_DOCS_METADATA_URL'=$TARIFF_DOCS_METADATA_URL
 
 #az container logs --resource-group vangos-resources --name ita-dataloader
 
