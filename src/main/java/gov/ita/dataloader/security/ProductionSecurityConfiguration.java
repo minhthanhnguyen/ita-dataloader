@@ -33,6 +33,6 @@ public class ProductionSecurityConfiguration extends WebSecurityConfigurerAdapte
   @Override
   public void configure(WebSecurity web) throws Exception {
     web.ignoring().antMatchers(
-      "api/**");
+      "/api/storage-metadata", "/api/storage-containers", "/api/extract/**");
   }
 }

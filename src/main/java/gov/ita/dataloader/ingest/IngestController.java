@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.dataloader.ingest.configuration.BusinessUnit;
 import gov.ita.dataloader.ingest.configuration.BusinessUnitConfigResponse;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
-import gov.ita.dataloader.storage.BlobMetaData;
-import gov.ita.dataloader.storage.Storage;
 import gov.ita.dataloader.ingest.translators.Translator;
 import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.security.AuthenticationFacade;
+import gov.ita.dataloader.storage.BlobMetaData;
+import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,7 +43,6 @@ public class IngestController {
     this.translatorFactory = translatorFactory;
   }
 
-  @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping(value = "/api/configuration", produces = MediaType.APPLICATION_JSON_VALUE)
   private DataloaderConfig getDataSetConfigs(@RequestParam("containerName") String containerName) {
     return getDataloaderConfig(containerName);
@@ -114,6 +114,11 @@ public class IngestController {
     byte[] dataloaderConfig = storage.getBlob("dataloader", "configuration.json");
     BusinessUnitConfigResponse buc = objectMapper.readValue(dataloaderConfig, BusinessUnitConfigResponse.class);
     return buc.getBusinessUnits();
+  }
+
+  @GetMapping(value = "/api/storage-containers", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Set<String> getStorageContainers() {
+    return storage.getContainerNames();
   }
 
   private DataloaderConfig getDataloaderConfig(String containerName) {
