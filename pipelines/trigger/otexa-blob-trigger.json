@@ -1,0 +1,24 @@
+{
+	"name": "otexa-blob-trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "otexa",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/otexa/blobs/",
+			"ignoreEmptyBlobs": false,
+			"scope": "/subscriptions/61dbae51-cdd9-4380-ba89-78dd6c20b4d7/resourceGroups/vangos-resources/providers/Microsoft.Storage/storageAccounts/vangosstorageaccount",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
