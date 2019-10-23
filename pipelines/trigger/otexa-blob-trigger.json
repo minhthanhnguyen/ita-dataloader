@@ -14,7 +14,7 @@
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/otexa/blobs/",
-			"ignoreEmptyBlobs": false,
+			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/61dbae51-cdd9-4380-ba89-78dd6c20b4d7/resourceGroups/vangos-resources/providers/Microsoft.Storage/storageAccounts/vangosstorageaccount",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
