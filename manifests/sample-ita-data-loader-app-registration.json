@@ -1,0 +1,93 @@
+{
+	"id": "8a2554cc-c1b6-456c-ae0d-bf5a12a3a585",
+	"acceptMappedClaims": null,
+	"accessTokenAcceptedVersion": 2,
+	"addIns": [],
+	"allowPublicClient": null,
+	"appId": "b6c6f905-01c8-417e-a94a-785608a53cd7",
+	"appRoles": [],
+	"oauth2AllowUrlPathMatching": false,
+	"createdDateTime": "2019-07-11T14:26:28Z",
+	"groupMembershipClaims": null,
+	"identifierUris": [
+		"api://b6c6f905-01c8-417e-a94a-785608a53cd7"
+	],
+	"informationalUrls": {
+		"termsOfService": null,
+		"support": null,
+		"privacy": null,
+		"marketing": null
+	},
+	"keyCredentials": [],
+	"knownClientApplications": [],
+	"logoUrl": null,
+	"logoutUrl": null,
+	"name": "ita-dataloader",
+	"oauth2AllowIdTokenImplicitFlow": true,
+	"oauth2AllowImplicitFlow": true,
+	"oauth2Permissions": [],
+	"oauth2RequirePostResponse": false,
+	"optionalClaims": null,
+	"orgRestrictions": [],
+	"parentalControlSettings": {
+		"countriesBlockedForMinors": [],
+		"legalAgeGroupRule": "Allow"
+	},
+	"passwordCredentials": [
+		{
+			"customKeyIdentifier": null,
+			"endDate": "2299-12-31T05:00:00Z",
+			"keyId": "a36ab083-6f49-4cdb-bc7e-980e90929483",
+			"startDate": "2019-07-11T14:29:33.024Z",
+			"value": null,
+			"createdOn": "2019-07-11T14:29:35.0864735Z",
+			"hint": "55-",
+			"displayName": "ita-tariff-tool-secret"
+		}
+	],
+	"preAuthorizedApplications": [],
+	"publisherDomain": "MILITSDEV.onmicrosoft.com",
+	"replyUrlsWithType": [
+		{
+			"url": "http://localhost:8080/login/oauth2/code/azure",
+			"type": "Web"
+		},
+		{
+			"url": "http://localhost:8080",
+			"type": "Web"
+		}
+	],
+	"requiredResourceAccess": [
+		{
+			"resourceAppId": "9d3e55ba-79e0-4b7c-af50-dc460b81dca1",
+			"resourceAccess": [
+				{
+					"id": "e431adf3-7996-426b-b947-db8d7960cf27",
+					"type": "Scope"
+				}
+			]
+		},
+		{
+			"resourceAppId": "00000003-0000-0000-c000-000000000000",
+			"resourceAccess": [
+				{
+					"id": "14dad69e-099b-42c9-810b-d002981feec1",
+					"type": "Scope"
+				},
+				{
+					"id": "0e263e50-5827-48a4-b97c-d940288653c7",
+					"type": "Scope"
+				},
+				{
+					"id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+					"type": "Scope"
+				}
+			]
+		}
+	],
+	"samlMetadataUrl": null,
+	"signInUrl": null,
+	"signInAudience": "AzureADandPersonalMicrosoftAccount",
+	"tags": [],
+	"tokenEncryptionKeyId": null
+}

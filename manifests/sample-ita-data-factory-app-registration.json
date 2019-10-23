@@ -1,0 +1,75 @@
+{
+	"id": "05663ed5-ecd3-4ece-adbc-642e39158397",
+	"acceptMappedClaims": null,
+	"accessTokenAcceptedVersion": 2,
+	"addIns": [],
+	"allowPublicClient": null,
+	"appId": "7b652d34-009e-4754-ac8e-960a6075368c",
+	"appRoles": [],
+	"oauth2AllowUrlPathMatching": false,
+	"createdDateTime": "2019-09-21T19:09:51Z",
+	"groupMembershipClaims": null,
+	"identifierUris": [],
+	"informationalUrls": {
+		"termsOfService": null,
+		"support": null,
+		"privacy": null,
+		"marketing": null
+	},
+	"keyCredentials": [],
+	"knownClientApplications": [],
+	"logoUrl": null,
+	"logoutUrl": null,
+	"name": "ita-data-factory",
+	"oauth2AllowIdTokenImplicitFlow": true,
+	"oauth2AllowImplicitFlow": true,
+	"oauth2Permissions": [],
+	"oauth2RequirePostResponse": false,
+	"optionalClaims": null,
+	"orgRestrictions": [],
+	"parentalControlSettings": {
+		"countriesBlockedForMinors": [],
+		"legalAgeGroupRule": "Allow"
+	},
+	"passwordCredentials": [
+		{
+			"customKeyIdentifier": null,
+			"endDate": "2299-12-31T05:00:00Z",
+			"keyId": "665ea1ff-7cb3-475a-92a7-121e59a7d7d5",
+			"startDate": "2019-10-10T18:12:03.771Z",
+			"value": null,
+			"createdOn": "2019-10-10T18:12:06.5986871Z",
+			"hint": "INn",
+			"displayName": "Password uploaded on Thu Oct 10 2019"
+		},
+		{
+			"customKeyIdentifier": null,
+			"endDate": "2299-12-31T05:00:00Z",
+			"keyId": "927337cc-95de-4b59-b55e-2c5b2bc73c53",
+			"startDate": "2019-09-21T19:14:16.271Z",
+			"value": null,
+			"createdOn": "2019-09-21T19:14:17.7448573Z",
+			"hint": "m*d",
+			"displayName": "Password uploaded on Sat Sep 21 2019"
+		}
+	],
+	"preAuthorizedApplications": [],
+	"publisherDomain": "MILITSDEV.onmicrosoft.com",
+	"replyUrlsWithType": [],
+	"requiredResourceAccess": [
+		{
+			"resourceAppId": "00000003-0000-0000-c000-000000000000",
+			"resourceAccess": [
+				{
+					"id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+					"type": "Scope"
+				}
+			]
+		}
+	],
+	"samlMetadataUrl": null,
+	"signInUrl": null,
+	"signInAudience": "AzureADandPersonalMicrosoftAccount",
+	"tags": [],
+	"tokenEncryptionKeyId": null
+}
