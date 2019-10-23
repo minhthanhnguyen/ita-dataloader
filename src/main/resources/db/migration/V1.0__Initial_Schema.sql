@@ -345,3 +345,15 @@ create TABLE OTEXA_HEADER_REF (
   , HEADER_DESCRIPTION VARCHAR(255)
   , HEADER_TYPE VARCHAR(255)
 )
+go
+
+create VIEW OTEXA_DATA_SET_CAT_VW
+as
+select details.CTRY_ID
+    , details.CAT_ID
+    , details.HEADER_ID
+    , case when hdr.HEADER_TYPE = 'UNITS' then details.VAL / details.SYEF else details.VAL end as ADJ_VAL
+from OTEXA_DATA_SET_CAT details
+inner join OTEXA_HEADER_REF hdr
+on details.HEADER_ID = hdr.HEADER_ID;
+go
