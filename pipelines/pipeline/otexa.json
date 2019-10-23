@@ -213,7 +213,7 @@
 							},
 							{
 								"source": {
-									"name": "CTYR_NAME",
+									"name": "CTRY_DESCRIPTION",
 									"type": "String"
 								},
 								"sink": {
