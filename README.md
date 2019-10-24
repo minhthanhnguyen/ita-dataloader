@@ -40,7 +40,7 @@ Steps to run this application on you local machine for development purposes.
 1. Create a Resource Group 
     - ```az group create --name <Resource Group Name> --location <Azure Region>```
 1. Create a Blob Storage Account (Don't enable Hierarchical Namespace, i.e. we don't want Data Lake Gen 2) 
-    - ```az storage account create --name <Storage Account Name> --resource-group <Resource Group> --location <Azure Region>```
+    - ```az storage account create --name <Storage Account Name> --resource-group <Resource Group> --location <Azure Region> --kind StorageV2``` 
 1. An Azure AD App Registration is required to procure an OAuth Client ID and Client Secret
     - a sample manifest is located here: /manifests/sample-ita-data-loader-app-registration.json
 1. Create a SQL Database: <https://docs.microsoft.com/en-us/azure/sql-database/scripts/sql-database-create-and-configure-database-cli?toc=%2fcli%2fazure%2ftoc.json>
