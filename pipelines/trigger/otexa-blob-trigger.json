@@ -8,7 +8,7 @@
 		"typeProperties": {
 			"blobPathBeginsWith": "/otexa/blobs/",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/61dbae51-cdd9-4380-ba89-78dd6c20b4d7/resourceGroups/vangos-resources/providers/Microsoft.Storage/storageAccounts/vangosstorageaccount",
+			"scope": "/subscriptions/61dbae51-cdd9-4380-ba89-78dd6c20b4d7/resourceGroups/vangos-resources/providers/Microsoft.Storage/storageAccounts/vangosstorageacct",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]
