@@ -1,9 +1,5 @@
 <template>
   <div id="container">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
     <router-view />
   </div>
 </template>
@@ -26,16 +22,17 @@ export default {
 @import "~vue-material/dist/theme/all"; // Apply the theme
 
 .top-btn {
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .loading {
   margin-left: 30px;
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
-.nav-btns {
-  display: flex;
+.nav-menu {
+  height: 500px;
+  margin-right: 16px;
 }
 
 .spinner {
@@ -44,8 +41,17 @@ export default {
   justify-content: center;
 }
 
-.stats {
+.stat {
   font-size: 12px;
-  margin-right: 15px;
+  margin-right: 16px;
+}
+
+.content {
+  display: flex;
+}
+
+.sub-content {
+  min-width:  1000px;
+  width: 100%;
 }
 </style>
