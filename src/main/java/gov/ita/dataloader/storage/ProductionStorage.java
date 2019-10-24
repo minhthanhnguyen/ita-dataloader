@@ -129,6 +129,11 @@ public class ProductionStorage implements Storage {
     return null;
   }
 
+  @Override
+  public void makeSnapshot(String containerName, String blobName) {
+    makeServiceURL().createContainerURL(containerName).createBlobURL(blobName).createSnapshot().blockingGet();
+  }
+
   private String buildUrlForBlob(String name, String containerName) {
     return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
   }

@@ -15,4 +15,6 @@ public interface Storage {
   Set<String> getContainerNames();
 
   byte[] getBlob(String containerName, String blobName);
+
+  void makeSnapshot(String containerName, String blobName);
 }

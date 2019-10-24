@@ -72,4 +72,9 @@ public class DevelopmentStorage implements Storage {
   public byte[] getBlob(String containerName, String blobName) {
     return storageContent.get(containerName).get(blobName);
   }
+
+  @Override
+  public void makeSnapshot(String containerName, String blobName) {
+
+  }
 }

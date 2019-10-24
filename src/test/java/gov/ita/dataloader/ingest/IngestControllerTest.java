@@ -107,6 +107,8 @@ public class IngestControllerTest {
 
     verify(storage, times(1))
       .save("OG File Name.csv", SOME_BYTES, "TestUser@gmail.com", "cool-container", true);
+
+    verify(storage, times(1)).makeSnapshot("cool-container", "OG File Name.csv");
   }
 
   @Test

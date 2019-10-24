@@ -79,6 +79,8 @@ public class IngestController {
       containerName,
       true);
 
+    storage.makeSnapshot(containerName, file.getOriginalFilename());
+
     Translator translator = translatorFactory.getTranslator(containerName + "#" + file.getOriginalFilename());
     if (translator != null) {
       byte[] translatedFile = translator.translate(file.getBytes());
@@ -123,7 +125,7 @@ public class IngestController {
         if (!metadata.containsKey("user_upload")) {
           metadata.put("user_upload", "true");
         }
-        
+
         blobMetaData.setMetadata(metadata);
         return blobMetaData;
       })
