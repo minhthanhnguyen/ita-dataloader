@@ -76,8 +76,8 @@
     <div v-if="!loading" class="md-layout md-alignment-top-center storage-content">
       <md-table v-model="storageMetadata" md-sort="name" md-sort-order="asc">
         <md-table-row slot-scope="{ item }" slot="md-table-row">
-          <md-table-cell md-label="File Name" md-sort-by="name">
-            <a v-bind:href="item.url">{{item.name}}</a>
+          <md-table-cell md-label="File Name" md-sort-by="fileName">
+            <a v-bind:href="item.url">{{item.fileName}}</a>
           </md-table-cell>
           <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
           <md-table-cell
@@ -206,7 +206,7 @@ export default {
 
       this.destinationFileNameOptions = this.storageMetadata
         .filter(file => file.metadata.user_upload === "true")
-        .map(file => file.name);
+        .map(file => file.fileName);
 
       this.totalManualUploads = this.storageMetadata.filter(
         file => file.metadata.user_upload === "true"

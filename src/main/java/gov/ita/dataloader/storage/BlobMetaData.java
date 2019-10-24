@@ -11,7 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlobMetaData {
-  String name;
+  String fileName;
   String url;
   Long size;
   String containerName;

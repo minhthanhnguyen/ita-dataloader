@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,7 +107,26 @@ public class IngestController {
   @GetMapping(value = "/api/container-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<BlobMetaData> getStorageMetadata(@RequestParam("containerName") String containerName) {
     return storage.getBlobMetadata(containerName).stream()
-      .filter(blobMetaData -> !blobMetaData.getName().equals("configuration.json"))
+      .filter(blobMetaData -> !blobMetaData.getFileName().equals("configuration.json"))
+      .map(blobMetaData -> {
+        Map<String, String> metadata = blobMetaData.getMetadata();
+        if (metadata == null) {
+          metadata = new HashMap<>();
+          metadata.put("uploaded_by", "---");
+          metadata.put("user_upload", "true");
+        }
+
+        if (!metadata.containsKey("uploaded_by")) {
+          metadata.put("uploaded_by", "---");
+        }
+
+        if (!metadata.containsKey("user_upload")) {
+          metadata.put("user_upload", "true");
+        }
+        
+        blobMetaData.setMetadata(metadata);
+        return blobMetaData;
+      })
       .collect(Collectors.toList());
   }
 

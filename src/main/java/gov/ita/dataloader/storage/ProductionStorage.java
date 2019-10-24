@@ -101,7 +101,7 @@ public class ProductionStorage implements Storage {
             containerName,
             x.properties().lastModified(),
             x.metadata()
-          )).filter(item -> !item.name.startsWith("adfpolybaserejectedrows"))
+          )).filter(item -> !item.fileName.startsWith("adfpolybaserejectedrows"))
         .collect(Collectors.toList());
     }
 
@@ -118,7 +118,7 @@ public class ProductionStorage implements Storage {
 
   @Override
   public byte[] getBlob(String containerName, String blobName) {
-    Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getName().equals(blobName)).findFirst();
+    Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getFileName().equals(blobName)).findFirst();
     if (blobMetaData.isPresent()) {
       try {
         return httpHelper.getBytes(blobMetaData.get().getUrl());
