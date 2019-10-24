@@ -102,7 +102,7 @@ public class IngestController {
     return storage.getListBlobsUrl(containerName);
   }
 
-  @GetMapping(value = "/api/storage-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/api/container-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<BlobMetaData> getStorageMetadata(@RequestParam("containerName") String containerName) {
     return storage.getBlobMetadata(containerName).stream()
       .filter(blobMetaData -> !blobMetaData.getName().equals("configuration.json"))

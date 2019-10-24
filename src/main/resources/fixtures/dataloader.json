@@ -2,15 +2,25 @@
   "businessUnits": [
     {
       "containerName": "select-usa",
-      "businessName": "Select USA"
+      "businessName": "Select USA",
+      "reports": [
+      ]
     },
     {
       "containerName": "otexa",
-      "businessName": "OTEXA"
+      "businessName": "OTEXA",
+      "reports": [
+        {
+          "name": "U.S. Imports of Textile and Apparel - Annual Data by Category for all Countries",
+          "url": "https://app.powerbi.com/view?r=eyJrIjoiZTk3Y2FkNDEtMmY5OC00MjMzLTkxZjItNWY1OTZiMDQ4ODE5IiwidCI6Ijc4NzY2MWExLTUxNDItNDFjMC1iY2M1LWMyYzkwODA3ODFlNSIsImMiOjJ9"
+        }
+      ]
     },
     {
       "containerName": "fta-tariff-rates",
-      "businessName": "FTA Tariff Rates"
+      "businessName": "FTA Tariff Rates",
+      "reports": [
+      ]
     }
   ]
 }

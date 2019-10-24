@@ -44,7 +44,7 @@ export default class DataloaderRepository {
   }
 
   async _getStorageMetadata(containerName) {
-    let storageMetadataResponse = await axios.get('/api/storage-metadata', {
+    let storageMetadataResponse = await axios.get('/api/container-metadata', {
       params: {
         containerName
       }
