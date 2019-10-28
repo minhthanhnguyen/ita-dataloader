@@ -4,7 +4,16 @@
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
-        {{businessUnitName}} - Reports
+        <md-table v-model="reports" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+          <md-table-toolbar>
+            <h1 class="md-title">Reports</h1>
+          </md-table-toolbar>
+          <md-table-row slot="md-table-row" slot-scope="{ item }">
+            <md-table-cell md-label="Name" md-sort-by="name">
+              <a v-bind:href="item.url" target="_blank">{{item.name}}</a>
+            </md-table-cell>
+          </md-table-row>
+        </md-table>
         <div v-if="loading" class="loading">
           <md-progress-bar md-mode="indeterminate"></md-progress-bar>
         </div>
@@ -47,16 +56,19 @@ export default {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
     this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    this.businessUnitName = this.businessUnits.find(
+    let businessUnit = this.businessUnits.find(
       b => b.containerName === this.containerName
-    ).businessName;
+    );
+    this.businessUnitName = businessUnit.businessName;
+    this.reports = businessUnit.reports;
     this.loading = false;
   },
   data() {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null
+      businessUnitName: null,
+      reports: []
     };
   },
   methods: {}
