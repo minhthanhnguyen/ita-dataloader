@@ -140,8 +140,8 @@ public class IngestController {
   }
 
   @GetMapping(value = "/api/storage-containers", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Set<String> getStorageContainers() {
-    return storage.getContainerNames();
+  public List<String> getStorageContainers() throws Exception {
+    return getBusinessUnits().stream().map(BusinessUnit::getContainerName).collect(Collectors.toList());
   }
 
   private DataloaderConfig getDataloaderConfig(String containerName) {
