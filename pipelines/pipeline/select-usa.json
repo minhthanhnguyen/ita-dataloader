@@ -53,7 +53,7 @@
 							"referenceName": "VangosBlobStorage",
 							"type": "LinkedServiceReference"
 						},
-						"path": "select-usa-stats"
+						"path": "select-usa"
 					},
 					"enableSkipIncompatibleRow": true,
 					"redirectIncompatibleRowSettings": {
