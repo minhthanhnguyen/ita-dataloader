@@ -37,7 +37,7 @@
 						"userProperties": [
 							{
 								"name": "Source",
-								"value": "select-usa-stats//WORLDBANK_EASE_COUNTRY_METADATA.csv"
+								"value": "select-usa//WORLDBANK_EASE_COUNTRY_METADATA.csv"
 							},
 							{
 								"name": "Destination",
@@ -74,7 +74,7 @@
 									"referenceName": "[parameters('VangosBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
-								"path": "select-usa-stats"
+								"path": "select-usa"
 							},
 							"enableSkipIncompatibleRow": true,
 							"redirectIncompatibleRowSettings": {
@@ -82,7 +82,7 @@
 									"referenceName": "[parameters('VangosBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
-								"path": "select-usa-stats"
+								"path": "select-usa"
 							},
 							"translator": {
 								"type": "TabularTranslator",
@@ -683,7 +683,7 @@
 									"referenceName": "[parameters('VangosBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
-								"path": "select-usa-stats"
+								"path": "select-usa"
 							},
 							"translator": {
 								"type": "TabularTranslator",
@@ -795,7 +795,7 @@
 									"referenceName": "[parameters('VangosBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
-								"path": "select-usa-stats"
+								"path": "select-usa"
 							},
 							"translator": {
 								"type": "TabularTranslator",
@@ -2138,7 +2138,7 @@
 									"referenceName": "[parameters('VangosBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
-								"path": "select-usa-stats"
+								"path": "select-usa"
 							},
 							"translator": {
 								"type": "TabularTranslator",
@@ -2784,7 +2784,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -2871,7 +2871,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -3228,7 +3228,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "BEA_NIPA.json",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					}
 				},
 				"schema": {
@@ -3423,7 +3423,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "bea-mne-country",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					}
 				},
 				"schema": {
@@ -3661,7 +3661,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "bea-mne-country-by-industry",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					}
 				},
 				"schema": {
@@ -3899,7 +3899,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "bea-mne-country-ubo-by-industry",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					}
 				},
 				"schema": {
@@ -4137,7 +4137,7 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"folderPath": "bea-mne-industry",
-						"container": "select-usa-stats"
+						"container": "select-usa"
 					}
 				},
 				"schema": {

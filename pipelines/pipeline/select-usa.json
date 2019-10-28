@@ -16,7 +16,7 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "select-usa-stats//WORLDBANK_EASE_COUNTRY_METADATA.csv"
+						"value": "select-usa//WORLDBANK_EASE_COUNTRY_METADATA.csv"
 					},
 					{
 						"name": "Destination",
