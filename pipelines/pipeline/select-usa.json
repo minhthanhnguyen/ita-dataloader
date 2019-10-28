@@ -47,14 +47,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						},
-						"path": "select-usa"
-					},
+					"enableStaging": false,
 					"enableSkipIncompatibleRow": true,
 					"redirectIncompatibleRowSettings": {
 						"linkedServiceName": {
