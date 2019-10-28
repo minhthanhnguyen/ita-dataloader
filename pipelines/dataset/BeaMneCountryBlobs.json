@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"folderPath": "bea-mne-country",
-				"container": "select-usa-stats"
+				"container": "select-usa"
 			}
 		},
 		"schema": {

@@ -1,5 +1,5 @@
 {
-	"name": "imfWeoDataBlob",
+	"name": "ImfWeoDataBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "VangosBlobStorage",

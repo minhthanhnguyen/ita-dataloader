@@ -61,7 +61,7 @@
 							"referenceName": "VangosBlobStorage",
 							"type": "LinkedServiceReference"
 						},
-						"path": "select-usa-stats"
+						"path": "select-usa"
 					},
 					"translator": {
 						"type": "TabularTranslator",
@@ -611,7 +611,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "imfWeoDataBlob",
+						"referenceName": "ImfWeoDataBlob",
 						"type": "DatasetReference"
 					}
 				],
@@ -662,7 +662,7 @@
 							"referenceName": "VangosBlobStorage",
 							"type": "LinkedServiceReference"
 						},
-						"path": "select-usa-stats"
+						"path": "select-usa"
 					},
 					"translator": {
 						"type": "TabularTranslator",
@@ -750,11 +750,11 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
+							"recursive": false,
+							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings",
-							"skipLineCount": 4
+							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"sink": {
@@ -768,21 +768,15 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						},
-						"path": "select-usa-stats"
-					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 1
+									"name": "Country Name",
+									"type": "String"
 								},
 								"sink": {
 									"name": "Country Name",
@@ -791,8 +785,8 @@
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 2
+									"name": "Country Code",
+									"type": "String"
 								},
 								"sink": {
 									"name": "Country Code",
@@ -801,8 +795,8 @@
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 3
+									"name": "Indicator Name",
+									"type": "String"
 								},
 								"sink": {
 									"name": "Indicator Name",
@@ -811,8 +805,8 @@
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 4
+									"name": "Indicator Code",
+									"type": "String"
 								},
 								"sink": {
 									"name": "Indicator Code",
@@ -821,592 +815,592 @@
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 5
+									"name": "1960",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1960",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 6
+									"name": "1961",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1961",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 7
+									"name": "1962",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1962",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 8
+									"name": "1963",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1963",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 9
+									"name": "1964",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1964",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 10
+									"name": "1965",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1965",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 11
+									"name": "1966",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1966",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 12
+									"name": "1967",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1967",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 13
+									"name": "1968",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1968",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 14
+									"name": "1969",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1969",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 15
+									"name": "1970",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1970",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 16
+									"name": "1971",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1971",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 17
+									"name": "1972",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1972",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 18
+									"name": "1973",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1973",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 19
+									"name": "1974",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1974",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 20
+									"name": "1975",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1975",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 21
+									"name": "1976",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1976",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 22
+									"name": "1977",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1977",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 23
+									"name": "1978",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1978",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 24
+									"name": "1979",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1979",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 25
+									"name": "1980",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1980",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 26
+									"name": "1981",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1981",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 27
+									"name": "1982",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1982",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 28
+									"name": "1983",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1983",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 29
+									"name": "1984",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1984",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 30
+									"name": "1985",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1985",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 31
+									"name": "1986",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1986",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 32
+									"name": "1987",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1987",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 33
+									"name": "1988",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1988",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 34
+									"name": "1989",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1989",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 35
+									"name": "1990",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1990",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 36
+									"name": "1991",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1991",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 37
+									"name": "1992",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1992",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 38
+									"name": "1993",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1993",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 39
+									"name": "1994",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1994",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 40
+									"name": "1995",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1995",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 41
+									"name": "1996",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1996",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 42
+									"name": "1997",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1997",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 43
+									"name": "1998",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1998",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 44
+									"name": "1999",
+									"type": "String"
 								},
 								"sink": {
 									"name": "1999",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 45
+									"name": "2000",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2000",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 46
+									"name": "2001",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2001",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 47
+									"name": "2002",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2002",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 48
+									"name": "2003",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2003",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 49
+									"name": "2004",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2004",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 50
+									"name": "2005",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2005",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 51
+									"name": "2006",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2006",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 52
+									"name": "2007",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2007",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 53
+									"name": "2008",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2008",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 54
+									"name": "2009",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2009",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 55
+									"name": "2010",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2010",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 56
+									"name": "2011",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2011",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 57
+									"name": "2012",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2012",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 58
+									"name": "2013",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2013",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 59
+									"name": "2014",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2014",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 60
+									"name": "2015",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2015",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 61
+									"name": "2016",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2016",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 62
+									"name": "2017",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2017",
-									"type": "Int32"
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"type": "String",
-									"ordinal": 63
+									"name": "2018",
+									"type": "String"
 								},
 								"sink": {
 									"name": "2018",
-									"type": "Int32"
+									"type": "String"
 								}
 							}
 						]
@@ -1562,7 +1556,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "BEA_NIPA_Blob",
+						"referenceName": "BeaNipaBlob",
 						"type": "DatasetReference"
 					}
 				],
@@ -2117,7 +2111,7 @@
 							"referenceName": "VangosBlobStorage",
 							"type": "LinkedServiceReference"
 						},
-						"path": "select-usa-stats"
+						"path": "select-usa"
 					},
 					"translator": {
 						"type": "TabularTranslator",

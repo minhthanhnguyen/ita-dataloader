@@ -1,5 +1,5 @@
 {
-	"name": "BEA_NIPA_Blob",
+	"name": "BeaNipaBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "VangosBlobStorage",
@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "BEA_NIPA.json",
-				"container": "select-usa-stats"
+				"container": "select-usa"
 			}
 		},
 		"schema": {
