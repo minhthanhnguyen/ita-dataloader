@@ -1436,13 +1436,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						}
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -1590,13 +1584,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						}
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -1757,13 +1745,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						}
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -1924,13 +1906,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						}
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -2091,14 +2067,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						},
-						"path": "select-usa"
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
