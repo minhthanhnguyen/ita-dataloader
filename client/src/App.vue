@@ -53,5 +53,6 @@ export default {
 .sub-content {
   min-width:  1000px;
   width: 100%;
+  padding-top: 12px;
 }
 </style>

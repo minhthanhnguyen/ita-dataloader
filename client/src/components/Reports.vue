@@ -4,10 +4,15 @@
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
-        <md-table v-model="reports" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
-          <md-table-toolbar>
-            <h1 class="md-title">Reports</h1>
-          </md-table-toolbar>
+        <p v-if="reports.length === 0">No reports have been created yet.</p>
+        <md-table
+          v-if="reports.length > 0"
+          v-model="reports"
+          md-sort="name"
+          md-sort-order="asc"
+          md-card
+          md-fixed-header
+        >
           <md-table-row slot="md-table-row" slot-scope="{ item }">
             <md-table-cell md-label="Name" md-sort-by="name">
               <a v-bind:href="item.url" target="_blank">{{item.name}}</a>

@@ -1,23 +1,23 @@
 <template>
   <nav class="nav-menu">
     <md-list class="menu-list-items">
-      <md-list-item class="menu-li" @click="goTo('Upload')">
+      <md-list-item v-bind:class="getClasses('Upload')" @click="goTo('Upload')">
         <md-icon id="menu-icon">arrow_upward</md-icon>
         <span class="md-list-item-text">Upload</span>
       </md-list-item>
-      <md-list-item class="menu-li" @click="goTo('Config')">
+      <md-list-item v-bind:class="getClasses('Config')" @click="goTo('Config')">
         <md-icon id="menu-icon">settings_applications</md-icon>
         <span class="md-list-item-text">Configure</span>
       </md-list-item>
-      <md-list-item class="menu-li" @click="goTo('Log')">
+      <md-list-item v-bind:class="getClasses('Log')" @click="goTo('Log')">
         <md-icon id="menu-icon">menu_book</md-icon>
         <span class="md-list-item-text">Log</span>
       </md-list-item>
-      <md-list-item class="menu-li" @click="goTo('Reports')">
+      <md-list-item v-bind:class="getClasses('Reports')" @click="goTo('Reports')">
         <md-icon id="menu-icon">pie_chart</md-icon>
         <span class="md-list-item-text">Reports</span>
       </md-list-item>
-      <md-list-item class="menu-li" @click="goTo('APIs')">
+      <md-list-item v-bind:class="getClasses('APIs')" @click="goTo('APIs')">
         <md-icon id="menu-icon">developer_mode</md-icon>
         <span class="md-list-item-text">APIs</span>
       </md-list-item>
@@ -53,6 +53,10 @@
   color: white;
   margin: 0 5px 0 0;
 }
+
+.menu-li.current-route {
+  background: #ff3333;
+}
 </style>
 <script>
 export default {
@@ -68,6 +72,9 @@ export default {
           containerName: this.containerName
         }
       });
+    },
+    getClasses(routeName) {
+      return routeName === this.$route.name ? "menu-li current-route" : "menu-li";
     }
   }
 };
