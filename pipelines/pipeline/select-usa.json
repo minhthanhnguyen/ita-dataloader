@@ -48,14 +48,7 @@
 						}
 					},
 					"enableStaging": false,
-					"enableSkipIncompatibleRow": true,
-					"redirectIncompatibleRowSettings": {
-						"linkedServiceName": {
-							"referenceName": "VangosBlobStorage",
-							"type": "LinkedServiceReference"
-						},
-						"path": "select-usa"
-					},
+					"enableSkipIncompatibleRow": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
