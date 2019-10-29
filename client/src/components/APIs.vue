@@ -1,8 +1,8 @@
 <template>
   <div>
-    <dataloader-header businessUnitName="APIs" />
+    <dataloader-header />
     <div class="content">
-      <dataloader-menu v-bind:containerName="containerName" />
+      <dataloader-menu />
       <div class="sub-content">
         <section>
           <h1 class="md-title">Storage Containers</h1>
@@ -19,9 +19,6 @@
           <p>/api/extract/fta/tariff-rates?containerName=$containerName&amp;fileName=$fileName</p>
           <p>Returns tariff rates for the given file with Rule of Origin applied</p>
         </section>
-        <div v-if="loading" class="loading">
-          <md-progress-bar md-mode="indeterminate"></md-progress-bar>
-        </div>
       </div>
     </div>
   </div>
@@ -56,23 +53,6 @@ export default {
   components: {
     "dataloader-header": Header,
     "dataloader-menu": Menu
-  },
-  async created() {
-    this.loading = true;
-    this.containerName = this.$route.params["containerName"];
-    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    this.businessUnitName = this.businessUnits.find(
-      b => b.containerName === this.containerName
-    ).businessName;
-    this.loading = false;
-  },
-  data() {
-    return {
-      loading: true,
-      containerName: null,
-      businessUnitName: null
-    };
-  },
-  methods: {}
+  }
 };
 </script>

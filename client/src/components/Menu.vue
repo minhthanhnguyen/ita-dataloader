@@ -66,15 +66,23 @@ export default {
   },
   methods: {
     goTo(routeName) {
-      this.$router.push({
-        name: routeName,
-        params: {
-          containerName: this.containerName
-        }
-      });
+      if (this.containerName) {
+        this.$router.push({
+          name: routeName,
+          params: {
+            containerName: this.containerName
+          }
+        });
+      } else {
+        this.$router.push({
+          name: routeName
+        });
+      }
     },
     getClasses(routeName) {
-      return routeName === this.$route.name ? "menu-li current-route" : "menu-li";
+      return routeName === this.$route.name
+        ? "menu-li current-route"
+        : "menu-li";
     }
   }
 };

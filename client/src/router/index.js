@@ -40,7 +40,7 @@ export default new Router({
         dataloaderRepository: new DataloaderRepository()
       }
     }, {
-      path: '/apis/:containerName',
+      path: '/apis',
       name: 'APIs',
       component: APIs,
       props: {
