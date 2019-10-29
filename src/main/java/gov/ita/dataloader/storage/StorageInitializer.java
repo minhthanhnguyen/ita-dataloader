@@ -18,6 +18,8 @@ public class StorageInitializer {
   public void init() {
     Map<String, String> configurationFiles = getResources("/fixtures");
     Set<String> containers = storage.getContainerNames();
+
+    //Update container configurations for those that don't exist; once that exist, users control the configuration content.
     for (String configFile : configurationFiles.keySet()) {
       String containerName = configFile.replace(".json", "");
       if (!containers.contains(containerName)) {
@@ -26,5 +28,13 @@ public class StorageInitializer {
         storage.save("configuration.json", getResourceAsString(path).getBytes(), null, containerName, false);
       }
     }
+
+    //Always update the dataloader configuration; users don't control the dataloader configuration content
+    storage.save(
+      "configuration.json",
+      getResourceAsString("/fixtures/dataloader.json").getBytes(),
+      null,
+      "dataloader",
+      false);
   }
 }
