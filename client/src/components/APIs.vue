@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dataloader-header v-bind:businessUnitName="businessUnitName" />
+    <dataloader-header businessUnitName="APIs" />
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
