@@ -79,6 +79,10 @@ public class Tariff {
     this.rateAlts = rateAlts;
   }
 
+  public Tariff() {
+
+  }
+
   public Long getId() {
     return id;
   }
@@ -86,7 +90,7 @@ public class Tariff {
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public String getTariffLine() {
     return tariffLine;
   }

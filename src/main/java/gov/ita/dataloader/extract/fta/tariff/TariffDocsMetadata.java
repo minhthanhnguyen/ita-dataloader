@@ -2,6 +2,9 @@ package gov.ita.dataloader.extract.fta.tariff;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TariffDocsMetadata {
 
   @JsonProperty("PublicationID")
@@ -47,6 +50,16 @@ public class TariffDocsMetadata {
 
   public String getCountry() {
     return country;
+  }
+
+  public List<String> getCountries() {
+    return Arrays.asList(country.split(";"));
+  }
+
+  public String getHS2Code() {
+    if (ftaPublicationHsCode != null)
+      return ftaPublicationHsCode.substring(0, 2);
+    return null;
   }
 
   public void setCountry(String country) {

@@ -17,7 +17,7 @@
         <section>
           <h1 class="md-title">FTA Tariff Rates</h1>
           <p>/api/extract/fta/tariff-rates?containerName=$containerName&amp;fileName=$fileName</p>
-          <p>Returns tariff rates for the given file with Rule of Origin applied</p>
+          <p>Returns tariff rates for the given file with Rules of Origin applied</p>
         </section>
       </div>
     </div>

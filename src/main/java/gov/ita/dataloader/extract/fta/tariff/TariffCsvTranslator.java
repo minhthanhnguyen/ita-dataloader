@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class TariffCsvTranslator {
@@ -79,34 +77,6 @@ public class TariffCsvTranslator {
           }
         });
         tf.setRateAlts(rateAlts);
-
-        Map<Integer, Link> linkMap = new HashMap<>();
-        headers.forEach((header, position) -> {
-          if (header.toLowerCase().contains("link")) {
-            int linkIndex = 0;
-            String linkPosition = removeNonNumericCharacters(header);
-            if (!linkPosition.isEmpty()) linkIndex = Integer.parseInt(linkPosition);
-
-            Link link = linkMap.get(linkIndex);
-            if (link != null) {
-              if (header.toLowerCase().contains("text")) {
-                link.setLinkText(csvRecord.get(header));
-              } else {
-                link.setLinkUrl(csvRecord.get(header));
-              }
-            } else {
-              if (header.toLowerCase().contains("text")) {
-                linkMap.put(linkIndex, new Link(null, csvRecord.get(header)));
-              } else {
-                linkMap.put(linkIndex, new Link(csvRecord.get(header), null));
-              }
-            }
-          }
-        });
-
-        List<Link> links = linkMap.values().stream()
-          .filter(link -> link.getLinkText() != null || link.getLinkUrl() != null).collect(Collectors.toList());
-        tf.setLinks(links);
 
         tariffs.add(tf);
         i++;
