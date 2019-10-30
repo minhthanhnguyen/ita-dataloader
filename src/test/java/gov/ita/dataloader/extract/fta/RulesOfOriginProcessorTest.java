@@ -33,8 +33,8 @@ public class RulesOfOriginProcessorTest {
     tariffDocsMetadata.add(ausMeta);
 
     TariffDocsMetadata ausMeta2 = new TariffDocsMetadata();
-    ausMeta2.setCountry("Australia;Bahrain");
-    ausMeta2.setFtaPublicationHsCode("33 - More oils");
+    ausMeta2.setCountry("Bahrain;Australia");
+    ausMeta2.setFtaPublicationHsCode("33 - Essential oils");
     ausMeta2.setMetadataStoragePath("http://aus.file.2.pdf");
     tariffDocsMetadata.add(ausMeta2);
 

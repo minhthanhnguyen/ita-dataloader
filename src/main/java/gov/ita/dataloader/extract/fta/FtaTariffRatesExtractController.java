@@ -33,8 +33,8 @@ public class FtaTariffRatesExtractController {
   }
 
   @GetMapping(value = "/api/extract/fta/tariff-rates", produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<Tariff> getTariffRates(@RequestParam String containerName, @RequestParam String fileName) throws InvalidCsvFileException {
-    byte[] blob = storage.getBlob(containerName, fileName);
+  public List<Tariff> getTariffRates(@RequestParam String fileName) throws InvalidCsvFileException {
+    byte[] blob = storage.getBlob("fta-tariff-rates", fileName);
     List<Tariff> tariffs = tariffCsvTranslator.translate(new InputStreamReader(new ByteArrayInputStream(blob)));
     List<TariffDocsMetadata> metadata = tariffDocsMetaDataGateway.getMetadata();
     rulesOfOriginProcessor.process(tariffs, metadata);
