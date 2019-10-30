@@ -3,7 +3,6 @@ package gov.ita.dataloader.ingest;
 import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
-import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,16 +56,19 @@ public class IngestProcessor {
             throw new IngestProcessorException(
               String.format("%s Could not extract zip file from %s", LocalDateTime.now(), dsc.getUrl()));
           }
+
           assert fileMap != null;
-          for (String fileName : fileMap.keySet()) {
-            ZipFileConfig zfc = getZipFileConfig(dsc, fileName);
+          dsc.getZipFileConfigs().forEach(zipFileConfig -> {
+            String fileNameKey = fileMap.keySet().stream()
+              .filter(fileName -> fileName.matches(zipFileConfig.getOriginalFileName()))
+              .findFirst().get();
             processAndSaveDataSource(
-              zfc.getDestinationFileName(),
-              fileMap.get(fileName).toByteArray(),
-              zfc.getReplaceValues(),
+              zipFileConfig.getDestinationFileName(),
+              fileMap.get(fileNameKey).toByteArray(),
+              zipFileConfig.getReplaceValues(),
               containerName,
               userName);
-          }
+          });
         }
 
         updateStatus(dsc, ingestProcessorStatus);
@@ -117,17 +119,4 @@ public class IngestProcessor {
     }
     storage.save(fileName, fileBytes, userName, containerName, false);
   }
-
-  private ZipFileConfig getZipFileConfig(DataSetConfig dsc, String fileName) throws IngestProcessorException {
-    try {
-      return dsc.getZipFileConfigs().stream()
-        .filter(zipFileContent -> zipFileContent.getOriginalFileName().equals(fileName))
-        .collect(Collectors.toList())
-        .get(0);
-    } catch (IndexOutOfBoundsException e) {
-      String message = String.format("Error: The file %s could not be found in the zip configuration for: %s", fileName, dsc.getUrl());
-      throw new IngestProcessorException(message);
-    }
-  }
-
 }
