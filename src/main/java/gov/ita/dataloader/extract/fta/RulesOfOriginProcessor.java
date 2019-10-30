@@ -27,7 +27,7 @@ public class RulesOfOriginProcessor {
       }));
 
     tariffs.stream().map(t -> {
-      String metadataKey = t.getPartnerName() + "#" + t.getHs6().substring(0, 2);
+      String metadataKey = t.getCountry() + "#" + t.getHs6().substring(0, 2);
       List<TariffDocsMetadata> tariffDocsMetadata = metadataMappings.getOrDefault(metadataKey, Collections.emptyList());
       List<Link> links = new ArrayList<>();
       tariffDocsMetadata.forEach(m -> {

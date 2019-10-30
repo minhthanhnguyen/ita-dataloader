@@ -290,4 +290,8 @@ public class Tariff {
     return rulesOfOrigin;
   }
 
+  public String getCountry() {
+    return partnerName.equalsIgnoreCase("United States") ? reporterName : partnerName;
+  }
+
 }

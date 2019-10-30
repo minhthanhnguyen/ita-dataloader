@@ -16,43 +16,38 @@ public class RulesOfOriginProcessorTest {
     List<Tariff> tariffs = new ArrayList<>();
     List<TariffDocsMetadata> tariffDocsMetadata = new ArrayList<>();
 
-    Tariff aus = new Tariff();
-    aus.setPartnerName("Australia");
-    aus.setHs6("33123");
-    tariffs.add(aus);
+    tariffs.add(makeTariff("Australia", "United States", "33123"));
+    tariffs.add(makeTariff("United States", "Greece", "88321"));
 
-    Tariff gr = new Tariff();
-    gr.setPartnerName("Greece");
-    gr.setHs6("88321");
-    tariffs.add(gr);
-
-    TariffDocsMetadata ausMeta = new TariffDocsMetadata();
-    ausMeta.setCountry("Australia;Bahrain");
-    ausMeta.setFtaPublicationHsCode("33 - Essential oils");
-    ausMeta.setMetadataStoragePath("http://aus.file.1.pdf");
-    tariffDocsMetadata.add(ausMeta);
-
-    TariffDocsMetadata ausMeta2 = new TariffDocsMetadata();
-    ausMeta2.setCountry("Bahrain;Australia");
-    ausMeta2.setFtaPublicationHsCode("33 - Essential oils");
-    ausMeta2.setMetadataStoragePath("http://aus.file.2.pdf");
-    tariffDocsMetadata.add(ausMeta2);
-
-    TariffDocsMetadata grMeta = new TariffDocsMetadata();
-    grMeta.setCountry("Mexico;Greece");
-    grMeta.setFtaPublicationHsCode("88 - Something else");
-    grMeta.setMetadataStoragePath("http://gr.file.1.pdf");
-    tariffDocsMetadata.add(grMeta);
-
+    tariffDocsMetadata.add(makeMeta("Australia;Bahrain", "33 - Essential oils", "http://file.1.pdf"));
+    tariffDocsMetadata.add(makeMeta("Bahrain;Australia", "33 - Essential oils", "http://file.2.pdf"));
+    tariffDocsMetadata.add(makeMeta("Mexico;Greece", "88 - Something else", "http://file.3.pdf"));
+    
     RulesOfOriginProcessor rulesOfOriginProcessor = new RulesOfOriginProcessor();
     rulesOfOriginProcessor.process(tariffs, tariffDocsMetadata);
 
     Tariff australia = getTariff(tariffs, "Australia");
     Tariff greece = getTariff(tariffs, "Greece");
 
-    assertTrue(containsLink(australia, "http://aus.file.1.pdf"));
-    assertTrue(containsLink(australia, "http://aus.file.2.pdf"));
-    assertTrue(containsLink(greece, "http://gr.file.1.pdf"));
+    assertTrue(containsLink(australia, "http://file.1.pdf"));
+    assertTrue(containsLink(australia, "http://file.2.pdf"));
+    assertTrue(containsLink(greece, "http://file.3.pdf"));
+  }
+
+  private Tariff makeTariff(String partner, String reporter, String hs6) {
+    Tariff t = new Tariff();
+    t.setPartnerName(partner);
+    t.setReporterName(reporter);
+    t.setHs6(hs6);
+    return t;
+  }
+
+  private TariffDocsMetadata makeMeta(String countryArray, String hs6Description, String url) {
+    TariffDocsMetadata metadata = new TariffDocsMetadata();
+    metadata.setCountry(countryArray);
+    metadata.setFtaPublicationHsCode(hs6Description);
+    metadata.setMetadataStoragePath(url);
+    return metadata;
   }
 
   private boolean containsLink(Tariff t, String linkUrl) {
@@ -60,7 +55,7 @@ public class RulesOfOriginProcessorTest {
   }
 
   private Tariff getTariff(List<Tariff> tariffs, String country) {
-    return tariffs.stream().filter(t -> t.getPartnerName().equals(country)).findFirst().get();
+    return tariffs.stream().filter(t -> t.getCountry().equals(country)).findFirst().get();
   }
 
 }
