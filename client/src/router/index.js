@@ -12,8 +12,15 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/upload/:containerName',
       name: 'Upload',
+      component: Upload,
+      props: {
+        dataloaderRepository: new DataloaderRepository()
+      },
+    }, {
+      path: '/',
+      name: 'Home',
       component: Upload,
       props: {
         dataloaderRepository: new DataloaderRepository()

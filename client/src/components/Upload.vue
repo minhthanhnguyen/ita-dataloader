@@ -1,29 +1,28 @@
 <template>
   <div>
-    <dataloader-header v-bind:businessUnitName="businessUnitName" />
+    <dataloader-header
+      v-if="containerName"
+      v-bind:businessUnits="businessUnits"
+      v-bind:initialContainerName="containerName"
+      v-bind:routeName="$route.name"
+    />
+    <div style="display:none">
+      <!-- A way of updating the content of a parent component when the container name changes -->
+      <md-field>
+        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
+      </md-field>
+    </div>
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-20">
-            <md-field>
-              <label>Business Unit</label>
-              <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()">
-                <md-option
-                  v-for="business in businessUnits"
-                  v-bind:key="business.containerName"
-                  v-bind:value="business.containerName"
-                >{{business.businessName}}</md-option>
-              </md-select>
-            </md-field>
-          </div>
-          <div class="md-layout-item md-size-30">
+          <div class="md-layout-item md-size-40">
             <md-field>
               <label>Select file</label>
               <md-file @md-change="onFileSelection($event)"></md-file>
             </md-field>
           </div>
-          <div class="md-layout-item md-size-40">
+          <div class="md-layout-item md-size-50">
             <md-autocomplete v-model="destinationFileName" :md-options="destinationFileNameOptions">
               <label>File name</label>
             </md-autocomplete>
@@ -60,7 +59,7 @@
               <span v-else>{{this.pipelineStatus.status}}</span>
               <span>{{this.pipelineStatus.runEnd}}</span>
             </span>
-            <a @click="updateBusinessUnitContent()" href="#">Refresh</a>
+            <md-button class="md-dense refresh-btn" @click="updateBusinessUnitContent()">Refresh</md-button>
           </div>
         </div>
         <div v-if="!loading" class="md-layout storage-content">

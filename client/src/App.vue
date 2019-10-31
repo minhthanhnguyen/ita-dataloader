@@ -44,6 +44,7 @@ export default {
 .stat {
   font-size: 12px;
   margin-right: 16px;
+  margin-top: 10px;
 }
 
 .content {
@@ -54,5 +55,9 @@ export default {
   min-width:  1000px;
   width: 100%;
   padding-top: 12px;
+}
+
+.refresh-btn {
+  top: -10px;
 }
 </style>

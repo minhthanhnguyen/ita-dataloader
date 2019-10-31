@@ -1,6 +1,17 @@
 <template>
   <div>
-    <dataloader-header v-bind:businessUnitName="businessUnitName" />
+    <dataloader-header
+      v-if="containerName"
+      v-bind:businessUnits="businessUnits"
+      v-bind:initialContainerName="containerName"
+      v-bind:routeName="$route.name"
+    />
+    <div style="display:none">
+      <!-- A way of updating the content of a parent component when the container name changes -->
+      <md-field>
+        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
+      </md-field>
+    </div>
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
@@ -96,20 +107,7 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
-      this.containerName
-    );
-    this.dataloaderConfigBeautified = beautify(
-      this.dataloaderConfig,
-      null,
-      2,
-      100
-    );
-    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    this.businessUnitName = this.businessUnits.find(
-      b => b.containerName === this.containerName
-    ).businessName;
-
+    await this.updateBusinessUnitContent();
     this.loading = false;
   },
   updated() {
@@ -124,7 +122,7 @@ export default {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null,
+      businessUnits: [],
       dataloaderConfig: null,
       dataloaderConfigBeautified: null,
       configSaved: false,
@@ -152,6 +150,21 @@ export default {
     },
     editConfiguration() {
       this.editing = true;
+    },
+    async updateBusinessUnitContent() {
+      this.dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+        this.containerName
+      );
+      this.dataloaderConfigBeautified = beautify(
+        this.dataloaderConfig,
+        null,
+        2,
+        100
+      );
+      this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+      this.businessUnitName = this.businessUnits.find(
+        b => b.containerName === this.containerName
+      ).businessName;
     }
   }
 };

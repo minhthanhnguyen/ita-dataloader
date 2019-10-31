@@ -1,6 +1,17 @@
 <template>
   <div>
-    <dataloader-header v-bind:businessUnitName="businessUnitName" />
+    <dataloader-header
+      v-if="containerName"
+      v-bind:businessUnits="businessUnits"
+      v-bind:initialContainerName="containerName"
+      v-bind:routeName="$route.name"
+    />
+    <div style="display:none">
+      <!-- A way of updating the content of a parent component when the container name changes -->
+      <md-field>
+        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
+      </md-field>
+    </div>
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
@@ -60,22 +71,26 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    let businessUnit = this.businessUnits.find(
-      b => b.containerName === this.containerName
-    );
-    this.businessUnitName = businessUnit.businessName;
-    this.reports = businessUnit.reports;
+    await this.updateBusinessUnitContent();
     this.loading = false;
   },
   data() {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null,
+      businessUnits: [],
       reports: []
     };
   },
-  methods: {}
+  methods: {
+    async updateBusinessUnitContent() {
+      this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+      let businessUnit = this.businessUnits.find(
+        b => b.containerName === this.containerName
+      );
+      this.businessUnitName = businessUnit.businessName;
+      this.reports = businessUnit.reports;
+    }
+  }
 };
 </script>

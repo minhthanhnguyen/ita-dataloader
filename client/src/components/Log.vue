@@ -1,6 +1,17 @@
 <template>
   <div>
-    <dataloader-header v-bind:businessUnitName="businessUnitName" />
+    <dataloader-header
+      v-if="containerName"
+      v-bind:businessUnits="businessUnits"
+      v-bind:initialContainerName="containerName"
+      v-bind:routeName="$route.name"
+    />
+    <div style="display:none">
+      <!-- A way of updating the content of a parent component when the container name changes -->
+      <md-field>
+        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
+      </md-field>
+    </div>
     <div class="content">
       <dataloader-menu v-bind:containerName="containerName" />
       <div class="sub-content">
@@ -17,11 +28,16 @@
             <strong>COMPLETED:</strong>
             <span>{{injestStatus.datasetsCompleted}}</span>
           </span>
-          <a @click="refreshLog()" href="#">Refresh</a>
+          <md-button class="md-dense refresh-btn" @click="refreshLog()">Refresh</md-button>
         </div>
 
         <div class="log-details">
-          <md-table v-model="injestStatus.log" md-sort="time" md-sort-order="asc">
+          <md-table
+            v-if="injestStatus.log"
+            v-model="injestStatus.log"
+            md-sort="time"
+            md-sort-order="asc"
+          >
             <md-table-row slot-scope="{ item }" slot="md-table-row">
               <md-table-cell md-label="Timestamp">{{item.time}}</md-table-cell>
               <md-table-cell md-label="Message">{{item.message}}</md-table-cell>
@@ -64,25 +80,14 @@ export default {
   async created() {
     this.loading = true;
     this.containerName = this.$route.params["containerName"];
-    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
-    this.businessUnitName = this.businessUnits.find(
-      b => b.containerName === this.containerName
-    ).businessName;
-    this.injestStatus = await this.dataloaderRepository._getIngestStatus(
-      this.containerName
-    );
-
-    if (!this.injestStatus) {
-      this.injestStatus = this.defaultInjectStatus();
-    }
-
+    await this.updateBusinessUnitContent();
     this.loading = false;
   },
   data() {
     return {
       loading: true,
       containerName: null,
-      businessUnitName: null,
+      businessUnits: [],
       injestStatus: this.defaultInjectStatus()
     };
   },
@@ -101,6 +106,19 @@ export default {
         processedUrlCalls: 0,
         log: []
       };
+    },
+    async updateBusinessUnitContent() {
+      this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+      this.businessUnitName = this.businessUnits.find(
+        b => b.containerName === this.containerName
+      ).businessName;
+      this.injestStatus = await this.dataloaderRepository._getIngestStatus(
+        this.containerName
+      );
+
+      if (!this.injestStatus) {
+        this.injestStatus = this.defaultInjectStatus();
+      }
     }
   }
 };
