@@ -23,7 +23,7 @@ public class WorldBankEaseIndexTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("CountryName", "CountryCode", "IndicatorName", "IndicatorCode", "Year", "Val"));
+        .withHeader("Country_Name", "Country_Code", "Indicator_Name", "Indicator_Code", "Year", "Val"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
@@ -47,9 +47,9 @@ public class WorldBankEaseIndexTranslator implements Translator {
 
         for (String header : valueFields) {
 
-            csvPrinter.printRecord(
-              countryName, countryCode, indicatorName, indicatorCode, header, csvRecord.get(header)
-            );
+          csvPrinter.printRecord(
+            countryName, countryCode, indicatorName, indicatorCode, header, csvRecord.get(header)
+          );
         }
       }
 

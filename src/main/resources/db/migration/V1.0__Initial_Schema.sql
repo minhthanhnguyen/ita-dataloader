@@ -66,9 +66,9 @@ create TABLE WORLDBANK_EASE_COUNTRY_METADATA (
 go
 
 create TABLE WORLDBANK_EASE_COUNTRY_INDEX (
-    [Country Name] VARCHAR(255),
-    [Country Code] VARCHAR(255),
-    [Indicator Code] VARCHAR(255),
+    [Country_Name] VARCHAR(255),
+    [Country_Code] VARCHAR(255),
+    [Indicator_Code] VARCHAR(255),
     [Year] INT,
     [Val] INT
 );

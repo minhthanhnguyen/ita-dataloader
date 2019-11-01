@@ -25,22 +25,22 @@ public class WorldBankEaseIndexTranslatorTest {
 
   @Test
   public void translates_CountryName() {
-    assertEquals("Aruba", results.get(0).get("CountryName"));
+    assertEquals("Aruba", results.get(0).get("Country_Name"));
   }
 
   @Test
   public void translates_CountryCode() {
-    assertEquals("ABW", results.get(0).get("CountryCode"));
+    assertEquals("ABW", results.get(0).get("Country_Code"));
   }
 
   @Test
   public void translates_IndicatorName() {
-    assertEquals("Ease of doing business index (1=most business-friendly regulations)", results.get(0).get("IndicatorName"));
+    assertEquals("Ease of doing business index (1=most business-friendly regulations)", results.get(0).get("Indicator_Name"));
   }
 
   @Test
   public void translates_IndicatorCode() {
-    assertEquals("IC.BUS.EASE.XQ", results.get(0).get("IndicatorCode"));
+    assertEquals("IC.BUS.EASE.XQ", results.get(0).get("Indicator_Code"));
   }
 
   @Test
@@ -55,7 +55,7 @@ public class WorldBankEaseIndexTranslatorTest {
 
   @Test
   public void translates_Greece_2019() {
-    CSVRecord csvRecord = results.stream().filter(r -> r.get("CountryName").equals("Greece") && r.get("Year").equals("2019")).findFirst().get();
+    CSVRecord csvRecord = results.stream().filter(r -> r.get("Country_Name").equals("Greece") && r.get("Year").equals("2019")).findFirst().get();
     assertEquals("79", csvRecord.get("Val"));
   }
 }

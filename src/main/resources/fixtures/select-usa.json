@@ -6,7 +6,7 @@
       "fileName": "WEODATA.csv",
       "replaceValues": [
         {
-          "replaceThis": "International Monetary Fund, World Economic Outlook Database, April 2019",
+          "replaceThis": ".*\\b(International Monetary Fund, World Economic Outlook Database)\\b.*",
           "withThis": ""
         }
       ],
@@ -21,21 +21,33 @@
         {
           "originalFileName": "^API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv",
+          "skipLineCount": 4,
           "replaceValues": [
-            { "replaceThis": ",\r\n", "withThis": "\r\n" },
-            { "replaceThis": "\"Data Source\",\"World Development Indicators\"", "withThis": "" },
-            { "replaceThis": "\"Last Updated Date\",\"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\"", "withThis": "" }
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
           ]
         },
         {
           "originalFileName": "^Metadata_Indicator_API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_INDICATOR_DESCRIPTION.csv",
-          "replaceValues": [ { "replaceThis": ",\r\n", "withThis": "\r\n" } ]
+          "replaceValues": [
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
+          ]
         },
         {
           "originalFileName": "^Metadata_Country_API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv",
-          "replaceValues": [ { "replaceThis": ",\r\n", "withThis": "\r\n" } ]
+          "replaceValues": [
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
+          ]
         }
       ]
     },
