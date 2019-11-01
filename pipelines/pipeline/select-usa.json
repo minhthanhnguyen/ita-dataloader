@@ -2134,6 +2134,143 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy BEA ITA",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.json"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE BEA_ITA;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['Indicator']"
+								},
+								"sink": {
+									"name": "Indicator",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['AreaOrCountry']"
+								},
+								"sink": {
+									"name": "AreaOrCountry",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['Frequency']"
+								},
+								"sink": {
+									"name": "Frequency",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['Year']"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "['TimeSeriesId']"
+								},
+								"sink": {
+									"name": "TimeSeriesId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['TimeSeriesDescription']"
+								},
+								"sink": {
+									"name": "TimeSeriesDescription",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['TimePeriod']"
+								},
+								"sink": {
+									"name": "TimePeriod",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['CL_UNIT']"
+								},
+								"sink": {
+									"name": "CL_UNIT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UNIT_MULT']"
+								},
+								"sink": {
+									"name": "UNIT_MULT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['DataValue']"
+								},
+								"sink": {
+									"name": "DataValue",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['BEAAPI']['Results']['Data']"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "BeaItaBlobs",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "BeaItaDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []

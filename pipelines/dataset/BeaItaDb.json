@@ -1,0 +1,58 @@
+{
+	"name": "BeaItaDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Indicator",
+				"type": "varchar"
+			},
+			{
+				"name": "AreaOrCountry",
+				"type": "varchar"
+			},
+			{
+				"name": "Frequency",
+				"type": "varchar"
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TimeSeriesId",
+				"type": "varchar"
+			},
+			{
+				"name": "TimeSeriesDescription",
+				"type": "varchar"
+			},
+			{
+				"name": "TimePeriod",
+				"type": "varchar"
+			},
+			{
+				"name": "CL_UNIT",
+				"type": "varchar"
+			},
+			{
+				"name": "UNIT_MULT",
+				"type": "varchar"
+			},
+			{
+				"name": "DataValue",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BEA_ITA"
+		}
+	}
+}

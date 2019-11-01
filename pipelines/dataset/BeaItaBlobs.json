@@ -1,0 +1,130 @@
+{
+	"name": "BeaItaBlobs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VangosBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "bea-ita",
+				"container": "select-usa"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"BEAAPI": {
+					"type": "object",
+					"properties": {
+						"Request": {
+							"type": "object",
+							"properties": {
+								"RequestParam": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"ParameterName": {
+												"type": "string"
+											},
+											"ParameterValue": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						},
+						"Results": {
+							"type": "object",
+							"properties": {
+								"TsLastUpdated": {
+									"type": "string"
+								},
+								"Dimensions": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Ordinal": {
+												"type": "string"
+											},
+											"Name": {
+												"type": "string"
+											},
+											"DataType": {
+												"type": "string"
+											},
+											"IsValue": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"Data": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Indicator": {
+												"type": "string"
+											},
+											"AreaOrCountry": {
+												"type": "string"
+											},
+											"Frequency": {
+												"type": "string"
+											},
+											"Year": {
+												"type": "string"
+											},
+											"TimeSeriesId": {
+												"type": "string"
+											},
+											"TimeSeriesDescription": {
+												"type": "string"
+											},
+											"TimePeriod": {
+												"type": "string"
+											},
+											"CL_UNIT": {
+												"type": "string"
+											},
+											"UNIT_MULT": {
+												"type": "string"
+											},
+											"DataValue": {
+												"type": "string"
+											},
+											"NoteRef": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"Notes": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"NoteRef": {
+												"type": "string"
+											},
+											"NoteText": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
