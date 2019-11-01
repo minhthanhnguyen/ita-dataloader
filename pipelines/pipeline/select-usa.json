@@ -1966,6 +1966,174 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy FDI Index",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE FDI_INDEX;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "LOCATION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LOCATION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Country",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SECTOR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SECTOR",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Sector / Industry",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sector_Industry",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "RESTYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RESTYPE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Type of restriction",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Type_of_restriction",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SERIES",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SERIES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIME",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Year",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Value",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Value",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Flag Codes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flag_Codes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Flags",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flags",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "FdiIndexBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "FdiIndexDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []

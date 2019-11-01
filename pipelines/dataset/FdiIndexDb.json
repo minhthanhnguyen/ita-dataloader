@@ -1,0 +1,70 @@
+{
+	"name": "FdiIndexDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "LOCATION",
+				"type": "varchar"
+			},
+			{
+				"name": "Country",
+				"type": "varchar"
+			},
+			{
+				"name": "SECTOR",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Sector_Industry",
+				"type": "varchar"
+			},
+			{
+				"name": "RESTYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "Type_of_restriction",
+				"type": "varchar"
+			},
+			{
+				"name": "SERIES",
+				"type": "varchar"
+			},
+			{
+				"name": "TIME",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Value",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 3
+			},
+			{
+				"name": "Flag_Codes",
+				"type": "varchar"
+			},
+			{
+				"name": "Flags",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FDI_INDEX"
+		}
+	}
+}
