@@ -206,36 +206,52 @@ on details.HEADER_ID = hdr.HEADER_ID;
 go
 
 create TABLE IESE_VCPE_INDEX (
-   Regioncountry                                           VARCHAR(20) NOT NULL
-  , Score_or_Rank                                          VARCHAR(5) NOT NULL
-  , [0_Index]                                              NUMERIC(5,1) NOT NULL
-  , [1_Economic_Activity]                                  NUMERIC(5,1) NOT NULL
-  , [11_Size_of_the_Economy_GDP]                           NUMERIC(5,1) NOT NULL
-  , [12_Expected_Real_GDP_Growth]                          NUMERIC(5,1) NOT NULL
-  , [13_Unemployment]                                      NUMERIC(5,1) NOT NULL
-  , [2_Capital_Market]                                     NUMERIC(5,1) NOT NULL
-  , [21_Size_and_Liquidity_of_the_Stock_Market]            NUMERIC(5,1) NOT NULL
-  , [211_Market_Capitalization_of_Listed_Companies]        NUMERIC(5,1) NOT NULL
-  , [23_IPOs_and_Public_Issuing_Activity]                  NUMERIC(5,1) NOT NULL
-  , [24_MA_Market]                                         NUMERIC(5,1) NOT NULL
-  , [25_Debt_and_Credit_Market]                            NUMERIC(5,1) NOT NULL
-  , [26_Bank_Non_Performing_Loans_to_Toal_Gross_Loans]     NUMERIC(5,1) NOT NULL
-  , [27_Financial_Market_Sophistication]                   NUMERIC(5,1) NOT NULL
-  , [3_Taxation]                                           NUMERIC(5,1) NOT NULL
-  , [31_Entrepreneurial_Tax_Incentives_and_Admin_Burden]   NUMERIC(5,1) NOT NULL
-  , [4_Investor_Protection_and_Corporate_Governance]       NUMERIC(5,1) NOT NULL
-  , [41_Quality_of_Corporate_Governance]                   NUMERIC(5,1) NOT NULL
-  , [42_Security_of_Property_Rights]                       NUMERIC(5,1) NOT NULL
-  , [43_Quality_of_Legal_Enforcement]                      NUMERIC(5,1) NOT NULL
-  , [5_Human_and_Social_Environment]                       NUMERIC(5,1) NOT NULL
-  , [51_Education_and_Human_Capital]                       NUMERIC(5,1) NOT NULL
-  , [52_Labor_Regulations]                                 NUMERIC(5,1) NOT NULL
-  , [53_Bribing_and_Corruption]                            NUMERIC(5,1) NOT NULL
-  , [6_Entrepreneurial_Opportunities]                      NUMERIC(5,1) NOT NULL
-  , [61_Innovation]                                        NUMERIC(5,1) NOT NULL
-  , [62_Scientific_and_Technical_Journal_Articles]         NUMERIC(5,1) NOT NULL
-  , [63_Burdens_of_Starting_and_Running_a_Business]        NUMERIC(5,1) NOT NULL
-  , [64_Simplicity_of_Closing_a_Business]                  NUMERIC(5,1) NOT NULL
-  , [65_Corporate_RD]                                      NUMERIC(5,1) NOT NULL
+   Regioncountry                                           VARCHAR(255)
+  , Score_or_Rank                                          VARCHAR(255)
+  , [0_Index]                                              NUMERIC(5,1)
+  , [1_Economic_Activity]                                  NUMERIC(5,1)
+  , [11_Size_of_the_Economy_GDP]                           NUMERIC(5,1)
+  , [12_Expected_Real_GDP_Growth]                          NUMERIC(5,1)
+  , [13_Unemployment]                                      NUMERIC(5,1)
+  , [2_Capital_Market]                                     NUMERIC(5,1)
+  , [21_Size_and_Liquidity_of_the_Stock_Market]            NUMERIC(5,1)
+  , [211_Market_Capitalization_of_Listed_Companies]        NUMERIC(5,1)
+  , [23_IPOs_and_Public_Issuing_Activity]                  NUMERIC(5,1)
+  , [24_MA_Market]                                         NUMERIC(5,1)
+  , [25_Debt_and_Credit_Market]                            NUMERIC(5,1)
+  , [26_Bank_Non_Performing_Loans_to_Toal_Gross_Loans]     NUMERIC(5,1)
+  , [27_Financial_Market_Sophistication]                   NUMERIC(5,1)
+  , [3_Taxation]                                           NUMERIC(5,1)
+  , [31_Entrepreneurial_Tax_Incentives_and_Admin_Burden]   NUMERIC(5,1)
+  , [4_Investor_Protection_and_Corporate_Governance]       NUMERIC(5,1)
+  , [41_Quality_of_Corporate_Governance]                   NUMERIC(5,1)
+  , [42_Security_of_Property_Rights]                       NUMERIC(5,1)
+  , [43_Quality_of_Legal_Enforcement]                      NUMERIC(5,1)
+  , [5_Human_and_Social_Environment]                       NUMERIC(5,1)
+  , [51_Education_and_Human_Capital]                       NUMERIC(5,1)
+  , [52_Labor_Regulations]                                 NUMERIC(5,1)
+  , [53_Bribing_and_Corruption]                            NUMERIC(5,1)
+  , [6_Entrepreneurial_Opportunities]                      NUMERIC(5,1)
+  , [61_Innovation]                                        NUMERIC(5,1)
+  , [62_Scientific_and_Technical_Journal_Articles]         NUMERIC(5,1)
+  , [63_Burdens_of_Starting_and_Running_a_Business]        NUMERIC(5,1)
+  , [64_Simplicity_of_Closing_a_Business]                  NUMERIC(5,1)
+  , [65_Corporate_RD]                                      NUMERIC(5,1)
+);
+go
+
+create TABLE FDI_INDEX (
+   LOCATION            VARCHAR(255)
+  , Country             VARCHAR(255)
+  , SECTOR              INTEGER
+  , Sector_Industry     VARCHAR(255)
+  , RESTYPE             VARCHAR(255)
+  , Type_of_restriction VARCHAR(255)
+  , SERIES              VARCHAR(255)
+  , TIME                INTEGER
+  , Year                INTEGER
+  , Value               NUMERIC(5,3)
+  , Flag_Codes          VARCHAR(255)
+  , Flags               VARCHAR(255)
 );
 go
