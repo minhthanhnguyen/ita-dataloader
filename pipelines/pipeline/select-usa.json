@@ -2188,6 +2188,364 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy IESE VSPE INDEX",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE IESE_VCPE_INDEX;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Region/country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Regioncountry",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Score or Rank",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Score_or_Rank",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "0 Index",
+									"type": "String"
+								},
+								"sink": {
+									"name": "0_Index",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "1 Economic Activity",
+									"type": "String"
+								},
+								"sink": {
+									"name": "1_Economic_Activity",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "1.1 Size of the Economy (GDP)",
+									"type": "String"
+								},
+								"sink": {
+									"name": "11_Size_of_the_Economy_GDP",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "1.2 Expected Real GDP Growth",
+									"type": "String"
+								},
+								"sink": {
+									"name": "12_Expected_Real_GDP_Growth",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "1.3 Unemployment",
+									"type": "String"
+								},
+								"sink": {
+									"name": "13_Unemployment",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2 Capital Market",
+									"type": "String"
+								},
+								"sink": {
+									"name": "2_Capital_Market",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.1 Size and Liquidity of the Stock Market",
+									"type": "String"
+								},
+								"sink": {
+									"name": "21_Size_and_Liquidity_of_the_Stock_Market",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.1.1 Market Capitalization of Listed Companies",
+									"type": "String"
+								},
+								"sink": {
+									"name": "211_Market_Capitalization_of_Listed_Companies",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.3 IPOs and Public Issuing Activity",
+									"type": "String"
+								},
+								"sink": {
+									"name": "23_IPOs_and_Public_Issuing_Activity",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.4 M&A Market",
+									"type": "String"
+								},
+								"sink": {
+									"name": "24_MA_Market",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.5 Debt and Credit Market",
+									"type": "String"
+								},
+								"sink": {
+									"name": "25_Debt_and_Credit_Market",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.6 Bank Non Performing Loans to Toal Gross Loans",
+									"type": "String"
+								},
+								"sink": {
+									"name": "26_Bank_Non_Performing_Loans_to_Toal_Gross_Loans",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "2.7 Financial Market Sophistication",
+									"type": "String"
+								},
+								"sink": {
+									"name": "27_Financial_Market_Sophistication",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "3 Taxation",
+									"type": "String"
+								},
+								"sink": {
+									"name": "3_Taxation",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "3.1 Entrepreneurial Tax Incentives and Admin. Burden",
+									"type": "String"
+								},
+								"sink": {
+									"name": "31_Entrepreneurial_Tax_Incentives_and_Admin_Burden",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "4 Investor Protection and Corporate Governance",
+									"type": "String"
+								},
+								"sink": {
+									"name": "4_Investor_Protection_and_Corporate_Governance",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "4.1 Quality of Corporate Governance",
+									"type": "String"
+								},
+								"sink": {
+									"name": "41_Quality_of_Corporate_Governance",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "4.2 Security of Property Rights",
+									"type": "String"
+								},
+								"sink": {
+									"name": "42_Security_of_Property_Rights",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "4.3 Quality of Legal Enforcement",
+									"type": "String"
+								},
+								"sink": {
+									"name": "43_Quality_of_Legal_Enforcement",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "5 Human and Social Environment",
+									"type": "String"
+								},
+								"sink": {
+									"name": "5_Human_and_Social_Environment",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "5.1 Education and Human Capital",
+									"type": "String"
+								},
+								"sink": {
+									"name": "51_Education_and_Human_Capital",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "5.2 Labor Regulations",
+									"type": "String"
+								},
+								"sink": {
+									"name": "52_Labor_Regulations",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "5.3 Bribing and Corruption",
+									"type": "String"
+								},
+								"sink": {
+									"name": "53_Bribing_and_Corruption",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6 Entrepreneurial Opportunities",
+									"type": "String"
+								},
+								"sink": {
+									"name": "6_Entrepreneurial_Opportunities",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6.1 Innovation",
+									"type": "String"
+								},
+								"sink": {
+									"name": "61_Innovation",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6.2 Scientific and Technical Journal Articles",
+									"type": "String"
+								},
+								"sink": {
+									"name": "62_Scientific_and_Technical_Journal_Articles",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6.3 Burdens of Starting and Running a Business",
+									"type": "String"
+								},
+								"sink": {
+									"name": "63_Burdens_of_Starting_and_Running_a_Business",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6.4 Simplicity of Closing a Business",
+									"type": "String"
+								},
+								"sink": {
+									"name": "64_Simplicity_of_Closing_a_Business",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "6.5 Corporate R&D",
+									"type": "String"
+								},
+								"sink": {
+									"name": "65_Corporate_RD",
+									"type": "Decimal"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "IeseVcpeIndexBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "IeseVcpeIndexDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
