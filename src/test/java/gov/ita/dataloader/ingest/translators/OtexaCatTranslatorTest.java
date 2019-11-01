@@ -1,10 +1,7 @@
 package gov.ita.dataloader.ingest.translators;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
+import gov.ita.dataloader.TestHelpers;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.input.CharSequenceReader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,26 +9,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static gov.ita.dataloader.TestHelpers.formattedResults;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("development")
 public class OtexaCatTranslatorTest {
-
+  private TestHelpers h = new TestHelpers();
   private List<CSVRecord> results;
 
   @Before
   public void setUp() {
     OtexaCatTranslator otexaCatTranslator = new OtexaCatTranslator();
-    byte[] translatedBytes = otexaCatTranslator.translate(getSampleData());
+    byte[] translatedBytes = otexaCatTranslator.translate(h.get("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv"));
     results = formattedResults(translatedBytes);
   }
 
@@ -82,28 +78,4 @@ public class OtexaCatTranslatorTest {
     }
   }
 
-  private byte[] getSampleData() {
-    try {
-      return IOUtils.toString(
-        this.getClass().getResourceAsStream("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv")
-      ).getBytes();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  private List<CSVRecord> formattedResults(byte[] translatedBytes) {
-    Reader reader = new CharSequenceReader(new String(translatedBytes));
-    CSVParser csvParser;
-    try {
-      csvParser = new CSVParser(
-        reader,
-        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withNullString("").withIgnoreHeaderCase());
-      return csvParser.getRecords();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
 }

@@ -14,4 +14,11 @@ public class TranslatorFactoryTest {
     assertThat(translator, instanceOf(OtexaCatTranslator.class));
   }
 
+  @Test
+  public void returnsWorldBankEaseIndexTranslator() {
+    TranslatorFactory translatorFactory = new TranslatorFactory();
+    Translator translator = translatorFactory.getTranslator("select-usa#WORLDBANK_EASE_COUNTRY_INDEX.csv");
+    assertThat(translator, instanceOf(WorldBankEaseIndexTranslator.class));
+  }
+
 }
