@@ -1,0 +1,199 @@
+{
+	"name": "IeseVcpeIndexDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Regioncountry",
+				"type": "varchar"
+			},
+			{
+				"name": "Score_or_Rank",
+				"type": "varchar"
+			},
+			{
+				"name": "0_Index",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "1_Economic_Activity",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "11_Size_of_the_Economy_GDP",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "12_Expected_Real_GDP_Growth",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "13_Unemployment",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "2_Capital_Market",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "21_Size_and_Liquidity_of_the_Stock_Market",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "211_Market_Capitalization_of_Listed_Companies",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "23_IPOs_and_Public_Issuing_Activity",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "24_MA_Market",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "25_Debt_and_Credit_Market",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "26_Bank_Non_Performing_Loans_to_Toal_Gross_Loans",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "27_Financial_Market_Sophistication",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "3_Taxation",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "31_Entrepreneurial_Tax_Incentives_and_Admin_Burden",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "4_Investor_Protection_and_Corporate_Governance",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "41_Quality_of_Corporate_Governance",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "42_Security_of_Property_Rights",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "43_Quality_of_Legal_Enforcement",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "5_Human_and_Social_Environment",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "51_Education_and_Human_Capital",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "52_Labor_Regulations",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "53_Bribing_and_Corruption",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "6_Entrepreneurial_Opportunities",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "61_Innovation",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "62_Scientific_and_Technical_Journal_Articles",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "63_Burdens_of_Starting_and_Running_a_Business",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "64_Simplicity_of_Closing_a_Business",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			},
+			{
+				"name": "65_Corporate_RD",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 1
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "IESE_VCPE_INDEX"
+		}
+	}
+}
