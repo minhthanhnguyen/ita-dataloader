@@ -4,11 +4,12 @@ import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
 import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
+import gov.ita.dataloader.ingest.translators.Translator;
+import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.storage.Storage;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -18,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,33 +30,43 @@ public class IngestProcessorTest {
   private Storage storage;
   @Mock
   private HttpHelper httpHelper;
+  @Mock
+  private TranslatorFactory translatorFactory;
+  @Mock
+  private Translator translator;
 
   private List<DataSetConfig> dataSetConfigs;
 
-  @Test
-  public void processDataSetConfig() throws Exception {
-    byte[] radBytes = "rad bytes".getBytes();
-    byte[] veryRadBytes = "very rad bytes".getBytes();
-    byte[] reallyRadBytes = "really rad bytes".getBytes();
+  private byte[] RAD_BYTES = "rad bytes".getBytes();
+  private byte[] VERY_RAD_BYTES = "very rad bytes".getBytes();
+  private byte[] REALLY_RAD_BYTES = "really rad bytes".getBytes();
+  private byte[] ZIP_FILE_BYTES = "zip file bytes".getBytes();
+  private byte[] TRANSLATED_BYTES = "translated".getBytes();
 
+  @Before
+  public void setUp() throws Exception {
+    when(httpHelper.getBytes("http://cool.io")).thenReturn(RAD_BYTES);
+    when(httpHelper.getBytes("http://very-cool.io")).thenReturn(VERY_RAD_BYTES);
+    when(httpHelper.getBytes("http://really-cool.io")).thenReturn(REALLY_RAD_BYTES);
+    when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(ZIP_FILE_BYTES);
+  }
+
+  @Test
+  public void processDataSetConfig() {
     dataSetConfigs = new ArrayList<>();
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
     dataSetConfigs.add(new DataSetConfig("http://very-cool.io", true, "very-rad.csv", null, null));
     dataSetConfigs.add(new DataSetConfig("http://really-cool.io", true, "really-rad.csv", null, null));
 
-    when(httpHelper.getBytes("http://cool.io")).thenReturn(radBytes);
-    when(httpHelper.getBytes("http://very-cool.io")).thenReturn(veryRadBytes);
-    when(httpHelper.getBytes("http://really-cool.io")).thenReturn(reallyRadBytes);
-
-    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, translatorFactory);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
-      .save("rad.csv", radBytes, "TestUser@gmail.com", "a-container", false);
+      .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
-      .save("very-rad.csv", veryRadBytes, "TestUser@gmail.com", "a-container", false);
+      .save("very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
-      .save("really-rad.csv", reallyRadBytes, "TestUser@gmail.com", "a-container", false);
+      .save("really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
   }
 
   @Test
@@ -69,7 +79,7 @@ public class IngestProcessorTest {
 
     when(httpHelper.getBytes("http://vango.io")).thenReturn("The best sport is baseball!".getBytes());
 
-    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, translatorFactory);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -89,20 +99,17 @@ public class IngestProcessorTest {
     dataSetConfigs = new ArrayList<>();
     dataSetConfigs.add(new DataSetConfig("http://vangos-zip.io", true, "vangos.zip", null, zipFileConfigs));
 
-    byte[] zipFileBytes = "zip file bytes".getBytes();
-    when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(zipFileBytes);
-
     Map<String, ByteArrayOutputStream> zipFileContents = new HashMap<>();
     zipFileContents.put("Hobbies_1342.csv", convert("My favorite hobby is swimming!"));
     zipFileContents.put("Hobbies_5674.csv", convert("My favorite hobby is biking!"));
 
-    when(zipFileExtractor.extract(zipFileBytes)).thenReturn(zipFileContents);
+    when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
-      .save("vangos.zip", zipFileBytes, "TestUser@gmail.com", "a-container", false);
+      .save("vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
       .save("Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
@@ -119,21 +126,37 @@ public class IngestProcessorTest {
     dataSetConfigs = new ArrayList<>();
     dataSetConfigs.add(new DataSetConfig("http://vangos-zip.io", true, "vangos.zip", null, zipFileConfigs));
 
-    byte[] zipFileBytes = "zip file bytes".getBytes();
-    when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(zipFileBytes);
+    when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(ZIP_FILE_BYTES);
 
     Map<String, ByteArrayOutputStream> zipFileContents = new HashMap<>();
     zipFileContents.put("Hobbies_skip.csv", convert("zip file bytes \n more bytes \n and more \n never ending bytes"));
 
-    when(zipFileExtractor.extract(zipFileBytes)).thenReturn(zipFileContents);
+    when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper);
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
-      .save("vangos.zip", zipFileBytes, "TestUser@gmail.com", "a-container", false);
+      .save("vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
       .save("Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com", "a-container", false);
+  }
+
+  @Test
+  public void usesTranslatorFactoryToRetrieveAppropriateTranslator() {
+    dataSetConfigs = new ArrayList<>();
+    dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
+
+    when(translatorFactory.getTranslator("a-container#rad.csv")).thenReturn(translator);
+    when(translator.translate(RAD_BYTES)).thenReturn(TRANSLATED_BYTES);
+
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
+    ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
+
+    verify(storage, times(1))
+      .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(1))
+      .save("translated/rad.csv", TRANSLATED_BYTES, "TestUser@gmail.com", "a-container", false);
   }
 
   private ByteArrayOutputStream convert(String s) {

@@ -3,6 +3,8 @@ package gov.ita.dataloader.ingest;
 import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
+import gov.ita.dataloader.ingest.translators.Translator;
+import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,12 +25,14 @@ public class IngestProcessor {
   private ZipFileExtractor zipFileExtractor;
   private Storage storage;
   private HttpHelper httpHelper;
+  private TranslatorFactory translatorFactory;
   private Map<String, IngestProcessorStatus> status;
 
-  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage, HttpHelper httpHelper) {
+  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage, HttpHelper httpHelper, TranslatorFactory translatorFactory) {
     this.zipFileExtractor = zipFileExtractor;
     this.storage = storage;
     this.httpHelper = httpHelper;
+    this.translatorFactory = translatorFactory;
     status = new HashMap<>();
   }
 
@@ -120,6 +124,12 @@ public class IngestProcessor {
       for (ReplaceValue rv : replaceValues) {
         fileBytes = replace(fileBytes, rv.getReplaceThis(), rv.getWithThis());
       }
+    }
+
+    Translator translator = translatorFactory.getTranslator(containerName + "#" + fileName);
+    if (translator != null) {
+      byte[] translatedFileBytes = translator.translate(fileBytes);
+      storage.save("translated/" + fileName, translatedFileBytes, userName, containerName, false);
     }
 
     storage.save(fileName, fileBytes, userName, containerName, false);
