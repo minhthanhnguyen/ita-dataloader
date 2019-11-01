@@ -22,7 +22,7 @@ public class RulesOfOriginProcessorTest {
     tariffDocsMetadata.add(makeMeta("Australia;Bahrain", "33 - Essential oils", "http://file.1.pdf"));
     tariffDocsMetadata.add(makeMeta("Bahrain;Australia", "33 - Essential oils", "http://file.2.pdf"));
     tariffDocsMetadata.add(makeMeta("Mexico;Greece", "88 - Something else", "http://file.3.pdf"));
-    
+
     RulesOfOriginProcessor rulesOfOriginProcessor = new RulesOfOriginProcessor();
     rulesOfOriginProcessor.process(tariffs, tariffDocsMetadata);
 

@@ -39,7 +39,7 @@ public class TariffDocsMetaDataGateway {
     headers.setBearerAuth(getAccessToken());
 
     String body = "{\"query\": \"$filter=Publication eq 'FTA Publication'\"}";
-    
+
     HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
     return restTemplate.exchange(
       tariffDocsMetadataUrl,

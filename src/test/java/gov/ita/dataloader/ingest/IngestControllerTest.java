@@ -2,10 +2,10 @@ package gov.ita.dataloader.ingest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
-import gov.ita.dataloader.storage.Storage;
 import gov.ita.dataloader.ingest.translators.Translator;
 import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.security.AuthenticationFacade;
+import gov.ita.dataloader.storage.Storage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
