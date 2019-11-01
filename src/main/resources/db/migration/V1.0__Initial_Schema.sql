@@ -162,7 +162,7 @@ create TABLE BEA_ITA (
     [TimePeriod] VARCHAR(255),
     [CL_UNIT] VARCHAR(255),
     [UNIT_MULT] VARCHAR(255),
-    [DataValue] INT
+    [DataValue] VARCHAR(255)
 );
 go
 
