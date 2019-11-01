@@ -24,7 +24,7 @@
           "replaceValues": [
             { "replaceThis": ",\r\n", "withThis": "\r\n" },
             { "replaceThis": "\"Data Source\",\"World Development Indicators\"", "withThis": "" },
-            { "replaceThis": "\"Last Updated Date\",\"2019-10-16\"", "withThis": "" }
+            { "replaceThis": "\"Last Updated Date\",\"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\"", "withThis": "" }
           ]
         },
         {
