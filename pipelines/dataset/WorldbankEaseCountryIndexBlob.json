@@ -21,19 +21,19 @@
 		},
 		"schema": [
 			{
-				"name": "CountryName",
+				"name": "Country_Name",
 				"type": "String"
 			},
 			{
-				"name": "CountryCode",
+				"name": "Country_Code",
 				"type": "String"
 			},
 			{
-				"name": "IndicatorName",
+				"name": "Indicator_Name",
 				"type": "String"
 			},
 			{
-				"name": "IndicatorCode",
+				"name": "Indicator_Code",
 				"type": "String"
 			},
 			{

@@ -754,31 +754,31 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "CountryName",
+									"name": "Country_Name",
 									"type": "String"
 								},
 								"sink": {
-									"name": "Country Name",
+									"name": "Country_Name",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "CountryCode",
+									"name": "Country_Code",
 									"type": "String"
 								},
 								"sink": {
-									"name": "Country Code",
+									"name": "Country_Code",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "IndicatorCode",
+									"name": "Indicator_Code",
 									"type": "String"
 								},
 								"sink": {
-									"name": "Indicator Code",
+									"name": "Indicator_Code",
 									"type": "String"
 								}
 							},

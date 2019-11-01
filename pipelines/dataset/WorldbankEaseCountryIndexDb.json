@@ -9,15 +9,15 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "Country Name",
+				"name": "Country_Name",
 				"type": "varchar"
 			},
 			{
-				"name": "Country Code",
+				"name": "Country_Code",
 				"type": "varchar"
 			},
 			{
-				"name": "Indicator Code",
+				"name": "Indicator_Code",
 				"type": "varchar"
 			},
 			{
