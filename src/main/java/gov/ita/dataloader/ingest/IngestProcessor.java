@@ -7,8 +7,7 @@ import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class IngestProcessor {
 
         fileBytes = httpHelper.getBytes(dsc.getUrl());
 
-        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), containerName, userName);
+        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), null, containerName, userName);
 
         if (dsc.getZipFileConfigs() != null) {
           Map<String, ByteArrayOutputStream> fileMap;
@@ -66,8 +65,8 @@ public class IngestProcessor {
               zipFileConfig.getDestinationFileName(),
               fileMap.get(fileNameKey).toByteArray(),
               zipFileConfig.getReplaceValues(),
-              containerName,
-              userName);
+              zipFileConfig.getSkipLineCount(),
+              containerName, userName);
           });
         }
 
@@ -110,13 +109,53 @@ public class IngestProcessor {
   private void processAndSaveDataSource(String fileName,
                                         byte[] fileBytes,
                                         List<ReplaceValue> replaceValues,
+                                        Integer skipLineCount,
                                         String containerName,
                                         String userName) {
+    if (skipLineCount != null && skipLineCount > 0) {
+      fileBytes = skipLines(fileBytes, skipLineCount);
+    }
+
     if (replaceValues != null) {
       for (ReplaceValue rv : replaceValues) {
         fileBytes = replace(fileBytes, rv.getReplaceThis(), rv.getWithThis());
       }
     }
+
     storage.save(fileName, fileBytes, userName, containerName, false);
   }
+
+  private byte[] skipLines(byte[] fileBytes, Integer skipLineCount) {
+    InputStream is;
+    BufferedReader reader;
+    BufferedWriter writer;
+
+    is = new ByteArrayInputStream(fileBytes);
+    StringWriter out = new StringWriter();
+    writer = new BufferedWriter(out);
+    reader = new BufferedReader(new InputStreamReader(is));
+    String temp;
+
+    try {
+      for (int i = 0; i < skipLineCount; i++)
+        reader.readLine();
+
+      while ((temp = reader.readLine()) != null) {
+        writer.write(temp);
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        writer.flush();
+        is.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    return out.toString().getBytes();
+  }
+
 }

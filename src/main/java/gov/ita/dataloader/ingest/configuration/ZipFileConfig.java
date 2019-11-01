@@ -10,5 +10,6 @@ import java.util.List;
 public class ZipFileConfig {
   String originalFileName;
   String destinationFileName;
+  Integer skipLineCount;
   List<ReplaceValue> replaceValues;
 }

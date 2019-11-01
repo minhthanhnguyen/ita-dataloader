@@ -7,6 +7,8 @@ import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
 import gov.ita.dataloader.storage.Storage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -16,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -80,8 +83,8 @@ public class IngestProcessorTest {
     replaceValues.add(new ReplaceValue("biking", "climbing"));
 
     List<ZipFileConfig> zipFileConfigs = new ArrayList<>();
-    zipFileConfigs.add(new ZipFileConfig("Hobbies_1342.csv", "Hobbies_A.csv", replaceValues));
-    zipFileConfigs.add(new ZipFileConfig("Hobbies_5674.csv", "Hobbies_B.csv", replaceValues));
+    zipFileConfigs.add(new ZipFileConfig("Hobbies_1342.csv", "Hobbies_A.csv", null, replaceValues));
+    zipFileConfigs.add(new ZipFileConfig("Hobbies_5674.csv", "Hobbies_B.csv", null, replaceValues));
 
     dataSetConfigs = new ArrayList<>();
     dataSetConfigs.add(new DataSetConfig("http://vangos-zip.io", true, "vangos.zip", null, zipFileConfigs));
@@ -104,6 +107,33 @@ public class IngestProcessorTest {
       .save("Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
       .save("Hobbies_B.csv", "My favorite hobby is climbing!".getBytes(), "TestUser@gmail.com", "a-container", false);
+  }
+
+  @Test
+  public void processDataSetConfigWithSkipLinesInZipConfig() throws Exception {
+    Integer skipLineCount = 2;
+
+    List<ZipFileConfig> zipFileConfigs = new ArrayList<>();
+    zipFileConfigs.add(new ZipFileConfig("Hobbies_skip.csv", "Skipped_Hobbies.csv", skipLineCount, null));
+
+    dataSetConfigs = new ArrayList<>();
+    dataSetConfigs.add(new DataSetConfig("http://vangos-zip.io", true, "vangos.zip", null, zipFileConfigs));
+
+    byte[] zipFileBytes = "zip file bytes".getBytes();
+    when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(zipFileBytes);
+
+    Map<String, ByteArrayOutputStream> zipFileContents = new HashMap<>();
+    zipFileContents.put("Hobbies_skip.csv", convert("zip file bytes \n more bytes \n and more \n never ending bytes"));
+
+    when(zipFileExtractor.extract(zipFileBytes)).thenReturn(zipFileContents);
+
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper);
+    ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
+
+    verify(storage, times(1))
+      .save("vangos.zip", zipFileBytes, "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(1))
+      .save("Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com", "a-container", false);
   }
 
   private ByteArrayOutputStream convert(String s) {
