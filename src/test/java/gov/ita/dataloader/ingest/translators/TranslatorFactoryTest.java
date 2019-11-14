@@ -15,6 +15,13 @@ public class TranslatorFactoryTest {
   }
 
   @Test
+  public void returnsOtexaHtsTranslator() {
+    TranslatorFactory translatorFactory = new TranslatorFactory();
+    Translator translator = translatorFactory.getTranslator("otexa#OTEXA_EXE_HTS.csv");
+    assertThat(translator, instanceOf(OtexaHtsTranslator.class));
+  }
+
+  @Test
   public void returnsWorldBankEaseIndexTranslator() {
     TranslatorFactory translatorFactory = new TranslatorFactory();
     Translator translator = translatorFactory.getTranslator("select-usa#WORLDBANK_EASE_COUNTRY_INDEX.csv");

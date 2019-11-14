@@ -80,8 +80,10 @@ public class IngestController {
 
     storage.makeSnapshot(containerName, file.getOriginalFilename());
 
-    Translator translator = translatorFactory.getTranslator(containerName + "#" + file.getOriginalFilename());
+    String containerFileCompositeKey = containerName + "#" + file.getOriginalFilename();
+    Translator translator = translatorFactory.getTranslator(containerFileCompositeKey);
     if (translator != null) {
+      log.info("Translating {}", containerFileCompositeKey);
       byte[] translatedFile = translator.translate(file.getBytes());
       storage.save(
         "translated/" + file.getOriginalFilename(),
