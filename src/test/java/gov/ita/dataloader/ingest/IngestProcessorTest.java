@@ -148,7 +148,7 @@ public class IngestProcessorTest {
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
 
     when(translatorFactory.getTranslator("a-container#rad.csv")).thenReturn(translator);
-    when(translator.translate(RAD_BYTES)).thenReturn(TRANSLATED_BYTES);
+    when(translator.translate(RAD_BYTES, -1, -1)).thenReturn(TRANSLATED_BYTES);
 
     IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);

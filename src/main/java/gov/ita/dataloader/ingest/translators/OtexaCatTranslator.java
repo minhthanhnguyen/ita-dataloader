@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class OtexaCatTranslator implements Translator {
 
   @Override
-  public byte[] translate(byte[] bytes) {
+  public byte[] translate(byte[] bytes, int offset, int size) {
     StringWriter stringWriter = new StringWriter();
     CSVPrinter csvPrinter;
 
@@ -57,5 +57,10 @@ public class OtexaCatTranslator implements Translator {
     }
 
     return null;
+  }
+
+  @Override
+  public int pageSize() {
+    return -1;
   }
 }

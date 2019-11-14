@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class OtexaHtsTranslator implements Translator {
 
   @Override
-  public byte[] translate(byte[] bytes) {
+  public byte[] translate(byte[] bytes, int offset, int size) {
     StringWriter stringWriter = new StringWriter();
     CSVPrinter csvPrinter;
 
@@ -36,6 +36,7 @@ public class OtexaHtsTranslator implements Translator {
         .filter(header -> header.startsWith("D") || header.startsWith("QTY") || header.startsWith("VAL"))
         .collect(Collectors.toList());
 
+      int i = 0;
       for (CSVRecord csvRecord : csvParser) {
         String ctryNum = csvRecord.get("CTRYNUM");
         String catId = csvRecord.get("CAT");
@@ -46,6 +47,7 @@ public class OtexaHtsTranslator implements Translator {
           csvPrinter.printRecord(
             ctryNum, catId, hts, syef, header, csvRecord.get(header)
           );
+          i++;
         }
       }
 
@@ -58,6 +60,11 @@ public class OtexaHtsTranslator implements Translator {
     }
 
     return null;
+  }
+
+  @Override
+  public int pageSize() {
+    return 50000;
   }
 
 }

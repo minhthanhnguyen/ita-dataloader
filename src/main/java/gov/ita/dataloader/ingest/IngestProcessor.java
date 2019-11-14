@@ -128,7 +128,7 @@ public class IngestProcessor {
 
     Translator translator = translatorFactory.getTranslator(containerName + "#" + fileName);
     if (translator != null) {
-      byte[] translatedFileBytes = translator.translate(fileBytes);
+      byte[] translatedFileBytes = translator.translate(fileBytes, -1, -1);
       storage.save("translated/" + fileName, translatedFileBytes, userName, containerName, false);
     }
 

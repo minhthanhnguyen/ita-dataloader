@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.dataloader.ingest.configuration.BusinessUnit;
 import gov.ita.dataloader.ingest.configuration.BusinessUnitConfigResponse;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
-import gov.ita.dataloader.ingest.translators.Translator;
-import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.security.AuthenticationFacade;
 import gov.ita.dataloader.storage.BlobMetaData;
 import gov.ita.dataloader.storage.Storage;
@@ -30,18 +28,18 @@ public class IngestController {
   private IngestProcessor ingestProcessor;
   private AuthenticationFacade authenticationFacade;
   private ObjectMapper objectMapper;
-  private TranslatorFactory translatorFactory;
+  private IngestTranslationProcessor ingestTranslationProcessor;
 
   public IngestController(Storage storage,
                           IngestProcessor ingestProcessor,
                           AuthenticationFacade authenticationFacade,
                           ObjectMapper objectMapper,
-                          TranslatorFactory translatorFactory) {
+                          IngestTranslationProcessor ingestTranslationProcessor) {
     this.storage = storage;
     this.ingestProcessor = ingestProcessor;
     this.authenticationFacade = authenticationFacade;
     this.objectMapper = objectMapper;
-    this.translatorFactory = translatorFactory;
+    this.ingestTranslationProcessor = ingestTranslationProcessor;
   }
 
   @GetMapping(value = "/api/configuration", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -79,19 +77,7 @@ public class IngestController {
       true);
 
     storage.makeSnapshot(containerName, file.getOriginalFilename());
-
-    String containerFileCompositeKey = containerName + "#" + file.getOriginalFilename();
-    Translator translator = translatorFactory.getTranslator(containerFileCompositeKey);
-    if (translator != null) {
-      log.info("Translating {}", containerFileCompositeKey);
-      byte[] translatedFile = translator.translate(file.getBytes());
-      storage.save(
-        "translated/" + file.getOriginalFilename(),
-        translatedFile,
-        authenticationFacade.getUserName(),
-        containerName,
-        true);
-    }
+    ingestTranslationProcessor.process(containerName, file, authenticationFacade.getUserName());
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
