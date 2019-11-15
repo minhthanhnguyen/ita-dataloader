@@ -21,7 +21,7 @@ public class OtexaHtsTranslatorTest {
   @Before
   public void setUp() {
     OtexaHtsTranslator otexaHtsTranslator = new OtexaHtsTranslator();
-    byte[] translatedBytes = otexaHtsTranslator.translate(h.get("/fixtures/otexa/OTEXA_EXE_HTS.csv"), -1, -1);
+    byte[] translatedBytes = otexaHtsTranslator.translate(h.get("/fixtures/otexa/OTEXA_EXE_HTS.csv"), 0, 10);
     results = formattedResults(translatedBytes);
   }
 

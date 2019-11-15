@@ -31,7 +31,7 @@ public class IngestProcessorTest {
   @Mock
   private HttpHelper httpHelper;
   @Mock
-  private TranslatorFactory translatorFactory;
+  private IngestTranslationProcessor ingestTranslationProcessor;
   @Mock
   private Translator translator;
 
@@ -58,7 +58,7 @@ public class IngestProcessorTest {
     dataSetConfigs.add(new DataSetConfig("http://very-cool.io", true, "very-rad.csv", null, null));
     dataSetConfigs.add(new DataSetConfig("http://really-cool.io", true, "really-rad.csv", null, null));
 
-    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, translatorFactory);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, ingestTranslationProcessor);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -79,7 +79,7 @@ public class IngestProcessorTest {
 
     when(httpHelper.getBytes("http://vango.io")).thenReturn("The best sport is baseball!".getBytes());
 
-    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, translatorFactory);
+    IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, ingestTranslationProcessor);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -105,7 +105,7 @@ public class IngestProcessorTest {
 
     when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, ingestTranslationProcessor);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -133,7 +133,7 @@ public class IngestProcessorTest {
 
     when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, ingestTranslationProcessor);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
@@ -143,20 +143,17 @@ public class IngestProcessorTest {
   }
 
   @Test
-  public void usesTranslatorFactoryToRetrieveAppropriateTranslator() {
+  public void sendFilesThroughIngestTranslationProcessor() {
     dataSetConfigs = new ArrayList<>();
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
 
-    when(translatorFactory.getTranslator("a-container#rad.csv")).thenReturn(translator);
-    when(translator.translate(RAD_BYTES, -1, -1)).thenReturn(TRANSLATED_BYTES);
-
-    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, translatorFactory);
+    IngestProcessor ingestProcessor = new IngestProcessor(zipFileExtractor, storage, httpHelper, ingestTranslationProcessor);
     ingestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
       .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
-    verify(storage, times(1))
-      .save("translated/rad.csv", TRANSLATED_BYTES, "TestUser@gmail.com", "a-container", false);
+    verify(ingestTranslationProcessor, times(1))
+      .process("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
   }
 
   private ByteArrayOutputStream convert(String s) {

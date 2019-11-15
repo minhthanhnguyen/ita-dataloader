@@ -77,7 +77,7 @@ public class IngestController {
       true);
 
     storage.makeSnapshot(containerName, file.getOriginalFilename());
-    ingestTranslationProcessor.process(containerName, file, authenticationFacade.getUserName());
+    ingestTranslationProcessor.process(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")

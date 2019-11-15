@@ -5,10 +5,11 @@ import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -22,63 +23,72 @@ public class IngestTranslationProcessor {
     this.translatorFactory = translatorFactory;
   }
 
-  public void process(String containerName, MultipartFile file, String userName) throws IOException {
-    String containerFileCompositeKey = containerName + "#" + file.getOriginalFilename();
+  public void process(String containerName, String fileName, byte[] fileBytes, String userName) {
+    String fileRootName = "translated/" + fileName;
+
+    storage.delete(containerName, fileRootName);
+
+    String containerFileCompositeKey = containerName + "#" + fileName;
     Translator translator = translatorFactory.getTranslator(containerFileCompositeKey);
-    if (translator == null) System.exit(0);
+    if (translator != null) {
+      log.info("Processing {}", containerFileCompositeKey);
 
-    log.info("Translating {}", containerFileCompositeKey);
+      int HEADER_ROW = 1;
+      int lineCount = countLines(new ByteArrayInputStream(fileBytes)) - HEADER_ROW;
+      int pageSize = translator.pageSize();
+      if (pageSize == -1) pageSize = lineCount;
+      int pages = (lineCount + pageSize - 1) / pageSize;
 
-    int lineCount = countLines(file.getInputStream());
-    int currentPage = 1;
-    int pageSize = translator.pageSize();
-    if (pageSize == -1) pageSize = lineCount;
-    int pages = (lineCount + pageSize - 1) / pageSize;
-
-    while (currentPage <= pages) {
-      int offset = currentPage * pageSize;
-      byte[] translatedFile = translator.translate(file.getBytes(), offset, pageSize);
-      storage.save(
-        "translated/" + file.getOriginalFilename() + "_" + currentPage,
-        translatedFile,
-        userName,
-        containerName,
-        true);
-      currentPage++;
+      int currentPage = 0;
+      while (currentPage < pages) {
+        log.info("Translating page {} of {} for {}", currentPage, pages, containerFileCompositeKey);
+        
+        int offset = currentPage * pageSize;
+        byte[] translatedFile = translator.translate(fileBytes, offset, pageSize);
+        storage.save(
+          fileRootName + "/" + UUID.randomUUID(),
+          translatedFile,
+          userName,
+          containerName,
+          true);
+        currentPage++;
+      }
     }
   }
 
-  static int countLines(InputStream is) throws IOException {
+  private static int countLines(InputStream is) {
     byte[] c = new byte[1024];
 
-    int readChars = is.read(c);
-    if (readChars == -1) {
-      // bail out if nothing to read
-      return 0;
-    }
-
-    // make it easy for the optimizer to tune this loop
-    int count = 0;
-    while (readChars == 1024) {
-      for (int i = 0; i < 1024; ) {
-        if (c[i++] == '\n') {
-          ++count;
-        }
+    try {
+      int readChars = is.read(c);
+      if (readChars == -1) {
+        return 0;
       }
-      readChars = is.read(c);
-    }
 
-    // count remaining characters
-    while (readChars != -1) {
-      System.out.println(readChars);
-      for (int i = 0; i < readChars; ++i) {
-        if (c[i] == '\n') {
-          ++count;
+      int count = 0;
+      while (readChars == 1024) {
+        for (int i = 0; i < 1024; ) {
+          if (c[i++] == '\n') {
+            ++count;
+          }
         }
+        readChars = is.read(c);
       }
-      readChars = is.read(c);
-    }
 
-    return count == 0 ? 1 : count;
+      while (readChars != -1) {
+        for (int i = 0; i < readChars; ++i) {
+          if (c[i] == '\n') {
+            ++count;
+          }
+        }
+        readChars = is.read(c);
+      }
+
+      return count == 0 ? 1 : count;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return -1;
   }
+
 }

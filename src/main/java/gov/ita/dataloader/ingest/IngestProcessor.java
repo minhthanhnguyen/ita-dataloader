@@ -25,14 +25,17 @@ public class IngestProcessor {
   private ZipFileExtractor zipFileExtractor;
   private Storage storage;
   private HttpHelper httpHelper;
-  private TranslatorFactory translatorFactory;
+  private IngestTranslationProcessor ingestTranslationProcessor;
   private Map<String, IngestProcessorStatus> status;
 
-  public IngestProcessor(ZipFileExtractor zipFileExtractor, Storage storage, HttpHelper httpHelper, TranslatorFactory translatorFactory) {
+  public IngestProcessor(ZipFileExtractor zipFileExtractor,
+                         Storage storage,
+                         HttpHelper httpHelper,
+                         IngestTranslationProcessor ingestTranslationProcessor) {
     this.zipFileExtractor = zipFileExtractor;
     this.storage = storage;
     this.httpHelper = httpHelper;
-    this.translatorFactory = translatorFactory;
+    this.ingestTranslationProcessor = ingestTranslationProcessor;
     status = new HashMap<>();
   }
 
@@ -65,12 +68,16 @@ public class IngestProcessor {
             String fileNameKey = fileMap.keySet().stream()
               .filter(fileName -> fileName.matches(zipFileConfig.getOriginalFileName()))
               .findFirst().get();
-            processAndSaveDataSource(
-              zipFileConfig.getDestinationFileName(),
-              fileMap.get(fileNameKey).toByteArray(),
-              zipFileConfig.getReplaceValues(),
-              zipFileConfig.getSkipLineCount(),
-              containerName, userName);
+            try {
+              processAndSaveDataSource(
+                zipFileConfig.getDestinationFileName(),
+                fileMap.get(fileNameKey).toByteArray(),
+                zipFileConfig.getReplaceValues(),
+                zipFileConfig.getSkipLineCount(),
+                containerName, userName);
+            } catch (IOException e) {
+              ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
+            }
           });
         }
 
@@ -79,7 +86,7 @@ public class IngestProcessor {
         try {
           Thread.sleep(sleepMs);
         } catch (InterruptedException e) {
-          e.printStackTrace();
+          ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
         }
       }
     } catch (Exception e) {
@@ -115,7 +122,7 @@ public class IngestProcessor {
                                         List<ReplaceValue> replaceValues,
                                         Integer skipLineCount,
                                         String containerName,
-                                        String userName) {
+                                        String userName) throws IOException {
     if (skipLineCount != null && skipLineCount > 0) {
       fileBytes = skipLines(fileBytes, skipLineCount);
     }
@@ -126,12 +133,7 @@ public class IngestProcessor {
       }
     }
 
-    Translator translator = translatorFactory.getTranslator(containerName + "#" + fileName);
-    if (translator != null) {
-      byte[] translatedFileBytes = translator.translate(fileBytes, -1, -1);
-      storage.save("translated/" + fileName, translatedFileBytes, userName, containerName, false);
-    }
-
+    ingestTranslationProcessor.process(containerName, fileName, fileBytes, userName);
     storage.save(fileName, fileBytes, userName, containerName, false);
   }
 

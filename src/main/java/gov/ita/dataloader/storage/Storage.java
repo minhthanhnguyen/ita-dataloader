@@ -17,4 +17,6 @@ public interface Storage {
   byte[] getBlob(String containerName, String blobName);
 
   void makeSnapshot(String containerName, String blobName);
+
+  void delete(String containerName, String blobPattern);
 }

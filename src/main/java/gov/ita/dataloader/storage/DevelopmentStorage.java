@@ -77,4 +77,24 @@ public class DevelopmentStorage implements Storage {
   public void makeSnapshot(String containerName, String blobName) {
 
   }
+
+  @Override
+  public void delete(String containerName, String blobPattern) {
+    for (String container : storageContent.keySet()) {
+      if (container.equals(containerName)) {
+        Map<String, byte[]> containerContent = storageContent.get(container);
+        List<String> fileNamesToRemove = new ArrayList<>();
+        for (String fileName : containerContent.keySet()) {
+          if (fileName.contains(blobPattern)) {
+            fileNamesToRemove.add(fileName);
+          }
+        }
+
+        for (String fileName : fileNamesToRemove) {
+          log.info("Deleting blob: {}", fileName);
+          containerContent.remove(fileName);
+        }
+      }
+    }
+  }
 }

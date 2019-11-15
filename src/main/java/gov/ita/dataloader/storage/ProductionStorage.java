@@ -137,6 +137,17 @@ public class ProductionStorage implements Storage {
     makeServiceURL().createContainerURL(containerName).createBlobURL(blobName).createSnapshot().blockingGet();
   }
 
+  @Override
+  public void delete(String containerName, String blobPattern) {
+    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName);
+    for (BlobMetaData b : blobMetadata) {
+      if (b.getFileName().contains(blobPattern)) {
+        log.info("Deleting blob: {}", b.getFileName());
+        makeServiceURL().createContainerURL(containerName).createBlobURL(b.getFileName()).delete().blockingGet();
+      }
+    }
+  }
+
   private String buildUrlForBlob(String name, String containerName) {
     return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
   }

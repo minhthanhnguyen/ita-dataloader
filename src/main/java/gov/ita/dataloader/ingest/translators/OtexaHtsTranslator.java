@@ -36,8 +36,9 @@ public class OtexaHtsTranslator implements Translator {
         .filter(header -> header.startsWith("D") || header.startsWith("QTY") || header.startsWith("VAL"))
         .collect(Collectors.toList());
 
-      int i = 0;
-      for (CSVRecord csvRecord : csvParser) {
+      List<CSVRecord> records = csvParser.getRecords();
+      for (int i = 0; i < size && i + offset < records.size(); i++) {
+        CSVRecord csvRecord = records.get(i + offset);
         String ctryNum = csvRecord.get("CTRYNUM");
         String catId = csvRecord.get("CAT");
         String syef = csvRecord.get("SYEF");
@@ -47,7 +48,6 @@ public class OtexaHtsTranslator implements Translator {
           csvPrinter.printRecord(
             ctryNum, catId, hts, syef, header, csvRecord.get(header)
           );
-          i++;
         }
       }
 

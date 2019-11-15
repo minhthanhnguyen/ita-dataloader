@@ -51,7 +51,7 @@ public class IngestControllerTest {
   }
 
   @Test
-  public void startIngestProcess() {
+  public void startsIngestProcess() {
     IngestProcessorStatus ingestProcessorStatus = new IngestProcessorStatus(0, 0, false, null);
     when(ingestProcessor.getStatus("some-container")).thenReturn(ingestProcessorStatus);
 
@@ -75,7 +75,7 @@ public class IngestControllerTest {
   }
 
   @Test
-  public void getIngestProcessorStatus() {
+  public void returnsIngestProcessorStatus() {
     IngestProcessorStatus ingestProcessorStatus = new IngestProcessorStatus(333, 123, true, null);
     when(ingestProcessor.getStatus("another-container")).thenReturn(ingestProcessorStatus);
 
@@ -89,7 +89,7 @@ public class IngestControllerTest {
   }
 
   @Test
-  public void saveFile() throws IOException {
+  public void savesUploadedFile() throws IOException {
     IngestController ingestController = new IngestController(storage, ingestProcessor, authenticationFacade, null, ingestTranslationProcessor);
     MultipartFile multipartFile = mock(MultipartFile.class);
     when(multipartFile.getBytes()).thenReturn(SOME_BYTES);
@@ -104,15 +104,16 @@ public class IngestControllerTest {
   }
 
   @Test
-  public void savedFilePassedThroughTranslator() throws IOException {
+  public void uploadedFilePassedThroughTranslationProcessor() throws IOException {
     IngestController ingestController = new IngestController(storage, null, authenticationFacade, null, ingestTranslationProcessor);
     MultipartFile multipartFile = mock(MultipartFile.class);
     when(multipartFile.getOriginalFilename()).thenReturn("OG File Name.csv");
+    when(multipartFile.getBytes()).thenReturn(SOME_BYTES);
 
     ingestController.saveFile(multipartFile, "cool-container");
 
     verify(ingestTranslationProcessor, times(1))
-      .process("cool-container", multipartFile, "TestUser@gmail.com");
+      .process("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
 }
