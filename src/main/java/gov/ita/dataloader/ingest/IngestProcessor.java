@@ -3,18 +3,17 @@ package gov.ita.dataloader.ingest;
 import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
-import gov.ita.dataloader.ingest.translators.Translator;
-import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
@@ -26,23 +25,27 @@ public class IngestProcessor {
   private Storage storage;
   private HttpHelper httpHelper;
   private IngestTranslationProcessor ingestTranslationProcessor;
-  private Map<String, IngestProcessorStatus> status;
+  private ProcessorStatusService processorStatusService;
 
   public IngestProcessor(ZipFileExtractor zipFileExtractor,
                          Storage storage,
                          HttpHelper httpHelper,
-                         IngestTranslationProcessor ingestTranslationProcessor) {
+                         IngestTranslationProcessor ingestTranslationProcessor,
+                         ProcessorStatusService processorStatusService) {
     this.zipFileExtractor = zipFileExtractor;
     this.storage = storage;
     this.httpHelper = httpHelper;
     this.ingestTranslationProcessor = ingestTranslationProcessor;
-    status = new HashMap<>();
+    this.processorStatusService = processorStatusService;
   }
 
-  public void process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName, long sleepMs) {
+  @Async
+  public CompletableFuture<Void> process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName, long sleepMs) {
     log.info("Starting ingest process for container: {}", containerName);
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
     IngestProcessorStatus ingestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
+
+    if (processorStatusService.getIngestProcessorStatusMap().get(containerName).ingesting) return new CompletableFuture<>();
 
     byte[] fileBytes;
     try {
@@ -68,16 +71,12 @@ public class IngestProcessor {
             String fileNameKey = fileMap.keySet().stream()
               .filter(fileName -> fileName.matches(zipFileConfig.getOriginalFileName()))
               .findFirst().get();
-            try {
-              processAndSaveDataSource(
-                zipFileConfig.getDestinationFileName(),
-                fileMap.get(fileNameKey).toByteArray(),
-                zipFileConfig.getReplaceValues(),
-                zipFileConfig.getSkipLineCount(),
-                containerName, userName);
-            } catch (IOException e) {
-              ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
-            }
+            processAndSaveDataSource(
+              zipFileConfig.getDestinationFileName(),
+              fileMap.get(fileNameKey).toByteArray(),
+              zipFileConfig.getReplaceValues(),
+              zipFileConfig.getSkipLineCount(),
+              containerName, userName);
           });
         }
 
@@ -96,21 +95,19 @@ public class IngestProcessor {
       ingestProcessorStatus.setIngesting(false);
       log.info("Ingest process complete for container: {}", containerName);
     }
+
+    return new CompletableFuture<>();
   }
 
   private IngestProcessorStatus initializeStatus(String containerName, int totalApiCalls) {
     IngestProcessorStatus ips = new IngestProcessorStatus(totalApiCalls, 0, true, new ArrayList<>());
-    status.put(containerName, ips);
+    processorStatusService.updateIngestProcessorStatus(containerName, ips);
     return ips;
   }
 
   private void updateStatus(DataSetConfig dataSetConfig, IngestProcessorStatus ingestProcessorStatus) {
     ingestProcessorStatus.setDatasetsCompleted(ingestProcessorStatus.getDatasetsCompleted() + 1);
     ingestProcessorStatus.getLog().add(new LogItem(String.format("Completed ingest of URL: %s", dataSetConfig.getUrl())));
-  }
-
-  IngestProcessorStatus getStatus(String containerName) {
-    return status.get(containerName);
   }
 
   private byte[] replace(byte[] fileBytes, String replace, String with) {
@@ -122,7 +119,7 @@ public class IngestProcessor {
                                         List<ReplaceValue> replaceValues,
                                         Integer skipLineCount,
                                         String containerName,
-                                        String userName) throws IOException {
+                                        String userName) {
     if (skipLineCount != null && skipLineCount > 0) {
       fileBytes = skipLines(fileBytes, skipLineCount);
     }

@@ -49,34 +49,18 @@ public class IngestController {
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
-  public String startIngestProcess(@RequestParam("containerName") String containerName) {
-    IngestProcessorStatus status = ingestProcessor.getStatus(containerName);
-    if (status == null || !status.isIngesting())
-      ingestProcessor.process(
-        getDataloaderConfig(containerName).getDataSetConfigs(),
-        containerName,
-        authenticationFacade.getUserName(),
-        5000);
-    return "done";
-  }
-
-  @GetMapping(value = "/api/ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
-  public IngestProcessorStatus getIngestProcessorStatus(@RequestParam("containerName") String containerName) {
-    return ingestProcessor.getStatus(containerName);
+  public void startIngestProcess(@RequestParam("containerName") String containerName) {
+    ingestProcessor.process(
+      getDataloaderConfig(containerName).getDataSetConfigs(),
+      containerName,
+      authenticationFacade.getUserName(),
+      5000);
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @PutMapping("/api/save/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
-    storage.save(
-      file.getOriginalFilename(),
-      file.getBytes(),
-      authenticationFacade.getUserName(),
-      containerName,
-      true);
-
-    storage.makeSnapshot(containerName, file.getOriginalFilename());
     ingestTranslationProcessor.process(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
   }
 

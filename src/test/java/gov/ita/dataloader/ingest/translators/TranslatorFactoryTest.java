@@ -21,7 +21,7 @@ public class TranslatorFactoryTest {
     TranslatorFactory translatorFactory = new TranslatorFactory();
     Translator translator = translatorFactory.getTranslator("otexa#OTEXA_EXE_HTS.csv");
     assertThat(translator, instanceOf(OtexaHtsTranslator.class));
-    assertEquals(50000, translator.pageSize());
+    assertEquals(25000, translator.pageSize());
   }
 
   @Test

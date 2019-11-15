@@ -57,7 +57,7 @@ public class OtexaCatTranslatorTest {
     expected.put("DG28", "6635940481");
     expected.put("DG29", "10911436956");
     expected.put("QTY1989", "12144215483");
-    expected.put("QTY1990", "12195002622");
+//    expected.put("QTY1990", null); //removed nulls
     expected.put("QTY1991", "12800352859");
     expected.put("QTY1992", "14520641062");
     expected.put("QTY1993", "15847506702");
@@ -76,6 +76,8 @@ public class OtexaCatTranslatorTest {
       String val = r.get("VAL");
       assertEquals("Expected " + header + " to have value of " + expected.get(val), expected.get(header), val);
     }
+
+    assertEquals(16, otexaCatRecords.size());
   }
 
 }

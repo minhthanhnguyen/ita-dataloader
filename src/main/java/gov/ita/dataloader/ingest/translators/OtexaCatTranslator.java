@@ -42,9 +42,11 @@ public class OtexaCatTranslator implements Translator {
         String syef = csvRecord.get("SYEF");
 
         for (String header : valueFields) {
-          csvPrinter.printRecord(
-            ctryNum, catId, syef, header, csvRecord.get(header)
-          );
+          String val = csvRecord.get(header);
+          if (val != null)
+            csvPrinter.printRecord(
+              ctryNum, catId, syef, header, val
+            );
         }
       }
 

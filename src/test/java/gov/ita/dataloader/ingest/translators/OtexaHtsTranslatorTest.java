@@ -76,7 +76,7 @@ public class OtexaHtsTranslatorTest {
     expected.put("DG29", "581083");
 
     expected.put("QTY1989", "475959.1998");
-    expected.put("QTY1990", "845457.5996");
+//    expected.put("QTY1990", null); //removed nulls
     expected.put("QTY1991", "400084.7998");
     expected.put("QTY1992", "690349.5997");
     expected.put("QTY1993", "99334.39996");
@@ -136,14 +136,16 @@ public class OtexaHtsTranslatorTest {
     expected.put("TSUSA", "3921121500");
 
     //Only checking the first record
-    List<CSVRecord> otexaCatRecords =
+    List<CSVRecord> otexaHtsRecords =
       results.stream().filter(r -> r.get("CTRY_ID").equals("888")).collect(Collectors.toList());
 
-    for (CSVRecord r : otexaCatRecords) {
+    for (CSVRecord r : otexaHtsRecords) {
       String header = r.get("HEADER_ID");
       String val = r.get("VAL");
       assertEquals("Expected " + header + " to have value of " + expected.get(val), expected.get(header), val);
     }
+
+    assertEquals(80, otexaHtsRecords.size());
   }
 
 }

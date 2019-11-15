@@ -45,9 +45,11 @@ public class OtexaHtsTranslator implements Translator {
         String hts = csvRecord.get("HTS");
 
         for (String header : valueFields) {
-          csvPrinter.printRecord(
-            ctryNum, catId, hts, syef, header, csvRecord.get(header)
-          );
+          String val = csvRecord.get(header);
+          if (val != null)
+            csvPrinter.printRecord(
+              ctryNum, catId, hts, syef, header, val
+            );
         }
       }
 
@@ -64,7 +66,7 @@ public class OtexaHtsTranslator implements Translator {
 
   @Override
   public int pageSize() {
-    return 50000;
+    return 25000;
   }
 
 }
