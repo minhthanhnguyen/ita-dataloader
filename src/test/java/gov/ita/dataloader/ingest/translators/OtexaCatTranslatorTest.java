@@ -27,7 +27,7 @@ public class OtexaCatTranslatorTest {
   @Before
   public void setUp() {
     OtexaCatTranslator otexaCatTranslator = new OtexaCatTranslator();
-    byte[] translatedBytes = otexaCatTranslator.translate(h.get("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv"), -1, -1);
+    byte[] translatedBytes = otexaCatTranslator.translate(h.get("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv"));
     results = formattedResults(translatedBytes);
   }
 

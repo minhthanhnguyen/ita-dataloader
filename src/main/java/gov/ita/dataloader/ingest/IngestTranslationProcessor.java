@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -45,14 +43,14 @@ public class IngestTranslationProcessor {
       if (translator != null) {
         log.info("Processing {}", containerFileCompositeKey);
         ingestProcessorStatus.setPhase(DELETING_OLD_TRANSLATIONS);
+
         storage.delete(containerName, fileRootName);
 
         int HEADER_ROW = 1;
-        int lineCount = countLines(new ByteArrayInputStream(fileBytes)) - HEADER_ROW;
+        int lineCount = countLines(fileBytes);
         int pageSize = translator.pageSize();
         if (pageSize == -1) pageSize = lineCount;
         int totalPages = (lineCount + pageSize - 1) / pageSize;
-
         int currentPage = 0;
 
         ingestProcessorStatus.setTotalPages(totalPages);
@@ -62,9 +60,9 @@ public class IngestTranslationProcessor {
         while (currentPage < totalPages) {
           log.info("Translating page {} of {} for {}", currentPage + 1, totalPages, containerFileCompositeKey);
           ingestProcessorStatus.setCurrentPage(currentPage + 1);
-
           int offset = currentPage * pageSize;
-          byte[] translatedFile = translator.translate(fileBytes, offset, pageSize);
+          byte[] partitionedFile = getFilePartition(fileBytes, offset, pageSize);
+          byte[] translatedFile = translator.translate(partitionedFile);
           storage.save(fileRootName + "/" + UUID.randomUUID(), translatedFile, userName, containerName, true);
           currentPage++;
         }
@@ -74,7 +72,30 @@ public class IngestTranslationProcessor {
     return new CompletableFuture<>();
   }
 
-  private static int countLines(InputStream is) {
+  private byte[] getFilePartition(byte[] bytes, int offset, int size) {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+    StringWriter writer = new StringWriter();
+    String temp = null;
+    int i = 0;
+    while (true) {
+      try {
+        if ((temp = reader.readLine()) == null) break;
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      if ((i == 0) || (i > offset && (i - offset <= size))) {
+        writer.write(temp);
+        writer.append(System.getProperty("line.separator"));
+      }
+      i++;
+    }
+
+    return writer.toString().getBytes();
+  }
+
+  private int countLines(byte[] bytes) {
+    InputStream is = new ByteArrayInputStream(bytes);
     byte[] c = new byte[1024];
 
     try {

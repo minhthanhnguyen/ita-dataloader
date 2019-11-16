@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class WorldBankEaseIndexTranslator implements Translator {
 
   @Override
-  public byte[] translate(byte[] bytes, int offset, int size) {
+  public byte[] translate(byte[] bytes) {
     StringWriter stringWriter = new StringWriter();
     CSVPrinter csvPrinter;
 

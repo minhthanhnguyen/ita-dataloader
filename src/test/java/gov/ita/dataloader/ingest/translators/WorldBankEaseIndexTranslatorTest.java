@@ -19,7 +19,7 @@ public class WorldBankEaseIndexTranslatorTest {
   @Before
   public void setUp() {
     WorldBankEaseIndexTranslator worldBankEaseIndexTranslator = new WorldBankEaseIndexTranslator();
-    byte[] translatedBytes = worldBankEaseIndexTranslator.translate(h.get("/fixtures/select-usa/WORLDBANK_EASE_COUNTRY_INDEX.csv"), -1, -1);
+    byte[] translatedBytes = worldBankEaseIndexTranslator.translate(h.get("/fixtures/select-usa/WORLDBANK_EASE_COUNTRY_INDEX.csv"));
     results = formattedResults(translatedBytes);
   }
 
