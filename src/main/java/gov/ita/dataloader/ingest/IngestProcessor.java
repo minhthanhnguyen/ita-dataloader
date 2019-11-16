@@ -45,7 +45,7 @@ public class IngestProcessor {
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
     IngestProcessorStatus ingestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
 
-    if (processorStatusService.getIngestProcessorStatusMap().get(containerName).ingesting) return new CompletableFuture<>();
+    if (processorStatusService.isIngesting(containerName)) return new CompletableFuture<>();
 
     byte[] fileBytes;
     try {
@@ -100,7 +100,7 @@ public class IngestProcessor {
   }
 
   private IngestProcessorStatus initializeStatus(String containerName, int totalApiCalls) {
-    IngestProcessorStatus ips = new IngestProcessorStatus(totalApiCalls, 0, true, new ArrayList<>());
+    IngestProcessorStatus ips = new IngestProcessorStatus(totalApiCalls, 0, false, new ArrayList<>());
     processorStatusService.updateIngestProcessorStatus(containerName, ips);
     return ips;
   }

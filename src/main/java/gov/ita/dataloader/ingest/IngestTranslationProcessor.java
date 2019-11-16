@@ -46,7 +46,6 @@ public class IngestTranslationProcessor {
 
         storage.delete(containerName, fileRootName);
 
-        int HEADER_ROW = 1;
         int lineCount = countLines(fileBytes);
         int pageSize = translator.pageSize();
         if (pageSize == -1) pageSize = lineCount;

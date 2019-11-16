@@ -43,14 +43,8 @@ public class IngestProcessorTest {
     when(httpHelper.getBytes("http://very-cool.io")).thenReturn(VERY_RAD_BYTES);
     when(httpHelper.getBytes("http://really-cool.io")).thenReturn(REALLY_RAD_BYTES);
     when(httpHelper.getBytes("http://vangos-zip.io")).thenReturn(ZIP_FILE_BYTES);
-    setUpProcessorStatus(false);
+    when(processorStatusService.isIngesting("a-container")).thenReturn(false);
     dataSetConfigs = new ArrayList<>();
-  }
-
-  private void setUpProcessorStatus(Boolean ingesting) {
-    Map<String, IngestProcessorStatus> ingestProcessorStatus = new HashMap<>();
-    ingestProcessorStatus.put("a-container", new IngestProcessorStatus(5, 3, ingesting, Collections.emptyList()));
-    when(processorStatusService.getIngestProcessorStatusMap()).thenReturn(ingestProcessorStatus);
   }
 
   @Test
@@ -72,7 +66,7 @@ public class IngestProcessorTest {
 
   @Test
   public void skipsIngestProcessWhenAlreadyInProgress() {
-    setUpProcessorStatus(true);
+    when(processorStatusService.isIngesting("a-container")).thenReturn(true);
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
 
     IngestProcessor ingestProcessor = new IngestProcessor(null, storage, httpHelper, ingestTranslationProcessor, processorStatusService);

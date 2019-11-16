@@ -21,6 +21,10 @@ public class ProcessorStatusService {
     ingestTranslationStatusFileMap.put(fileName, ingestProcessorStatus);
   }
 
+  public boolean isIngesting(String containerName) {
+    return ingestProcessorStatusMap.get(containerName).ingesting;
+  }
+
   public boolean isProcessing(String containerName, String fileName) {
     Map<String, IngestTranslationStatus> stringIngestTranslationStatusMap = ingestTranslationStatusMap.get(containerName);
     if (stringIngestTranslationStatusMap != null) {

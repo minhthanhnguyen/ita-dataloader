@@ -47,9 +47,11 @@ public class WorldBankEaseIndexTranslator implements Translator {
 
         for (String header : valueFields) {
 
-          csvPrinter.printRecord(
-            countryName, countryCode, indicatorName, indicatorCode, header, csvRecord.get(header)
-          );
+          String val = csvRecord.get(header);
+          if (val != null && !val.equals(""))
+            csvPrinter.printRecord(
+              countryName, countryCode, indicatorName, indicatorCode, header, val
+            );
         }
       }
 
