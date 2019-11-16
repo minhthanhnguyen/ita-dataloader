@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 import static gov.ita.dataloader.TestHelpers.formattedResults;
 import static org.junit.Assert.assertEquals;
 
-public class OtexaHtsTranslatorTest {
+public class OtexaHtsCsvTranslatorTest {
 
   private TestHelpers h = new TestHelpers();
   private List<CSVRecord> results;
 
   @Before
   public void setUp() {
-    OtexaHtsTranslator otexaHtsTranslator = new OtexaHtsTranslator();
-    byte[] translatedBytes = otexaHtsTranslator.translate(h.get("/fixtures/otexa/OTEXA_EXE_HTS.csv"));
+    OtexaHtsCsvTranslator otexaHtsCsvTranslator = new OtexaHtsCsvTranslator();
+    byte[] translatedBytes = otexaHtsCsvTranslator.translate(h.get("/fixtures/otexa/OTEXA_EXE_HTS.csv"));
     results = formattedResults(translatedBytes);
   }
 

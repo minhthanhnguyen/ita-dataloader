@@ -20,14 +20,14 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("development")
-public class OtexaCatTranslatorTest {
+public class OtexaCatCsvTranslatorTest {
   private TestHelpers h = new TestHelpers();
   private List<CSVRecord> results;
 
   @Before
   public void setUp() {
-    OtexaCatTranslator otexaCatTranslator = new OtexaCatTranslator();
-    byte[] translatedBytes = otexaCatTranslator.translate(h.get("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv"));
+    OtexaCatCsvTranslator otexaCatCsvTranslator = new OtexaCatCsvTranslator();
+    byte[] translatedBytes = otexaCatCsvTranslator.translate(h.get("/fixtures/otexa/OTEXA_DATA_SET_CAT.csv"));
     results = formattedResults(translatedBytes);
   }
 

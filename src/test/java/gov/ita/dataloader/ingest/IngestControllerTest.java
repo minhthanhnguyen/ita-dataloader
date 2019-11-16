@@ -65,7 +65,7 @@ public class IngestControllerTest {
     ingestController.saveFile(multipartFile, "cool-container");
 
     verify(ingestTranslationProcessor, times(1))
-      .process("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
+      .saveAndProcess("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -78,7 +78,7 @@ public class IngestControllerTest {
     ingestController.saveFile(multipartFile, "cool-container");
 
     verify(ingestTranslationProcessor, times(1))
-      .process("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
+      .saveAndProcess("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
 }

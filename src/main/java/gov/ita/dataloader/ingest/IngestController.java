@@ -61,7 +61,7 @@ public class IngestController {
   @PutMapping("/api/save/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
-    ingestTranslationProcessor.process(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
+    ingestTranslationProcessor.saveAndProcess(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")

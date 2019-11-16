@@ -12,7 +12,7 @@ public class TranslatorFactoryTest {
   public void returnsOtexaCatTranslator() {
     TranslatorFactory translatorFactory = new TranslatorFactory();
     Translator translator = translatorFactory.getTranslator("otexa#OTEXA_DATA_SET_CAT.csv");
-    assertThat(translator, instanceOf(OtexaCatTranslator.class));
+    assertThat(translator, instanceOf(OtexaCatCsvTranslator.class));
     assertEquals(-1, translator.pageSize());
   }
 
@@ -20,7 +20,7 @@ public class TranslatorFactoryTest {
   public void returnsOtexaHtsTranslator() {
     TranslatorFactory translatorFactory = new TranslatorFactory();
     Translator translator = translatorFactory.getTranslator("otexa#OTEXA_EXE_HTS.csv");
-    assertThat(translator, instanceOf(OtexaHtsTranslator.class));
+    assertThat(translator, instanceOf(OtexaHtsCsvTranslator.class));
     assertEquals(25000, translator.pageSize());
   }
 
@@ -28,7 +28,7 @@ public class TranslatorFactoryTest {
   public void returnsWorldBankEaseIndexTranslator() {
     TranslatorFactory translatorFactory = new TranslatorFactory();
     Translator translator = translatorFactory.getTranslator("select-usa#WORLDBANK_EASE_COUNTRY_INDEX.csv");
-    assertThat(translator, instanceOf(WorldBankEaseIndexTranslator.class));
+    assertThat(translator, instanceOf(WorldBankEaseIndexCsvTranslator.class));
     assertEquals(-1, translator.pageSize());
   }
 

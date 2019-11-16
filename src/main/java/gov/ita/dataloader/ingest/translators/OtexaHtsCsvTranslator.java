@@ -9,12 +9,11 @@ import org.apache.commons.io.input.CharSequenceReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class WorldBankEaseIndexTranslator implements Translator {
+public class OtexaHtsCsvTranslator implements Translator {
 
   @Override
   public byte[] translate(byte[] bytes) {
@@ -23,34 +22,31 @@ public class WorldBankEaseIndexTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("Country_Name", "Country_Code", "Indicator_Name", "Indicator_Code", "Year", "Val"));
+        .withHeader("CTRY_ID", "CAT_ID", "HTS", "SYEF", "HEADER_ID", "VAL"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
       csvParser = new CSVParser(
         reader,
-        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withIgnoreHeaderCase());
+        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withNullString("").withIgnoreHeaderCase());
 
       Map<String, Integer> headers = csvParser.getHeaderMap();
 
-      List<String> nonValueFields = Arrays.asList("Country Name", "Country Code", "Indicator Name", "Indicator Code", "");
-
       List<String> valueFields = headers.keySet().stream()
-        .filter(header -> !nonValueFields.contains(header))
+        .filter(header -> header.startsWith("D") || header.startsWith("QTY") || header.startsWith("VAL"))
         .collect(Collectors.toList());
 
-      for (CSVRecord csvRecord : csvParser) {
-        String countryName = csvRecord.get("Country Name");
-        String countryCode = csvRecord.get("Country Code");
-        String indicatorName = csvRecord.get("Indicator Name");
-        String indicatorCode = csvRecord.get("Indicator Code");
+      for (CSVRecord csvRecord : csvParser.getRecords()) {
+        String ctryNum = csvRecord.get("CTRYNUM");
+        String catId = csvRecord.get("CAT");
+        String syef = csvRecord.get("SYEF");
+        String hts = csvRecord.get("HTS");
 
         for (String header : valueFields) {
-
           String val = csvRecord.get(header);
-          if (val != null && !val.equals(""))
+          if (val != null)
             csvPrinter.printRecord(
-              countryName, countryCode, indicatorName, indicatorCode, header, val
+              ctryNum, catId, hts, syef, header, val
             );
         }
       }
@@ -68,6 +64,11 @@ public class WorldBankEaseIndexTranslator implements Translator {
 
   @Override
   public int pageSize() {
-    return -1;
+    return 25000;
+  }
+
+  @Override
+  public TranslatorType type() {
+    return TranslatorType.CSV;
   }
 }

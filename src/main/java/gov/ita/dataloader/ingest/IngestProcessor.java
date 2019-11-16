@@ -3,7 +3,6 @@ package gov.ita.dataloader.ingest;
 import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
-import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,18 +21,15 @@ import java.util.stream.Collectors;
 public class IngestProcessor {
 
   private ZipFileExtractor zipFileExtractor;
-  private Storage storage;
   private HttpHelper httpHelper;
   private IngestTranslationProcessor ingestTranslationProcessor;
   private ProcessorStatusService processorStatusService;
 
   public IngestProcessor(ZipFileExtractor zipFileExtractor,
-                         Storage storage,
                          HttpHelper httpHelper,
                          IngestTranslationProcessor ingestTranslationProcessor,
                          ProcessorStatusService processorStatusService) {
     this.zipFileExtractor = zipFileExtractor;
-    this.storage = storage;
     this.httpHelper = httpHelper;
     this.ingestTranslationProcessor = ingestTranslationProcessor;
     this.processorStatusService = processorStatusService;
@@ -54,7 +50,7 @@ public class IngestProcessor {
 
         fileBytes = httpHelper.getBytes(dsc.getUrl());
 
-        processAndSaveDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), null, containerName, userName);
+        processDataSource(dsc.getFileName(), fileBytes, dsc.getReplaceValues(), null, containerName, userName);
 
         if (dsc.getZipFileConfigs() != null) {
           Map<String, ByteArrayOutputStream> fileMap;
@@ -71,7 +67,7 @@ public class IngestProcessor {
             String fileNameKey = fileMap.keySet().stream()
               .filter(fileName -> fileName.matches(zipFileConfig.getOriginalFileName()))
               .findFirst().get();
-            processAndSaveDataSource(
+            processDataSource(
               zipFileConfig.getDestinationFileName(),
               fileMap.get(fileNameKey).toByteArray(),
               zipFileConfig.getReplaceValues(),
@@ -114,12 +110,12 @@ public class IngestProcessor {
     return new String(fileBytes).replaceAll(replace, with).getBytes();
   }
 
-  private void processAndSaveDataSource(String fileName,
-                                        byte[] fileBytes,
-                                        List<ReplaceValue> replaceValues,
-                                        Integer skipLineCount,
-                                        String containerName,
-                                        String userName) {
+  private void processDataSource(String fileName,
+                                 byte[] fileBytes,
+                                 List<ReplaceValue> replaceValues,
+                                 Integer skipLineCount,
+                                 String containerName,
+                                 String userName) {
     if (skipLineCount != null && skipLineCount > 0) {
       fileBytes = skipLines(fileBytes, skipLineCount);
     }
@@ -130,8 +126,7 @@ public class IngestProcessor {
       }
     }
 
-    ingestTranslationProcessor.process(containerName, fileName, fileBytes, userName);
-    storage.save(fileName, fileBytes, userName, containerName, false);
+    ingestTranslationProcessor.saveAndProcess(containerName, fileName, fileBytes, userName);
   }
 
   private byte[] skipLines(byte[] fileBytes, Integer skipLineCount) {

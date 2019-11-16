@@ -9,11 +9,12 @@ import org.apache.commons.io.input.CharSequenceReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class OtexaCatTranslator implements Translator {
+public class WorldBankEaseIndexCsvTranslator implements Translator {
 
   @Override
   public byte[] translate(byte[] bytes) {
@@ -22,30 +23,34 @@ public class OtexaCatTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("CTRY_ID", "CAT_ID", "SYEF", "HEADER_ID", "VAL"));
+        .withHeader("Country_Name", "Country_Code", "Indicator_Name", "Indicator_Code", "Year", "Val"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
       csvParser = new CSVParser(
         reader,
-        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withNullString("").withIgnoreHeaderCase());
+        CSVFormat.DEFAULT.withFirstRecordAsHeader().withTrim().withIgnoreHeaderCase());
 
       Map<String, Integer> headers = csvParser.getHeaderMap();
 
+      List<String> nonValueFields = Arrays.asList("Country Name", "Country Code", "Indicator Name", "Indicator Code", "");
+
       List<String> valueFields = headers.keySet().stream()
-        .filter(header -> header.startsWith("D") || header.startsWith("QTY") || header.startsWith("VAL"))
+        .filter(header -> !nonValueFields.contains(header))
         .collect(Collectors.toList());
 
       for (CSVRecord csvRecord : csvParser) {
-        String ctryNum = csvRecord.get("CTRYNUM");
-        String catId = csvRecord.get("CAT");
-        String syef = csvRecord.get("SYEF");
+        String countryName = csvRecord.get("Country Name");
+        String countryCode = csvRecord.get("Country Code");
+        String indicatorName = csvRecord.get("Indicator Name");
+        String indicatorCode = csvRecord.get("Indicator Code");
 
         for (String header : valueFields) {
+
           String val = csvRecord.get(header);
-          if (val != null)
+          if (val != null && !val.equals(""))
             csvPrinter.printRecord(
-              ctryNum, catId, syef, header, val
+              countryName, countryCode, indicatorName, indicatorCode, header, val
             );
         }
       }
@@ -64,5 +69,10 @@ public class OtexaCatTranslator implements Translator {
   @Override
   public int pageSize() {
     return -1;
+  }
+
+  @Override
+  public TranslatorType type() {
+    return TranslatorType.CSV;
   }
 }

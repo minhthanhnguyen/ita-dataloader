@@ -12,15 +12,15 @@ import static gov.ita.dataloader.TestHelpers.formattedResults;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class WorldBankEaseIndexTranslatorTest {
+public class WorldBankEaseIndexCsvTranslatorTest {
   private TestHelpers h = new TestHelpers();
 
   private List<CSVRecord> results;
 
   @Before
   public void setUp() {
-    WorldBankEaseIndexTranslator worldBankEaseIndexTranslator = new WorldBankEaseIndexTranslator();
-    byte[] translatedBytes = worldBankEaseIndexTranslator.translate(h.get("/fixtures/select-usa/WORLDBANK_EASE_COUNTRY_INDEX.csv"));
+    WorldBankEaseIndexCsvTranslator worldBankEaseIndexCsvTranslator = new WorldBankEaseIndexCsvTranslator();
+    byte[] translatedBytes = worldBankEaseIndexCsvTranslator.translate(h.get("/fixtures/select-usa/WORLDBANK_EASE_COUNTRY_INDEX.csv"));
     results = formattedResults(translatedBytes);
   }
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class OtexaHtsTranslator implements Translator {
+public class OtexaCatCsvTranslator implements Translator {
 
   @Override
   public byte[] translate(byte[] bytes) {
@@ -22,7 +22,7 @@ public class OtexaHtsTranslator implements Translator {
 
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-        .withHeader("CTRY_ID", "CAT_ID", "HTS", "SYEF", "HEADER_ID", "VAL"));
+        .withHeader("CTRY_ID", "CAT_ID", "SYEF", "HEADER_ID", "VAL"));
 
       Reader reader = new CharSequenceReader(new String(bytes));
       CSVParser csvParser;
@@ -36,17 +36,16 @@ public class OtexaHtsTranslator implements Translator {
         .filter(header -> header.startsWith("D") || header.startsWith("QTY") || header.startsWith("VAL"))
         .collect(Collectors.toList());
 
-      for (CSVRecord csvRecord : csvParser.getRecords()) {
+      for (CSVRecord csvRecord : csvParser) {
         String ctryNum = csvRecord.get("CTRYNUM");
         String catId = csvRecord.get("CAT");
         String syef = csvRecord.get("SYEF");
-        String hts = csvRecord.get("HTS");
 
         for (String header : valueFields) {
           String val = csvRecord.get(header);
           if (val != null)
             csvPrinter.printRecord(
-              ctryNum, catId, hts, syef, header, val
+              ctryNum, catId, syef, header, val
             );
         }
       }
@@ -64,7 +63,11 @@ public class OtexaHtsTranslator implements Translator {
 
   @Override
   public int pageSize() {
-    return 25000;
+    return -1;
   }
 
+  @Override
+  public TranslatorType type() {
+    return TranslatorType.CSV;
+  }
 }
