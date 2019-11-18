@@ -255,3 +255,13 @@ create TABLE FDI_INDEX (
   , Flags               VARCHAR(255)
 );
 go
+
+create TABLE OTEXA_EXE_HTS (
+   CTRY_ID INTEGER
+  , CAT_ID INTEGER
+  , HTS VARCHAR(25)
+  , SYEF DECIMAL(5,2)
+  , HEADER_ID VARCHAR(25)
+  , VAL DECIMAL(30, 10)
+);
+go
