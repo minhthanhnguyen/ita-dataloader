@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv",
-				"folderPath": "translated",
+				"folderPath": "translated/WORLDBANK_EASE_COUNTRY_INDEX.csv",
 				"container": "select-usa"
 			},
 			"columnDelimiter": ",",
