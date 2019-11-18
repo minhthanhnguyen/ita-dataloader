@@ -325,6 +325,115 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy HTS Data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OTEXA_EXE_HTS;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CTRY_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CTRY_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CAT_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CAT_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "HTS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HTS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SYEF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SYEF",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "HEADER_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HEADER_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAL",
+									"type": "Decimal"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OtexaExeHtsBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OtexaExeHtsDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []

@@ -1,0 +1,47 @@
+{
+	"name": "OtexaExeHtsDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CTRY_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "CAT_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "HTS",
+				"type": "varchar"
+			},
+			{
+				"name": "SYEF",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 2
+			},
+			{
+				"name": "HEADER_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "VAL",
+				"type": "decimal",
+				"precision": 30,
+				"scale": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OTEXA_EXE_HTS"
+		}
+	}
+}
