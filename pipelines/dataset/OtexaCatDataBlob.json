@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "OTEXA_DATA_SET_CAT.csv",
-				"folderPath": "translated",
+				"folderPath": "translated/OTEXA_DATA_SET_CAT.csv",
 				"container": "otexa"
 			},
 			"columnDelimiter": ",",
