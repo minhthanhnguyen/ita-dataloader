@@ -14,13 +14,13 @@ public class ProcessorStatusController {
   @Autowired
   private ProcessorStatusService processorStatusService;
 
-  @GetMapping(value = "/api/ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
-  public IngestProcessorStatus getIngestProcessorStatus(@RequestParam("containerName") String containerName) {
+  @GetMapping(value = "/api/automated-ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ManualIngestProcessorStatus getIngestProcessorStatus(@RequestParam("containerName") String containerName) {
     return processorStatusService.getIngestProcessorStatusMap().get(containerName);
   }
 
-  @GetMapping(value = "/api/translation/status", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Map<String, IngestTranslationStatus> getTranslationStatus(@RequestParam("containerName") String containerName) {
+  @GetMapping(value = "/api/manual-ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Map<String, ManualIngestTranslationStatus> getTranslationStatus(@RequestParam("containerName") String containerName) {
     return processorStatusService.getIngestTranslationStatusMap().get(containerName);
   }
 

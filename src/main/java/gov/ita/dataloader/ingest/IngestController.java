@@ -25,21 +25,21 @@ import java.util.stream.Collectors;
 public class IngestController {
 
   private Storage storage;
-  private IngestProcessor ingestProcessor;
+  private AutomatedIngestProcessor automatedIngestProcessor;
   private AuthenticationFacade authenticationFacade;
   private ObjectMapper objectMapper;
-  private IngestTranslationProcessor ingestTranslationProcessor;
+  private TranslationProcessor translationProcessor;
 
   public IngestController(Storage storage,
-                          IngestProcessor ingestProcessor,
+                          AutomatedIngestProcessor automatedIngestProcessor,
                           AuthenticationFacade authenticationFacade,
                           ObjectMapper objectMapper,
-                          IngestTranslationProcessor ingestTranslationProcessor) {
+                          TranslationProcessor translationProcessor) {
     this.storage = storage;
-    this.ingestProcessor = ingestProcessor;
+    this.automatedIngestProcessor = automatedIngestProcessor;
     this.authenticationFacade = authenticationFacade;
     this.objectMapper = objectMapper;
-    this.ingestTranslationProcessor = ingestTranslationProcessor;
+    this.translationProcessor = translationProcessor;
   }
 
   @GetMapping(value = "/api/configuration", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +50,7 @@ public class IngestController {
   @PreAuthorize("hasRole('ROLE_EDSP')")
   @GetMapping("/api/ingest")
   public void startIngestProcess(@RequestParam("containerName") String containerName) {
-    ingestProcessor.process(
+    automatedIngestProcessor.process(
       getDataloaderConfig(containerName).getDataSetConfigs(),
       containerName,
       authenticationFacade.getUserName(),
@@ -61,7 +61,7 @@ public class IngestController {
   @PutMapping("/api/save/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
-    ingestTranslationProcessor.saveAndProcess(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
+    translationProcessor.saveAndProcess(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
@@ -79,7 +79,7 @@ public class IngestController {
 
   @GetMapping(value = "/api/container-metadata", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<BlobMetaData> getStorageMetadata(@RequestParam("containerName") String containerName) {
-    return storage.getBlobMetadata(containerName, true).stream()
+    return storage.getBlobMetadata(containerName).stream()
       .filter(blobMetaData -> !blobMetaData.getFileName().equals("configuration.json"))
       .filter(blobMetaData -> !blobMetaData.getFileName().startsWith("translated"))
       .map(blobMetaData -> {

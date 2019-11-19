@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 
 @Slf4j
-class IngestProcessorException extends Exception {
+class AutomatedIngestProcessorException extends Exception {
 
-  IngestProcessorException(String message) {
+  AutomatedIngestProcessorException(String message) {
     super(LocalDateTime.now() + " " + message);
     log.error(message);
   }

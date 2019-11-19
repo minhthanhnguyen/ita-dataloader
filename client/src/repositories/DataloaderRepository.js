@@ -64,7 +64,7 @@ export default class DataloaderRepository {
   }
 
   async _getIngestStatus(containerName) {
-    let ingestStatusResponse = await axios.get('/api/ingest/status', {
+    let ingestStatusResponse = await axios.get('/api/automated-ingest/status', {
       params: {
         containerName
       }
@@ -79,5 +79,14 @@ export default class DataloaderRepository {
       }
     })
     return pipelineStatusResponse.data
+  }
+
+  async _getManualIngestStatus(containerName) {
+    let uploadStatus = await axios.get('/api/manual-ingest/status', {
+      params: {
+        containerName
+      }
+    })
+    return uploadStatus.data
   }
 }

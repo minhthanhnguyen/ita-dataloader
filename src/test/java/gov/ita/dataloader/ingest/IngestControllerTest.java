@@ -23,7 +23,7 @@ public class IngestControllerTest {
   private Storage storage;
 
   @Mock
-  private IngestProcessor ingestProcessor;
+  private AutomatedIngestProcessor automatedIngestProcessor;
 
   @Mock
   private AuthenticationFacade authenticationFacade;
@@ -32,7 +32,7 @@ public class IngestControllerTest {
   private ObjectMapper objectMapper;
 
   @Mock
-  private IngestTranslationProcessor ingestTranslationProcessor;
+  private TranslationProcessor translationProcessor;
 
   private static byte[] DATALOADER_CONFIG = "dataloader blob".getBytes();
   private static byte[] SOME_BYTES = "some bytes".getBytes();
@@ -48,36 +48,36 @@ public class IngestControllerTest {
 
   @Test
   public void startsIngestProcess() {
-    IngestController ingestController = new IngestController(storage, ingestProcessor, authenticationFacade, objectMapper, ingestTranslationProcessor);
+    IngestController ingestController = new IngestController(storage, automatedIngestProcessor, authenticationFacade, objectMapper, translationProcessor);
     ingestController.startIngestProcess("some-container");
 
-    verify(ingestProcessor, times(1))
+    verify(automatedIngestProcessor, times(1))
       .process(Collections.emptyList(), "some-container", "TestUser@gmail.com", 5000L);
   }
 
   @Test
   public void uploadedFileIsPassedToIngestTranslator() throws IOException {
-    IngestController ingestController = new IngestController(storage, ingestProcessor, authenticationFacade, null, ingestTranslationProcessor);
+    IngestController ingestController = new IngestController(storage, automatedIngestProcessor, authenticationFacade, null, translationProcessor);
     MultipartFile multipartFile = mock(MultipartFile.class);
     when(multipartFile.getBytes()).thenReturn(SOME_BYTES);
     when(multipartFile.getOriginalFilename()).thenReturn("OG File Name.csv");
 
     ingestController.saveFile(multipartFile, "cool-container");
 
-    verify(ingestTranslationProcessor, times(1))
+    verify(translationProcessor, times(1))
       .saveAndProcess("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
   @Test
   public void uploadedFilePassedThroughTranslationProcessor() throws IOException {
-    IngestController ingestController = new IngestController(storage, null, authenticationFacade, null, ingestTranslationProcessor);
+    IngestController ingestController = new IngestController(storage, null, authenticationFacade, null, translationProcessor);
     MultipartFile multipartFile = mock(MultipartFile.class);
     when(multipartFile.getOriginalFilename()).thenReturn("OG File Name.csv");
     when(multipartFile.getBytes()).thenReturn(SOME_BYTES);
 
     ingestController.saveFile(multipartFile, "cool-container");
 
-    verify(ingestTranslationProcessor, times(1))
+    verify(translationProcessor, times(1))
       .saveAndProcess("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 

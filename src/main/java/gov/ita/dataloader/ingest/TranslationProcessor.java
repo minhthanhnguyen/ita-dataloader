@@ -16,13 +16,13 @@ import static gov.ita.dataloader.ingest.Phase.*;
 
 @Slf4j
 @Service
-public class IngestTranslationProcessor {
+public class TranslationProcessor {
 
   private Storage storage;
   private TranslatorFactory translatorFactory;
   private ProcessorStatusService processorStatusService;
 
-  public IngestTranslationProcessor(Storage storage, TranslatorFactory translatorFactory, ProcessorStatusService processorStatusService) {
+  public TranslationProcessor(Storage storage, TranslatorFactory translatorFactory, ProcessorStatusService processorStatusService) {
     this.storage = storage;
     this.translatorFactory = translatorFactory;
     this.processorStatusService = processorStatusService;
@@ -35,7 +35,7 @@ public class IngestTranslationProcessor {
     String fileRootName = "translated/" + fileName;
 
     if (!processorStatusService.isProcessing(containerName, fileName)) {
-      IngestTranslationStatus ingestProcessorStatus = new IngestTranslationStatus(fileName, -1, 0, SAVING_NEW_FILE);
+      ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, SAVING_NEW_FILE);
       processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
 
       storage.save(fileName, fileBytes, userName, containerName, true);

@@ -18,20 +18,20 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class IngestProcessor {
+public class AutomatedIngestProcessor {
 
   private ZipFileExtractor zipFileExtractor;
   private HttpHelper httpHelper;
-  private IngestTranslationProcessor ingestTranslationProcessor;
+  private TranslationProcessor translationProcessor;
   private ProcessorStatusService processorStatusService;
 
-  public IngestProcessor(ZipFileExtractor zipFileExtractor,
-                         HttpHelper httpHelper,
-                         IngestTranslationProcessor ingestTranslationProcessor,
-                         ProcessorStatusService processorStatusService) {
+  public AutomatedIngestProcessor(ZipFileExtractor zipFileExtractor,
+                                  HttpHelper httpHelper,
+                                  TranslationProcessor translationProcessor,
+                                  ProcessorStatusService processorStatusService) {
     this.zipFileExtractor = zipFileExtractor;
     this.httpHelper = httpHelper;
-    this.ingestTranslationProcessor = ingestTranslationProcessor;
+    this.translationProcessor = translationProcessor;
     this.processorStatusService = processorStatusService;
   }
 
@@ -39,7 +39,7 @@ public class IngestProcessor {
   public CompletableFuture<Void> process(List<DataSetConfig> dataSourceConfigs, String containerName, String userName, long sleepMs) {
     log.info("Starting ingest process for container: {}", containerName);
     List<DataSetConfig> enabledConfigs = dataSourceConfigs.stream().filter(DataSetConfig::isEnabled).collect(Collectors.toList());
-    IngestProcessorStatus ingestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
+    ManualIngestProcessorStatus manualIngestProcessorStatus = initializeStatus(containerName, enabledConfigs.size());
 
     if (processorStatusService.isIngesting(containerName)) return new CompletableFuture<>();
 
@@ -58,7 +58,7 @@ public class IngestProcessor {
             fileMap = zipFileExtractor.extract(fileBytes);
           } catch (IOException e) {
             e.printStackTrace();
-            throw new IngestProcessorException(
+            throw new AutomatedIngestProcessorException(
               String.format("%s Could not extract zip file from %s", LocalDateTime.now(), dsc.getUrl()));
           }
 
@@ -76,34 +76,34 @@ public class IngestProcessor {
           });
         }
 
-        updateStatus(dsc, ingestProcessorStatus);
+        updateStatus(dsc, manualIngestProcessorStatus);
 
         try {
           Thread.sleep(sleepMs);
         } catch (InterruptedException e) {
-          ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
+          manualIngestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
         }
       }
     } catch (Exception e) {
-      ingestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
+      manualIngestProcessorStatus.getLog().add(new LogItem(e.getMessage()));
     } finally {
-      ingestProcessorStatus.getLog().add(new LogItem("Ingest process complete"));
-      ingestProcessorStatus.setIngesting(false);
+      manualIngestProcessorStatus.getLog().add(new LogItem("Ingest process complete"));
+      manualIngestProcessorStatus.setIngesting(false);
       log.info("Ingest process complete for container: {}", containerName);
     }
 
     return new CompletableFuture<>();
   }
 
-  private IngestProcessorStatus initializeStatus(String containerName, int totalApiCalls) {
-    IngestProcessorStatus ips = new IngestProcessorStatus(totalApiCalls, 0, false, new ArrayList<>());
+  private ManualIngestProcessorStatus initializeStatus(String containerName, int totalApiCalls) {
+    ManualIngestProcessorStatus ips = new ManualIngestProcessorStatus(totalApiCalls, 0, false, new ArrayList<>());
     processorStatusService.updateIngestProcessorStatus(containerName, ips);
     return ips;
   }
 
-  private void updateStatus(DataSetConfig dataSetConfig, IngestProcessorStatus ingestProcessorStatus) {
-    ingestProcessorStatus.setDatasetsCompleted(ingestProcessorStatus.getDatasetsCompleted() + 1);
-    ingestProcessorStatus.getLog().add(new LogItem(String.format("Completed ingest of URL: %s", dataSetConfig.getUrl())));
+  private void updateStatus(DataSetConfig dataSetConfig, ManualIngestProcessorStatus manualIngestProcessorStatus) {
+    manualIngestProcessorStatus.setDatasetsCompleted(manualIngestProcessorStatus.getDatasetsCompleted() + 1);
+    manualIngestProcessorStatus.getLog().add(new LogItem(String.format("Completed ingest of URL: %s", dataSetConfig.getUrl())));
   }
 
   private byte[] replace(byte[] fileBytes, String replace, String with) {
@@ -126,7 +126,7 @@ public class IngestProcessor {
       }
     }
 
-    ingestTranslationProcessor.saveAndProcess(containerName, fileName, fileBytes, userName);
+    translationProcessor.saveAndProcess(containerName, fileName, fileBytes, userName);
   }
 
   private byte[] skipLines(byte[] fileBytes, Integer skipLineCount) {

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class IngestTranslationStatus {
+public class ManualIngestTranslationStatus {
   String fileName;
   Integer totalPages;
   Integer currentPage;

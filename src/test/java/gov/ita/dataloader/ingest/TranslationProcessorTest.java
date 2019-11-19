@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IngestTranslationProcessorTest {
+public class TranslationProcessorTest {
 
   @Mock
   Storage storage;
@@ -50,8 +50,8 @@ public class IngestTranslationProcessorTest {
     when(translator.translate(secondPartition)).thenReturn(SECOND_TRANSLATED_BYTES);
     when(translator.translate(thirdPartition)).thenReturn(THIRD_TRANSLATED_BYTES);
 
-    IngestTranslationProcessor ingestTranslationProcessor = new IngestTranslationProcessor(storage, translatorFactory, processorStatusService);
-    ingestTranslationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
+    TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
+    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
 
     verify(storage).delete("some-container", "translated/some-file-name.csv");
     verify(storage).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
@@ -61,7 +61,7 @@ public class IngestTranslationProcessorTest {
 
   @Test
   public void skipsProcessingWhenAlreadyInProgress() {
-    IngestTranslationStatus status = new IngestTranslationStatus("some-file-name.csv", 2, 1, Phase.CREATING_NEW_TRANSLATIONS);
+    ManualIngestTranslationStatus status = new ManualIngestTranslationStatus("some-file-name.csv", 2, 1, Phase.CREATING_NEW_TRANSLATIONS);
     processorStatusService.updateTranslationProcessorStatus("some-container", "some-file-name.csv", status);
 
     byte[] FIRST_TRANSLATED_BYTES = "first".getBytes();
@@ -69,8 +69,8 @@ public class IngestTranslationProcessorTest {
 
     when(translatorFactory.getTranslator("some-container#some-file-name.csv")).thenReturn(translator);
 
-    IngestTranslationProcessor ingestTranslationProcessor = new IngestTranslationProcessor(storage, translatorFactory, processorStatusService);
-    ingestTranslationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
+    TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
+    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
 
     verify(storage, never()).delete("some-container", "translated/some-file-name.csv");
     verify(storage, never()).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
@@ -82,8 +82,8 @@ public class IngestTranslationProcessorTest {
     when(translatorFactory.getTranslator("some-container#some-file-name.csv")).thenReturn(translator);
     when(translator.type()).thenReturn(TranslatorType.NONE);
 
-    IngestTranslationProcessor ingestTranslationProcessor = new IngestTranslationProcessor(storage, translatorFactory, processorStatusService);
-    ingestTranslationProcessor.saveAndProcess("some-container", "some-file-name.csv", bytes, "TestUser@gmail.com");
+    TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
+    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", bytes, "TestUser@gmail.com");
 
     verify(storage, times(1)).save("some-file-name.csv", bytes, "TestUser@gmail.com", "some-container", true);
     verify(storage, times(1)).makeSnapshot("some-container", "some-file-name.csv");

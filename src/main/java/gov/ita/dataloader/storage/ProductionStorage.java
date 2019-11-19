@@ -86,7 +86,7 @@ public class ProductionStorage implements Storage {
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata(String containerName, boolean snapshots) {
+  public List<BlobMetaData> getBlobMetadata(String containerName) {
     ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
@@ -136,7 +136,7 @@ public class ProductionStorage implements Storage {
 
   @Override
   public void delete(String containerName, String blobPattern) {
-    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName, true);
+    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName);
     for (BlobMetaData b : blobMetadata) {
       if (b.getFileName().contains(blobPattern)) {
         log.info("Deleting blob: {}", b.getFileName());
