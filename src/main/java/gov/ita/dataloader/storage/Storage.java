@@ -10,7 +10,7 @@ public interface Storage {
 
   String getListBlobsUrl(String containerName);
 
-  List<BlobMetaData> getBlobMetadata(String containerName);
+  List<BlobMetaData> getBlobMetadata(String containerName, boolean snapshots);
 
   Set<String> getContainerNames();
 

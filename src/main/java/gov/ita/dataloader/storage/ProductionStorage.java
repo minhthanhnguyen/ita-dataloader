@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -87,10 +86,11 @@ public class ProductionStorage implements Storage {
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata(String containerName) {
+  public List<BlobMetaData> getBlobMetadata(String containerName, boolean snapshots) {
     ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
+    details.withSnapshots(true);
     listBlobsOptions.withDetails(details);
     BlobFlatListSegment segment = makeContainerUrl(containerName)
       .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
@@ -99,7 +99,7 @@ public class ProductionStorage implements Storage {
         .stream().map(
           x -> new BlobMetaData(
             x.name(),
-            buildUrlForBlob(x.name(), containerName),
+            buildUrlForBlob(containerName, x.name(), x.snapshot()),
             x.properties().contentLength(),
             containerName,
             x.properties().lastModified(),
@@ -121,13 +121,10 @@ public class ProductionStorage implements Storage {
 
   @Override
   public byte[] getBlob(String containerName, String blobName) {
-    Optional<BlobMetaData> blobMetaData = getBlobMetadata(containerName).stream().filter(b -> b.getFileName().equals(blobName)).findFirst();
-    if (blobMetaData.isPresent()) {
-      try {
-        return httpHelper.getBytes(blobMetaData.get().getUrl());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    try {
+      return httpHelper.getBytes(buildUrlForBlob(containerName, blobName, null));
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     return null;
   }
@@ -139,7 +136,7 @@ public class ProductionStorage implements Storage {
 
   @Override
   public void delete(String containerName, String blobPattern) {
-    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName);
+    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName, true);
     for (BlobMetaData b : blobMetadata) {
       if (b.getFileName().contains(blobPattern)) {
         log.info("Deleting blob: {}", b.getFileName());
@@ -148,7 +145,9 @@ public class ProductionStorage implements Storage {
     }
   }
 
-  private String buildUrlForBlob(String name, String containerName) {
+  private String buildUrlForBlob(String containerName, String name, String snapshot) {
+    if (snapshot != null)
+      return String.format("https://%s.blob.core.windows.net/%s/%s?snapshot=%s", accountName, containerName, name, snapshot);
     return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
   }
 

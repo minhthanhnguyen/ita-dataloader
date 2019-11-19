@@ -37,7 +37,7 @@ public class DevelopmentStorage implements Storage {
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata(String containerName) {
+  public List<BlobMetaData> getBlobMetadata(String containerName, boolean snapshots) {
     List<BlobMetaData> blobMetaDataList = new ArrayList<>();
 
     Map<String, String> metadata = new HashMap<>();

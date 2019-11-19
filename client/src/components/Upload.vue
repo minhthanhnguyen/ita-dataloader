@@ -60,6 +60,11 @@
               <span>{{this.pipelineStatus.runEnd}}</span>
             </span>
             <md-button class="md-dense refresh-btn" @click="updateBusinessUnitContent()">Refresh</md-button>
+            <md-switch
+              class="snapshot-switch"
+              v-model="displaySnapshots"
+              @change="updateBusinessUnitContent()"
+            >Display Snapshots</md-switch>
           </div>
         </div>
         <div v-if="!loading" class="md-layout storage-content">
@@ -76,6 +81,10 @@
               <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
               <md-table-cell md-label="Upload" md-sort-by="metadata.user_upload">
                 <span v-if="item.metadata.user_upload === 'true'" class="dot filled"></span>
+                <span v-else class="dot"></span>
+              </md-table-cell>
+              <md-table-cell md-label="Snapshot" md-sort-by="snapshot">
+                <span v-if="item.snapshot === 'true'" class="dot filled"></span>
                 <span v-else class="dot"></span>
               </md-table-cell>
             </md-table-row>
@@ -132,6 +141,10 @@
   background-color: #1b51ab;
   border: 1px solid #1b51ab;
 }
+
+.snapshot-switch {
+  margin: 0;
+}
 </style>
 <script>
 import Menu from "./Menu";
@@ -183,15 +196,26 @@ export default {
         message: "",
         runEnd: ""
       },
-      displayPipelineMessage: false
+      displayPipelineMessage: false,
+      displaySnapshots: false
     };
   },
   methods: {
     async updateBusinessUnitContent() {
       this.loading = true;
-      this.storageMetadata = await this.dataloaderRepository._getStorageMetadata(
+      let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
         this.containerName
       );
+
+      this.storageMetadata = storageMetadata
+        .filter(metadata => {
+          if (this.displaySnapshots) return true;
+          else return !metadata.url.includes("?snapshot=");
+        })
+        .map(metadata => {
+          metadata.snapshot = metadata.url.includes("?snapshot=").toString();
+          return metadata;
+        });
 
       this.totalFiles = this.storageMetadata.length;
 
