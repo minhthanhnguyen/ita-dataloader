@@ -219,7 +219,6 @@ export default {
     onFileSelection(event) {
       this.fileBlob = event[0];
       this.originalFileName = event[0].name;
-      this.destinationFileName = event[0].name;
       this.uploadSuccessful = false;
     },
     async uploadFile() {
