@@ -265,3 +265,15 @@ create TABLE OTEXA_EXE_HTS (
   , VAL DECIMAL(30, 10)
 );
 go
+
+create view OTEXA_EXE_HTS_VW
+as
+select details.CTRY_ID
+    , details.CAT_ID
+    , details.HTS
+    , details.HEADER_ID
+    , case when hdr.HEADER_TYPE = 'UNITS' then details.VAL / details.SYEF else details.VAL end as ADJ_VAL
+from OTEXA_EXE_HTS details
+inner join OTEXA_HEADER_REF hdr
+on details.HEADER_ID = hdr.HEADER_ID;
+go
