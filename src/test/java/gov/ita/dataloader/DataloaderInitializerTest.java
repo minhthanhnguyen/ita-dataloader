@@ -3,24 +3,22 @@ package gov.ita.dataloader;
 import gov.ita.dataloader.storage.StorageInitializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.event.ContextRefreshedEvent;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ActiveProfiles("development")
+@RunWith(MockitoJUnitRunner.class)
 public class DataloaderInitializerTest {
 
-  @MockBean
+  @Mock
   private StorageInitializer storageInitializer;
 
   @Test
   public void onApplicationEvent() {
+    DataloaderInitializer dataloaderInitializer = new DataloaderInitializer(storageInitializer);
+    dataloaderInitializer.onApplicationEvent(mock(ContextRefreshedEvent.class));
     verify(storageInitializer, times(1)).init();
   }
 }

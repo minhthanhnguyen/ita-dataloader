@@ -4,10 +4,6 @@ import gov.ita.dataloader.TestHelpers;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +13,6 @@ import java.util.stream.Collectors;
 import static gov.ita.dataloader.TestHelpers.formattedResults;
 import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ActiveProfiles("development")
 public class OtexaCatCsvTranslatorTest {
   private TestHelpers h = new TestHelpers();
   private List<CSVRecord> results;

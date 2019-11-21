@@ -1,0 +1,40 @@
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+variables:
+  webAppName: 'ita-dataloader'
+  azureServiceConnection: 'vangos-app-service-connection'
+  containerRegestryServiceConnection: 'vangos-container-registry-service-connection'
+  imageName: 'vangoscontainerregistry.azurecr.io/ita-dataloader'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '8.x'
+    displayName: Install Node
+  - script: |
+      ./build.sh
+    displayName: Build project artifacts
+  - task: Docker@2
+    displayName: Build docker image
+    inputs:
+      containerRegistry: $(containerRegestryServiceConnection)
+      repository: $(imageName)
+      command: 'buildAndPush'
+      Dockerfile: 'docker/Dockerfile'
+      tags: 'latest'
+  - task: AzureAppServiceManage@0
+    displayName: Stop App Service
+    inputs:
+      azureSubscription: '$(azureServiceConnection)'
+      Action: 'Stop Azure App Service'
+      WebAppName: '$(webAppName)'
+  - task: AzureAppServiceManage@0
+    displayName: Start App Service
+    inputs:
+      azureSubscription: '$(azureServiceConnection)'
+      Action: 'Start Azure App Service'
+      WebAppName: '$(webAppName)'
