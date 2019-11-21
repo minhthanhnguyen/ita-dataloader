@@ -266,6 +266,14 @@ create TABLE OTEXA_EXE_HTS (
 );
 go
 
+create TABLE OTEXA_HTS_REF (
+    HTS VARCHAR(25)
+   , CAT_ID  INTEGER
+   , UNIT VARCHAR(25)
+   , DESCRIPTION VARCHAR(255)
+);
+go
+
 create view OTEXA_EXE_HTS_VW
 as
 select details.CTRY_ID

@@ -54,9 +54,9 @@ public class TranslationProcessorTest {
     translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
 
     verify(storage).delete("some-container", "translated/some-file-name.csv");
-    verify(storage).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
-    verify(storage).save(anyString(), eq(SECOND_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
-    verify(storage).save(anyString(), eq(THIRD_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
+    verify(storage).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true));
+    verify(storage).save(anyString(), eq(SECOND_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true));
+    verify(storage).save(anyString(), eq(THIRD_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true));
   }
 
   @Test
@@ -66,8 +66,6 @@ public class TranslationProcessorTest {
 
     byte[] FIRST_TRANSLATED_BYTES = "first".getBytes();
     byte[] wholeFile = "HEADER RECORD\r\nFIRST ROW\r\nSECOND ROW\r\nTHIRD ROW\r\nFOURTH ROW\r\nFIFTH ROW".getBytes();
-
-    when(translatorFactory.getTranslator("some-container#some-file-name.csv")).thenReturn(translator);
 
     TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
     translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");

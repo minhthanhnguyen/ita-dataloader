@@ -30,51 +30,65 @@ public class TranslationProcessor {
 
   @Async
   public CompletableFuture<Void> saveAndProcess(String containerName, String fileName, byte[] fileBytes, String userName) {
-    String containerFileCompositeKey = containerName + "#" + fileName;
-    Translator translator = translatorFactory.getTranslator(containerFileCompositeKey);
-    String fileRootName = "translated/" + fileName;
-
     if (!processorStatusService.isProcessing(containerName, fileName)) {
       ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, SAVING_NEW_FILE);
       processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
-
       storage.save(fileName, fileBytes, userName, containerName, true);
       storage.makeSnapshot(containerName, fileName);
-
-      if (translator != null) {
-        log.info("Processing {}", containerFileCompositeKey);
-        ingestProcessorStatus.setPhase(DELETING_OLD_TRANSLATIONS);
-        storage.delete(containerName, fileRootName);
-
-        ingestProcessorStatus.setPhase(CREATING_NEW_TRANSLATIONS);
-        if (translator.type().equals(TranslatorType.CSV) && translator.pageSize() != -1) {
-          int lineCount = countLines(fileBytes);
-          int pageSize = translator.pageSize();
-          if (pageSize == -1) pageSize = lineCount;
-          int totalPages = (lineCount + pageSize - 1) / pageSize;
-          int currentPage = 0;
-
-          ingestProcessorStatus.setTotalPages(totalPages);
-          ingestProcessorStatus.setCurrentPage(currentPage);
-
-          while (currentPage < totalPages) {
-            log.info("Translating page {} of {} for {}", currentPage + 1, totalPages, containerFileCompositeKey);
-            ingestProcessorStatus.setCurrentPage(currentPage + 1);
-            int offset = currentPage * pageSize;
-            byte[] partitionedBytes = getFilePartition(fileBytes, offset, pageSize);
-            byte[] translatedBytes = translator.translate(partitionedBytes);
-            storage.save(fileRootName + "/" + UUID.randomUUID(), translatedBytes, userName, containerName, true);
-            currentPage++;
-          }
-        } else {
-          log.info("Translating {}", containerFileCompositeKey);
-          byte[] translatedBytes = translator.translate(fileBytes);
-          storage.save(fileRootName + "/" + UUID.randomUUID(), translatedBytes, userName, containerName, true);
-        }
-      }
+      process(containerName, fileName, fileBytes, ingestProcessorStatus);
       ingestProcessorStatus.setPhase(DONE);
     }
     return new CompletableFuture<>();
+  }
+
+  @Async
+  public CompletableFuture<Void> reProcess(String containerName, String fileName) {
+    byte[] fileBytes = storage.getBlob(containerName, fileName);
+    ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, CREATING_NEW_TRANSLATIONS);
+    processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
+    process(containerName, fileName, fileBytes, ingestProcessorStatus);
+    return new CompletableFuture<>();
+  }
+
+  private void process(String containerName, String fileName, byte[] fileBytes, ManualIngestTranslationStatus ingestProcessorStatus) {
+    String containerFileCompositeKey = containerName + "#" + fileName;
+    String fileRootName = "translated/" + fileName;
+
+    processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
+
+    Translator translator = translatorFactory.getTranslator(containerFileCompositeKey);
+    if (translator != null) {
+      log.info("Processing {}", containerFileCompositeKey);
+      ingestProcessorStatus.setPhase(DELETING_OLD_TRANSLATIONS);
+      storage.delete(containerName, fileRootName);
+
+      ingestProcessorStatus.setPhase(CREATING_NEW_TRANSLATIONS);
+      if (translator.type().equals(TranslatorType.CSV) && translator.pageSize() != -1) {
+        int lineCount = countLines(fileBytes);
+        int pageSize = translator.pageSize();
+        if (pageSize == -1) pageSize = lineCount;
+        int totalPages = (lineCount + pageSize - 1) / pageSize;
+        int currentPage = 0;
+
+        ingestProcessorStatus.setTotalPages(totalPages);
+        ingestProcessorStatus.setCurrentPage(currentPage);
+
+        while (currentPage < totalPages) {
+          log.info("Translating page {} of {} for {}", currentPage + 1, totalPages, containerFileCompositeKey);
+          ingestProcessorStatus.setCurrentPage(currentPage + 1);
+          int offset = currentPage * pageSize;
+          byte[] partitionedBytes = getFilePartition(fileBytes, offset, pageSize);
+          byte[] translatedBytes = translator.translate(partitionedBytes);
+          storage.save(fileRootName + "/" + UUID.randomUUID(), translatedBytes, "system", containerName, true);
+          currentPage++;
+        }
+      } else {
+        log.info("Translating {}", containerFileCompositeKey);
+        byte[] translatedBytes = translator.translate(fileBytes);
+        storage.save(fileRootName + "/" + UUID.randomUUID(), translatedBytes, "system", containerName, true);
+      }
+    }
+    ingestProcessorStatus.setPhase(DONE);
   }
 
   private byte[] getFilePartition(byte[] bytes, int offset, int size) {

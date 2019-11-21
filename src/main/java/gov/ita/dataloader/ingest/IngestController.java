@@ -65,6 +65,12 @@ public class IngestController {
   }
 
   @PreAuthorize("hasRole('ROLE_EDSP')")
+  @GetMapping("/api/reprocess/file")
+  public void reProcessFile(@RequestParam("containerName") String containerName, @RequestParam("fileName") String fileName) {
+    translationProcessor.reProcess(containerName, fileName);
+  }
+
+  @PreAuthorize("hasRole('ROLE_EDSP')")
   @PutMapping("/api/save/configuration")
   public void saveConfiguration(@RequestBody DataloaderConfig dataloaderConfig,
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
