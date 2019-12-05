@@ -2,7 +2,7 @@
 	"name": "IeseVcpeIndexBlob",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "VangosBlobStorage",
+			"referenceName": "AzureBlobStorage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],

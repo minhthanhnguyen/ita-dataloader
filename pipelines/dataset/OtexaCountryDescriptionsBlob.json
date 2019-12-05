@@ -2,7 +2,7 @@
 	"name": "OtexaCountryDescriptionsBlob",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "VangosBlobStorage",
+			"referenceName": "AzureBlobStorage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
