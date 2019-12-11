@@ -6,7 +6,7 @@ pool:
 
 variables:
   webAppName: 'ita-dataloader-01'
-  azureServiceConnection: '<service-connection-for-app-service>'
+  azureServiceConnection: 'ITAARMServiceConnection01'
   containerRegestryServiceConnection: '<container-registry-service connection>'
   imageName: 'itadataloader.azurecr.io/ita-dataloader'
 
