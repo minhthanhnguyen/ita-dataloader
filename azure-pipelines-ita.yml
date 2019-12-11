@@ -5,10 +5,10 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 variables:
-  webAppName: 'ita-dataloader'
+  webAppName: 'ita-dataloader-01'
   azureServiceConnection: '<service-connection-for-app-service>'
-  containerRegestryServiceConnection: '<container-registry-name>'
-  imageName: '<container-registry-url>/ita-dataloader'
+  containerRegestryServiceConnection: '<container-registry-service connection>'
+  imageName: 'itadataloader.azurecr.io/ita-dataloader'
 
 steps:
   - task: NodeTool@0
