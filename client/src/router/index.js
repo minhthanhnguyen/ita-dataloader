@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Upload from '@/components/Upload'
 import Config from '@/components/Config'
 import Log from '@/components/Log'
-import Reports from '@/components/Reports'
 import APIs from '@/components/APIs'
 import DataloaderRepository from '../repositories/DataloaderRepository'
 
@@ -36,13 +35,6 @@ export default new Router({
       path: '/log/:containerName',
       name: 'Log',
       component: Log,
-      props: {
-        dataloaderRepository: new DataloaderRepository()
-      }
-    }, {
-      path: '/reports/:containerName',
-      name: 'Reports',
-      component: Reports,
       props: {
         dataloaderRepository: new DataloaderRepository()
       }

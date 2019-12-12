@@ -3,6 +3,7 @@ package gov.ita.dataloader.ingest;
 import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
+import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,18 @@ public class AutomatedIngestProcessor {
   private HttpHelper httpHelper;
   private TranslationProcessor translationProcessor;
   private ProcessorStatusService processorStatusService;
+  private Storage storage;
 
   public AutomatedIngestProcessor(ZipFileExtractor zipFileExtractor,
                                   HttpHelper httpHelper,
                                   TranslationProcessor translationProcessor,
-                                  ProcessorStatusService processorStatusService) {
+                                  ProcessorStatusService processorStatusService,
+                                  Storage storage) {
     this.zipFileExtractor = zipFileExtractor;
     this.httpHelper = httpHelper;
     this.translationProcessor = translationProcessor;
     this.processorStatusService = processorStatusService;
+    this.storage = storage;
   }
 
   @Async
@@ -126,7 +130,9 @@ public class AutomatedIngestProcessor {
       }
     }
 
-    translationProcessor.saveAndProcess(containerName, fileName, fileBytes, userName);
+    storage.save(fileName, fileBytes, userName, containerName, false);
+    storage.makeSnapshot(containerName, fileName);
+    translationProcessor.initProcessing(containerName, fileName, fileBytes, userName);
   }
 
   private byte[] skipLines(byte[] fileBytes, Integer skipLineCount) {

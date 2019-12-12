@@ -51,7 +51,7 @@ public class TranslationProcessorTest {
     when(translator.translate(thirdPartition)).thenReturn(THIRD_TRANSLATED_BYTES);
 
     TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
-    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
+    translationProcessor.initProcessing("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
 
     verify(storage).delete("some-container", "translated/some-file-name.csv");
     verify(storage).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true));
@@ -68,22 +68,10 @@ public class TranslationProcessorTest {
     byte[] wholeFile = "HEADER RECORD\r\nFIRST ROW\r\nSECOND ROW\r\nTHIRD ROW\r\nFOURTH ROW\r\nFIFTH ROW".getBytes();
 
     TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
-    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
+    translationProcessor.initProcessing("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
 
     verify(storage, never()).delete("some-container", "translated/some-file-name.csv");
     verify(storage, never()).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("TestUser@gmail.com"), eq("some-container"), eq(true));
   }
 
-  @Test
-  public void savesUploadedFileAndMakesSnapshot() throws IOException {
-    byte[] bytes = h.get("/fixtures/otexa/OTEXA_EXE_HTS.csv");
-    when(translatorFactory.getTranslator("some-container#some-file-name.csv")).thenReturn(translator);
-    when(translator.type()).thenReturn(TranslatorType.NONE);
-
-    TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory, processorStatusService);
-    translationProcessor.saveAndProcess("some-container", "some-file-name.csv", bytes, "TestUser@gmail.com");
-
-    verify(storage, times(1)).save("some-file-name.csv", bytes, "TestUser@gmail.com", "some-container", true);
-    verify(storage, times(1)).makeSnapshot("some-container", "some-file-name.csv");
-  }
 }

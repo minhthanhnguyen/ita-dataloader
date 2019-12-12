@@ -13,10 +13,6 @@
         <md-icon id="menu-icon">menu_book</md-icon>
         <span class="md-list-item-text">Log</span>
       </md-list-item>
-      <md-list-item v-bind:class="getClasses('Reports')" @click="goTo('Reports')">
-        <md-icon id="menu-icon">pie_chart</md-icon>
-        <span class="md-list-item-text">Reports</span>
-      </md-list-item>
       <md-list-item v-bind:class="getClasses('APIs')" @click="goTo('APIs')">
         <md-icon id="menu-icon">developer_mode</md-icon>
         <span class="md-list-item-text">APIs</span>

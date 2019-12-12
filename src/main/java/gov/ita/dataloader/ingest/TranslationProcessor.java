@@ -28,15 +28,15 @@ public class TranslationProcessor {
     this.processorStatusService = processorStatusService;
   }
 
-  public void saveAndProcess(String containerName, String fileName, byte[] fileBytes, String userName) {
+  @Async
+  public CompletableFuture<Void> initProcessing(String containerName, String fileName, byte[] fileBytes, String userName) {
     if (!processorStatusService.isProcessing(containerName, fileName)) {
       ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, SAVING_NEW_FILE);
       processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
-      storage.save(fileName, fileBytes, userName, containerName, true);
-      storage.makeSnapshot(containerName, fileName);
       process(containerName, fileName, fileBytes, ingestProcessorStatus);
       ingestProcessorStatus.setPhase(DONE);
     }
+    return new CompletableFuture<>();
   }
 
   @Async
@@ -49,7 +49,7 @@ public class TranslationProcessor {
   }
 
   @Async
-  private CompletableFuture<Void> process(String containerName, String fileName, byte[] fileBytes, ManualIngestTranslationStatus ingestProcessorStatus) {
+  private void process(String containerName, String fileName, byte[] fileBytes, ManualIngestTranslationStatus ingestProcessorStatus) {
     String containerFileCompositeKey = containerName + "#" + fileName;
     String fileRootName = "translated/" + fileName;
 
@@ -88,7 +88,6 @@ public class TranslationProcessor {
       }
     }
     ingestProcessorStatus.setPhase(DONE);
-    return new CompletableFuture<>();
   }
 
   private byte[] getFilePartition(byte[] bytes, int offset, int size) {

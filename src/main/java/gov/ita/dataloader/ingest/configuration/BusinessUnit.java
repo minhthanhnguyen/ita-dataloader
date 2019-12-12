@@ -8,5 +8,4 @@ import java.util.List;
 public class BusinessUnit {
   String businessName;
   String containerName;
-  public List<Report> reports;
 }

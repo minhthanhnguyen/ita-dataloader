@@ -2,29 +2,15 @@
   "businessUnits": [
     {
       "containerName": "select-usa",
-      "businessName": "Select USA",
-      "reports": [
-      ]
+      "businessName": "Select USA"
     },
     {
       "containerName": "otexa",
-      "businessName": "OTEXA",
-      "reports": [
-        {
-          "name": "U.S. Imports of Textile and Apparel - Annual Data by Category for all Countries",
-          "url": "https://app.powerbi.com/reportEmbed?reportId=2c5b5a43-1c88-4a5e-9e1b-565df5ac61f2&groupId=00f93487-68bb-462c-b9bf-e222d71ac6e5&autoAuth=true&ctid=787661a1-5142-41c0-bcc5-c2c9080781e5&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLXVzLWVhc3QtYS1wcmltYXJ5LXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0LyJ9"
-        },
-        {
-          "name": "U.S. Imports of Textile and Apparel - Annual Data by Harmonized Tariff Schedule Line Item for All Countries",
-          "url": "https://app.powerbi.com/reportEmbed?reportId=4ccc0a0a-a6bc-4ff0-b4d5-ab9b06b5bb60&groupId=00f93487-68bb-462c-b9bf-e222d71ac6e5&autoAuth=true&ctid=787661a1-5142-41c0-bcc5-c2c9080781e5&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLXVzLWVhc3QtYS1wcmltYXJ5LXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0LyJ9"
-        }
-      ]
+      "businessName": "OTEXA"
     },
     {
       "containerName": "fta-tariff-rates",
-      "businessName": "FTA Tariff Rates",
-      "reports": [
-      ]
+      "businessName": "FTA Tariff Rates"
     }
   ]
 }

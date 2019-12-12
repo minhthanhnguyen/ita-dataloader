@@ -4,6 +4,7 @@ import gov.ita.dataloader.HttpHelper;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
 import gov.ita.dataloader.ingest.configuration.ZipFileConfig;
+import gov.ita.dataloader.storage.Storage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,8 @@ public class AutomatedIngestProcessorTest {
   private TranslationProcessor translationProcessor;
   @Mock
   private ProcessorStatusService processorStatusService;
+  @Mock
+  private Storage storage;
 
   private List<DataSetConfig> dataSetConfigs;
 
@@ -50,15 +53,29 @@ public class AutomatedIngestProcessorTest {
     dataSetConfigs.add(new DataSetConfig("http://very-cool.io", true, "very-rad.csv", null, null));
     dataSetConfigs.add(new DataSetConfig("http://really-cool.io", true, "really-rad.csv", null, null));
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
+    verify(storage, times(1))
+            .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(1))
+            .save("very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(1))
+            .save("really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+
+    verify(storage, times(1))
+            .makeSnapshot("a-container", "rad.csv");
+    verify(storage, times(1))
+            .makeSnapshot("a-container", "very-rad.csv");
+    verify(storage, times(1))
+            .makeSnapshot("a-container", "really-rad.csv");
+
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -66,11 +83,15 @@ public class AutomatedIngestProcessorTest {
     when(processorStatusService.isIngesting("a-container")).thenReturn(true);
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
+    verify(storage, times(0))
+            .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(0))
+            .makeSnapshot("a-container", "rad.csv");
     verify(translationProcessor, times(0))
-      .saveAndProcess("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -81,11 +102,15 @@ public class AutomatedIngestProcessorTest {
 
     when(httpHelper.getBytes("http://vango.io")).thenReturn("The best sport is baseball!".getBytes());
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(null, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
+    verify(storage, times(1))
+            .save("vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com", "a-container", false);
+    verify(storage, times(1))
+            .makeSnapshot("a-container", "vangos.csv");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com");
+            .initProcessing("a-container", "vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
@@ -106,15 +131,15 @@ public class AutomatedIngestProcessorTest {
 
     when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com");
+            .initProcessing("a-container", "Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "Hobbies_B.csv", "My favorite hobby is climbing!".getBytes(), "TestUser@gmail.com");
+            .initProcessing("a-container", "Hobbies_B.csv", "My favorite hobby is climbing!".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
@@ -132,26 +157,26 @@ public class AutomatedIngestProcessorTest {
 
     when(zipFileExtractor.extract(ZIP_FILE_BYTES)).thenReturn(zipFileContents);
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com");
+            .initProcessing("a-container", "Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
   public void sendFilesThroughIngestTranslationProcessor() {
     dataSetConfigs.add(new DataSetConfig("http://cool.io", true, "rad.csv", null, null));
 
-    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService);
+    AutomatedIngestProcessor automatedIngestProcessor = new AutomatedIngestProcessor(zipFileExtractor, httpHelper, translationProcessor, processorStatusService, storage);
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-      .saveAndProcess("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
   }
 
   private ByteArrayOutputStream convert(String s) {
