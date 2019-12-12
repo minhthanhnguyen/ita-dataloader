@@ -6,7 +6,7 @@
 			"type": "string",
 			"metadata": "Data Factory name"
 		},
-		"VangosBlobStorage": {
+		"AzureBlobStorage": {
 			"type": "string"
 		},
 		"AzureSqlDatabase": {
@@ -71,7 +71,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
 								"path": "select-usa"
@@ -79,7 +79,7 @@
 							"enableSkipIncompatibleRow": true,
 							"redirectIncompatibleRowSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
 								"path": "select-usa"
@@ -680,7 +680,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
 								"path": "select-usa"
@@ -792,7 +792,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
 								"path": "select-usa"
@@ -1480,7 +1480,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								}
 							},
@@ -1634,7 +1634,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								}
 							},
@@ -1801,7 +1801,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								}
 							},
@@ -1968,7 +1968,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								}
 							},
@@ -2135,7 +2135,7 @@
 							"enableStaging": true,
 							"stagingSettings": {
 								"linkedServiceName": {
-									"referenceName": "[parameters('VangosBlobStorage')]",
+									"referenceName": "[parameters('AzureBlobStorage')]",
 									"type": "LinkedServiceReference"
 								},
 								"path": "select-usa"
@@ -2532,7 +2532,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -2775,7 +2775,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -2862,7 +2862,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -3219,7 +3219,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -3414,7 +3414,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -3652,7 +3652,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -3890,7 +3890,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
@@ -4128,7 +4128,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "[parameters('VangosBlobStorage')]",
+					"referenceName": "[parameters('AzureBlobStorage')]",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],

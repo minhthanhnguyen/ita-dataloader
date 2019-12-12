@@ -31,7 +31,7 @@ public class TranslationProcessor {
   @Async
   public CompletableFuture<Void> initProcessing(String containerName, String fileName, byte[] fileBytes, String userName) {
     if (!processorStatusService.isProcessing(containerName, fileName)) {
-      ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, SAVING_NEW_FILE);
+      ManualIngestTranslationStatus ingestProcessorStatus = new ManualIngestTranslationStatus(fileName, -1, 0, CREATING_NEW_TRANSLATIONS);
       processorStatusService.updateTranslationProcessorStatus(containerName, fileName, ingestProcessorStatus);
       process(containerName, fileName, fileBytes, ingestProcessorStatus);
       ingestProcessorStatus.setPhase(DONE);

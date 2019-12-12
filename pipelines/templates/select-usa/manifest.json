@@ -9,7 +9,7 @@
 	],
 	"requires": {
 		"linkedservices": {
-			"VangosBlobStorage": {
+			"AzureBlobStorage": {
 				"supportTypes": [
 					"AzureBlobStorage"
 				]
