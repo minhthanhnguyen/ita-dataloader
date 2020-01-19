@@ -49,7 +49,7 @@
         <div class="md-layout md-gutter">
           <div class="md-layout">
             <div class="config-text">
-              <json-viewer v-if="!editing" :value="dataloaderConfig" expand-depth=4></json-viewer>
+              <json-viewer v-if="!editing" :value="dataloaderConfig" :expand-depth=4 />
               <md-field v-else>
                 <textarea v-model="dataloaderConfigBeautified" rows="200" cols="195" wrap="off"></textarea>
               </md-field>
@@ -98,7 +98,7 @@ import beautify from "json-beautify";
 
 export default {
   name: "Config",
-  props: ["dataloaderRepository"],
+  props: ["repository"],
   components: {
     "dataloader-header": Header,
     "dataloader-menu": Menu
@@ -114,23 +114,24 @@ export default {
       loading: true,
       containerName: null,
       businessUnits: [],
-      dataloaderConfig: null,
+      dataloaderConfig: {},
       configSaved: false,
       ingestClicked: false,
       ingesting: false,
-      editing: false
+      editing: false,
+      dataloaderConfigBeautified: null
     };
   },
   methods: {
     async startIngestProcess() {
       this.ingesting = true;
       this.ingestClicked = true;
-      await this.dataloaderRepository._startIngestProcess(this.containerName);
+      await this.repository._startIngestProcess(this.containerName);
       this.ingesting = false;
     },
     async saveConfiguration() {
       this.dataloaderConfig = JSON.parse(this.dataloaderConfigBeautified);
-      let configSaveResponse = await this.dataloaderRepository._saveDataloaderConfig(
+      let configSaveResponse = await this.repository._saveDataloaderConfig(
         this.dataloaderConfig,
         this.containerName
       );
@@ -142,7 +143,7 @@ export default {
       this.editing = true;
     },
     async updateBusinessUnitContent() {
-      this.dataloaderConfig = await this.dataloaderRepository._getDataloaderConfig(
+      this.dataloaderConfig = await this.repository._getDataloaderConfig(
         this.containerName
       );
       this.dataloaderConfigBeautified = beautify(
@@ -151,7 +152,7 @@ export default {
         2,
         100
       );
-      this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+      this.businessUnits = await this.repository._getBusinessUnits();
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;

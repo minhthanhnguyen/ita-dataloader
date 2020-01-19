@@ -59,7 +59,6 @@ import prettyPrintJson from "pretty-print-json";
 
 export default {
   name: "APIs",
-  props: ["dataloaderRepository"],
   components: {
     "dataloader-header": Header,
     "dataloader-menu": Menu

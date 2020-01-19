@@ -154,7 +154,7 @@ import { readUploadedFileAsArrayBuffer } from "./FileHelper";
 export default {
   name: "Upload",
   props: {
-    dataloaderRepository: Object
+    repository: Object
   },
   components: {
     "dataloader-header": Header,
@@ -162,7 +162,7 @@ export default {
   },
   async created() {
     this.loading = true;
-    this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+    this.businessUnits = await this.repository._getBusinessUnits();
 
     if (this.$route.params["containerName"]) {
       this.containerName = this.$route.params["containerName"];
@@ -203,7 +203,7 @@ export default {
   methods: {
     async updateBusinessUnitContent() {
       this.loading = true;
-      let storageMetadata = await this.dataloaderRepository._getStorageMetadata(
+      let storageMetadata = await this.repository._getStorageMetadata(
         this.containerName
       );
 
@@ -231,7 +231,7 @@ export default {
         file => file.metadata.user_upload === "true"
       ).length;
 
-      this.pipelineStatus = await this.dataloaderRepository._getPipelineStatus(
+      this.pipelineStatus = await this.repository._getPipelineStatus(
         this.containerName
       );
 
@@ -263,7 +263,7 @@ export default {
 
       const formData = new FormData();
       formData.append("file", this.fileBlob, this.destinationFileName);
-      const message = await this.dataloaderRepository._save(
+      const message = await this.repository._save(
         this.containerName,
         formData
       );

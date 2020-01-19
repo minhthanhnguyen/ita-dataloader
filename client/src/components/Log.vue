@@ -72,7 +72,7 @@ import Header from "./Header";
 
 export default {
   name: "Log",
-  props: ["dataloaderRepository"],
+  props: ["repository"],
   components: {
     "dataloader-header": Header,
     "dataloader-menu": Menu
@@ -94,7 +94,7 @@ export default {
   methods: {
     async refreshLog() {
       this.loading = true;
-      this.injestStatus = await this.dataloaderRepository._getIngestStatus(
+      this.injestStatus = await this.repository._getIngestStatus(
         this.containerName
       );
       this.loading = false;
@@ -108,11 +108,11 @@ export default {
       };
     },
     async updateBusinessUnitContent() {
-      this.businessUnits = await this.dataloaderRepository._getBusinessUnits();
+      this.businessUnits = await this.repository._getBusinessUnits();
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
-      this.injestStatus = await this.dataloaderRepository._getIngestStatus(
+      this.injestStatus = await this.repository._getIngestStatus(
         this.containerName
       );
 

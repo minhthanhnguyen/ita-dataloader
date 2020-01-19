@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-export default class DataloaderRepository {
+export default class Repository {
   async _save (containerName, file) {
     let fileSaveResponse = await axios({
       url: '/api/save/file',
