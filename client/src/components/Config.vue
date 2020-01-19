@@ -49,7 +49,7 @@
         <div class="md-layout md-gutter">
           <div class="md-layout">
             <div class="config-text">
-              <pre v-if="!editing" id="pretty-config-json"></pre>
+              <json-viewer v-if="!editing" :value="dataloaderConfig" expand-depth=4></json-viewer>
               <md-field v-else>
                 <textarea v-model="dataloaderConfigBeautified" rows="200" cols="195" wrap="off"></textarea>
               </md-field>
@@ -95,7 +95,6 @@
 import Menu from "./Menu";
 import Header from "./Header";
 import beautify from "json-beautify";
-import prettyPrintJson from "pretty-print-json";
 
 export default {
   name: "Config",
@@ -110,21 +109,12 @@ export default {
     await this.updateBusinessUnitContent();
     this.loading = false;
   },
-  updated() {
-    this.$nextTick(function() {
-      if (document.getElementById("pretty-config-json"))
-        document.getElementById(
-          "pretty-config-json"
-        ).innerHTML = prettyPrintJson.toHtml(this.dataloaderConfig);
-    });
-  },
   data() {
     return {
       loading: true,
       containerName: null,
       businessUnits: [],
       dataloaderConfig: null,
-      dataloaderConfigBeautified: null,
       configSaved: false,
       ingestClicked: false,
       ingesting: false,

@@ -16,7 +16,7 @@ export default new Router({
       component: Upload,
       props: {
         dataloaderRepository: new DataloaderRepository()
-      },
+      }
     }, {
       path: '/',
       name: 'Home',
