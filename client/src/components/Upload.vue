@@ -2,18 +2,12 @@
   <div>
     <dataloader-header
       v-if="containerName"
-      v-bind:businessUnits="businessUnits"
-      v-bind:initialContainerName="containerName"
-      v-bind:routeName="$route.name"
+      :businessUnits="businessUnits"
+      :initialContainerName="containerName"
+      :updateContainerFn="updateContainer"
     />
-    <div style="display:none">
-      <!-- A way of updating the content of a parent component when the container name changes -->
-      <md-field>
-        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
-      </md-field>
-    </div>
     <div class="content">
-      <dataloader-menu v-bind:containerName="containerName" />
+      <dataloader-menu :containerName="containerName" />
       <div class="sub-content">
         <div class="md-layout md-gutter">
           <div class="md-layout-item md-size-40">
@@ -71,7 +65,7 @@
           <md-table v-model="storageMetadata" md-sort="name" md-sort-order="asc">
             <md-table-row slot-scope="{ item }" slot="md-table-row">
               <md-table-cell md-label="File Name" md-sort-by="fileName">
-                <a v-bind:href="item.url">{{item.fileName}}</a>
+                <a :href="item.url">{{item.fileName}}</a>
               </md-table-cell>
               <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
               <md-table-cell
@@ -100,13 +94,13 @@
           <md-dialog-alert
             :md-active.sync="errorOccured"
             md-title="Upload Error!"
-            v-bind:md-content="errorMessage"
+            :md-content="errorMessage"
             md-confirm-text="Close"
           />
           <md-dialog-alert
             :md-active.sync="displayPipelineMessage"
             md-title="Pipeline Error!"
-            v-bind:md-content="pipelineStatus.message"
+            :md-content="pipelineStatus.message"
             md-confirm-text="Close"
           />
         </div>
@@ -277,6 +271,11 @@ export default {
       this.errorMessage = errorMessage;
       this.uploadSuccessful = false;
       this.uploading = false;
+    },
+    async updateContainer(containerName) {
+      this.containerName = containerName;
+      await this.updateBusinessUnitContent();
+      this.$forceUpdate()
     }
   }
 };

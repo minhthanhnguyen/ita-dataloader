@@ -36,7 +36,7 @@ export default function router(repository) {
           repository
         }
       }, {
-        path: '/apis',
+        path: '/apis/:containerName',
         name: 'APIs',
         component: APIs
       }

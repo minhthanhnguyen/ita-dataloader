@@ -54,7 +54,7 @@ spring:
 azure:
   activedirectory:
     tenant-id: ${AZURE_OAUTH_TENANT_ID}
-    active-directory-groups: EDSP
+    active-directory-groups: TSI_AllUsers
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <dataloader-header />
+    <dataloader-header v-if="containerName" />
     <div class="content">
-      <dataloader-menu />
+      <dataloader-menu :containerName="containerName"/>
       <div class="sub-content">
         <section>
           <h1 class="md-title">Storage Containers</h1>
@@ -55,13 +55,18 @@
 import Menu from "./Menu";
 import Header from "./Header";
 import beautify from "json-beautify";
-import prettyPrintJson from "pretty-print-json";
 
 export default {
   name: "APIs",
   components: {
     "dataloader-header": Header,
     "dataloader-menu": Menu
+  },
+  data: () => ({
+    containerName: null
+  }),
+  created() {
+    this.containerName = this.$route.params["containerName"]
   }
 };
 </script>

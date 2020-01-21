@@ -1,19 +1,19 @@
 <template>
   <nav class="nav-menu">
     <md-list class="menu-list-items">
-      <md-list-item v-bind:class="getClasses('Upload')" @click="goTo('Upload')">
+      <md-list-item :class="getClasses('Upload')" @click="goTo('Upload')">
         <md-icon id="menu-icon">arrow_upward</md-icon>
         <span class="md-list-item-text">Upload</span>
       </md-list-item>
-      <md-list-item v-bind:class="getClasses('Config')" @click="goTo('Config')">
+      <md-list-item :class="getClasses('Config')" @click="goTo('Config')">
         <md-icon id="menu-icon">settings_applications</md-icon>
         <span class="md-list-item-text">Configure</span>
       </md-list-item>
-      <md-list-item v-bind:class="getClasses('Log')" @click="goTo('Log')">
+      <md-list-item :class="getClasses('Log')" @click="goTo('Log')">
         <md-icon id="menu-icon">menu_book</md-icon>
         <span class="md-list-item-text">Log</span>
       </md-list-item>
-      <md-list-item v-bind:class="getClasses('APIs')" @click="goTo('APIs')">
+      <md-list-item :class="getClasses('APIs')" @click="goTo('APIs')">
         <md-icon id="menu-icon">developer_mode</md-icon>
         <span class="md-list-item-text">APIs</span>
       </md-list-item>

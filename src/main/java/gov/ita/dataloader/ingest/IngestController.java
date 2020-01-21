@@ -48,7 +48,7 @@ public class IngestController {
     return getDataloaderConfig(containerName);
   }
 
-  @PreAuthorize("hasRole('ROLE_EDSP')")
+//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @GetMapping("/api/ingest")
   public void startIngestProcess(@RequestParam("containerName") String containerName) {
     automatedIngestProcessor.process(
@@ -58,7 +58,7 @@ public class IngestController {
       5000);
   }
 
-  @PreAuthorize("hasRole('ROLE_EDSP')")
+//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @PutMapping("/api/save/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
@@ -67,13 +67,13 @@ public class IngestController {
     translationProcessor.initProcessing(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
   }
 
-  @PreAuthorize("hasRole('ROLE_EDSP')")
+//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @GetMapping("/api/reprocess/file")
   public void reProcessFile(@RequestParam("containerName") String containerName, @RequestParam("fileName") String fileName) {
     translationProcessor.reProcess(containerName, fileName);
   }
 
-  @PreAuthorize("hasRole('ROLE_EDSP')")
+//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @PutMapping("/api/save/configuration")
   public void saveConfiguration(@RequestBody DataloaderConfig dataloaderConfig,
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
@@ -111,18 +111,6 @@ public class IngestController {
         return blobMetaData;
       })
       .collect(Collectors.toList());
-  }
-
-  @GetMapping(value = "/api/business-units", produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<BusinessUnit> getBusinessUnits() throws Exception {
-    byte[] dataloaderConfig = storage.getBlob("dataloader", "configuration.json");
-    BusinessUnitConfigResponse buc = objectMapper.readValue(dataloaderConfig, BusinessUnitConfigResponse.class);
-    return buc.getBusinessUnits();
-  }
-
-  @GetMapping(value = "/api/storage-containers", produces = MediaType.APPLICATION_JSON_VALUE)
-  public List<String> getStorageContainers() throws Exception {
-    return getBusinessUnits().stream().map(BusinessUnit::getContainerName).collect(Collectors.toList());
   }
 
   private DataloaderConfig getDataloaderConfig(String containerName) {

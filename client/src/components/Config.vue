@@ -2,18 +2,12 @@
   <div>
     <dataloader-header
       v-if="containerName"
-      v-bind:businessUnits="businessUnits"
-      v-bind:initialContainerName="containerName"
-      v-bind:routeName="$route.name"
+      :businessUnits="businessUnits"
+      :initialContainerName="containerName"
+      :updateContainerFn="updateContainer"
     />
-    <div style="display:none">
-      <!-- A way of updating the content of a parent component when the container name changes -->
-      <md-field>
-        <md-select v-model="containerName" @md-selected="updateBusinessUnitContent()"></md-select>
-      </md-field>
-    </div>
     <div class="content">
-      <dataloader-menu v-bind:containerName="containerName" />
+      <dataloader-menu :containerName="containerName" />
       <div class="sub-content">
         <div class="md-layout md-gutter">
           <div class="md-layout-item md-size-80"></div>
@@ -156,6 +150,11 @@ export default {
       this.businessUnitName = this.businessUnits.find(
         b => b.containerName === this.containerName
       ).businessName;
+    },
+    async updateContainer(containerName) {
+      this.containerName = containerName;
+      await this.updateBusinessUnitContent();
+      this.$forceUpdate()
     }
   }
 };

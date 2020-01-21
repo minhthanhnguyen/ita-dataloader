@@ -21,6 +21,7 @@ public class StorageInitializer {
     newContainers.add("otexa");
     newContainers.add("select-usa");
     newContainers.add("fta-tariff-rates");
+    newContainers.add("demo");
 
     Set<String> existingContainers = storage.getContainerNames();
 

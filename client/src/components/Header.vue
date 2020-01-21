@@ -6,9 +6,9 @@
         <select v-model="containerName" @change="updateBusinessUnitContent($event)">
           <option
             v-for="businessUnit in businessUnits"
-            v-bind:key="businessUnit.containerName"
-            v-bind:value="businessUnit.containerName"
-            v-bind:selected="businessUnit.containerName === containerName"
+            :key="businessUnit.containerName"
+            :value="businessUnit.containerName"
+            :selected="businessUnit.containerName === containerName"
           >{{businessUnit.businessName}}</option>
         </select>
       </div>
@@ -34,7 +34,7 @@
 import GitHub from "./GitHub";
 export default {
   name: "Header",
-  props: ["initialContainerName", "businessUnits"],
+  props: ["initialContainerName", "businessUnits", "updateContainerFn"],
   components: {
     "git-hub": GitHub
   },
@@ -52,7 +52,7 @@ export default {
           containerName: this.containerName
         }
       });
-      this.$parent.containerName = this.containerName;
+      this.updateContainerFn(this.containerName)
     }
   }
 };
