@@ -40,7 +40,7 @@
   background: #8b9197;
 }
 
-.menu-li .md-list-item-text {
+.md-list-item-text {
   color: white;
   margin-left: 10px;
 }
@@ -62,23 +62,20 @@ export default {
   },
   methods: {
     goTo(routeName) {
-      if (this.containerName) {
-        this.$router.push({
-          name: routeName,
-          params: {
-            containerName: this.containerName
-          }
-        });
-      } else {
-        this.$router.push({
-          name: routeName
-        });
-      }
+      this.$router.push({
+        name: routeName,
+        params: {
+          containerName: this.containerName
+        }
+      });
     },
     getClasses(routeName) {
-      return routeName === this.$route.name
-        ? "menu-li current-route"
-        : "menu-li";
+      if (routeName === 'Upload' && this.$route.name === 'Home')
+        return "menu-li current-route"
+      else
+        return routeName === this.$route.name
+          ? "menu-li current-route"
+          : "menu-li";
     }
   }
 };

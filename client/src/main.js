@@ -16,10 +16,8 @@ Vue.use(Router)
 Vue.use(VueMaterial)
 Vue.use(JsonViewer)
 
-/* eslint-disable no-new */
+const repository = new Repository()
 new Vue({
-  el: '#app',
-  router: router(new Repository()),
-  components: { App },
-  template: '<App/>'
-})
+  router: router(repository),
+  render: h => h(App, { props: { repository } })
+}).$mount('#app')
