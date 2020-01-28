@@ -34,13 +34,5 @@ public class StorageInitializer {
         storage.save("configuration.json", getResourceAsString(path).getBytes(), null, containerName, false);
       }
     }
-
-    //Always update the dataloader configuration; users don't control the dataloader configuration content
-    storage.save(
-      "configuration.json",
-      getResourceAsString("/fixtures/dataloader.json").getBytes(),
-      null,
-      "dataloader",
-      false);
   }
 }
