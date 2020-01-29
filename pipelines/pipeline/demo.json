@@ -57,21 +57,21 @@
 							},
 							{
 								"source": {
-									"name": "SUBJECT",
+									"name": "Subject",
 									"type": "String"
 								},
 								"sink": {
-									"name": "SUBJECT_CODE",
+									"name": "Subject",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "MEASURE",
+									"name": "Measure",
 									"type": "String"
 								},
 								"sink": {
-									"name": "MEASURE_CODE",
+									"name": "Measure",
 									"type": "String"
 								}
 							},
