@@ -64,8 +64,9 @@
 			},
 			{
 				"name": "Value",
-				"type": "int",
-				"precision": 10
+				"type": "decimal",
+				"precision": 30,
+				"scale": 10
 			},
 			{
 				"name": "Flag_Codes",
