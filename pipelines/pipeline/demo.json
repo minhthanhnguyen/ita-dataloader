@@ -87,6 +87,16 @@
 							},
 							{
 								"source": {
+									"name": "Measure",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Measure",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
 									"name": "TIME",
 									"type": "String"
 								},
