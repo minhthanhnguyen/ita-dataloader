@@ -195,7 +195,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlTable1",
+						"referenceName": "OcedGdpDb",
 						"type": "DatasetReference"
 					}
 				]
