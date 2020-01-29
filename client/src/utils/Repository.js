@@ -3,7 +3,7 @@ const axios = require('axios')
 export default class Repository {
   async _save (containerName, file) {
     let fileSaveResponse = await axios({
-      url: '/api/save/file',
+      url: '/api/file',
       method: 'PUT',
       params: {
         containerName
@@ -30,7 +30,7 @@ export default class Repository {
 
   async _saveDataloaderConfig (dataloaderConfig, containerName) {
     let configSaveResponse = await axios({
-      url: '/api/save/configuration',
+      url: '/api/configuration',
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -88,5 +88,16 @@ export default class Repository {
       }
     })
     return uploadStatus.data
+  }
+
+  async _deleteBlob (containerName, fileName) {
+    await axios({
+      url: '/api/file',
+      method: 'DELETE',
+      params: {
+        containerName,
+        fileName
+      }
+    })
   }
 }

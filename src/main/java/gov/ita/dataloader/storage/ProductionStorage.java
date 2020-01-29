@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.microsoft.azure.storage.blob.models.DeleteSnapshotsOptionType.INCLUDE;
+import static com.microsoft.azure.storage.blob.models.DeleteSnapshotsOptionType.ONLY;
+
 @Slf4j
 @Service
 @Profile({"production", "staging"})
@@ -86,11 +89,11 @@ public class ProductionStorage implements Storage {
   }
 
   @Override
-  public List<BlobMetaData> getBlobMetadata(String containerName) {
+  public List<BlobMetaData> getBlobMetadata(String containerName, Boolean withSnapshots) {
     ListBlobsOptions listBlobsOptions = new ListBlobsOptions();
     BlobListDetails details = new BlobListDetails();
     details.withMetadata(true);
-    details.withSnapshots(true);
+    details.withSnapshots(withSnapshots);
     listBlobsOptions.withDetails(details);
     BlobFlatListSegment segment = makeContainerUrl(containerName)
       .listBlobsFlatSegment(null, listBlobsOptions, null).blockingGet().body().segment();
@@ -109,6 +112,11 @@ public class ProductionStorage implements Storage {
     }
 
     return Collections.emptyList();
+  }
+
+  @Override
+  public List<BlobMetaData> getBlobMetadata(String containerName) {
+    return getBlobMetadata(containerName, true);
   }
 
   @Override
@@ -136,11 +144,13 @@ public class ProductionStorage implements Storage {
 
   @Override
   public void delete(String containerName, String blobPattern) {
-    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName);
+    List<BlobMetaData> blobMetadata = getBlobMetadata(containerName, false);
     for (BlobMetaData b : blobMetadata) {
       if (b.getFileName().contains(blobPattern)) {
         log.info("Deleting blob: {}", b.getFileName());
-        makeServiceURL().createContainerURL(containerName).createBlobURL(b.getFileName()).delete().blockingGet();
+        makeServiceURL().createContainerURL(containerName).
+                createBlobURL(b.getFileName())
+                .delete(INCLUDE, null, null).blockingGet();
       }
     }
   }

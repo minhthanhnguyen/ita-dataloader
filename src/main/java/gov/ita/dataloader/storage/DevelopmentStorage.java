@@ -64,6 +64,11 @@ public class DevelopmentStorage implements Storage {
   }
 
   @Override
+  public List<BlobMetaData> getBlobMetadata(String containerName, Boolean withSnapshots) {
+    return getBlobMetadata(containerName, withSnapshots);
+  }
+
+  @Override
   public Set<String> getContainerNames() {
     return storageContent.keySet();
   }

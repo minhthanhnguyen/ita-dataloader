@@ -55,10 +55,13 @@
             </span>
             <md-button class="md-dense refresh-btn" @click="updateBusinessUnitContent()">Refresh</md-button>
             <md-switch
-              class="snapshot-switch"
+              class="display-switch"
               v-model="displaySnapshots"
               @change="updateBusinessUnitContent()"
-            >Display Snapshots</md-switch>
+            >Snapshots</md-switch>
+            <md-switch class="display-switch" v-model="displayDeleteButton">Delete Button
+              <md-tooltip>To recover a deleted file, please contact technical support.</md-tooltip>
+            </md-switch>
           </div>
         </div>
         <div v-if="!loading" class="md-layout storage-content">
@@ -80,6 +83,11 @@
               <md-table-cell md-label="Snapshot" md-sort-by="snapshot">
                 <span v-if="item.snapshot === 'true'" class="dot filled"></span>
                 <span v-else class="dot"></span>
+              </md-table-cell>
+              <md-table-cell v-if="displayDeleteButton">
+                <md-button v-if="item.snapshot === 'false'" class="md-icon-button" @click="deleteFile(item.fileName)">      
+                  <md-icon>delete</md-icon>
+                </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
@@ -136,8 +144,8 @@
   border: 1px solid #1b51ab;
 }
 
-.snapshot-switch {
-  margin: 0;
+.display-switch {
+  margin: 0 22px 0 0;
 }
 </style>
 <script>
@@ -191,7 +199,8 @@ export default {
         runEnd: ""
       },
       displayPipelineMessage: false,
-      displaySnapshots: false
+      displaySnapshots: false,
+      displayDeleteButton: false
     };
   },
   methods: {
@@ -276,6 +285,10 @@ export default {
       this.containerName = containerName;
       await this.updateBusinessUnitContent();
       this.$forceUpdate()
+    },
+    async deleteFile(fileName) {
+      await this.repository._deleteBlob(this.containerName, fileName)
+      this.storageMetadata = this.storageMetadata.filter(m => m.fileName !== fileName);
     }
   }
 };

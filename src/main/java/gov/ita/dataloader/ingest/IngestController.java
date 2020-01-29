@@ -2,20 +2,16 @@ package gov.ita.dataloader.ingest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.dataloader.ingest.configuration.BusinessUnit;
-import gov.ita.dataloader.ingest.configuration.BusinessUnitConfigResponse;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
 import gov.ita.dataloader.security.AuthenticationFacade;
 import gov.ita.dataloader.storage.BlobMetaData;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +55,19 @@ public class IngestController {
   }
 
 //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
-  @PutMapping("/api/save/file")
+  @PutMapping("/api/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
     storage.save(file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName(), containerName, true);
     storage.makeSnapshot(containerName, file.getOriginalFilename());
     translationProcessor.initProcessing(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
+  }
+
+  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
+  @DeleteMapping("/api/file")
+  public void saveFile(@RequestParam("fileName") String fileName,
+                       @RequestParam("containerName") String containerName) throws IOException {
+    storage.delete(containerName, fileName);
   }
 
 //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
@@ -74,7 +77,7 @@ public class IngestController {
   }
 
 //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
-  @PutMapping("/api/save/configuration")
+  @PutMapping("/api/configuration")
   public void saveConfiguration(@RequestBody DataloaderConfig dataloaderConfig,
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
     byte[] dataSetConfigsJsonBytes = objectMapper.writeValueAsString(dataloaderConfig).getBytes();

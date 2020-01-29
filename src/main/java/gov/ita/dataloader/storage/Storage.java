@@ -12,6 +12,8 @@ public interface Storage {
 
   List<BlobMetaData> getBlobMetadata(String containerName);
 
+  List<BlobMetaData> getBlobMetadata(String containerName, Boolean withSnapshots);
+
   Set<String> getContainerNames();
 
   byte[] getBlob(String containerName, String blobName);
