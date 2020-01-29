@@ -148,7 +148,7 @@
 							{
 								"source": {
 									"name": "Value",
-									"type": "Decimal"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "Value",
