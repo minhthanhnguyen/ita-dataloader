@@ -71,7 +71,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "OCED_GDP"
+			"table": "OECD_GDP"
 		}
 	}
 }
