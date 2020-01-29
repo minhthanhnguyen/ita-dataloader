@@ -2402,7 +2402,7 @@
 				]
 			},
 			{
-				"name": "Copy OCED_GDP",
+				"name": "Copy OECD_GDP",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -2579,13 +2579,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "OcedGdpBlob",
+						"referenceName": "OecdGdpBlob",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "OcedGdpDb",
+						"referenceName": "OecdGdpDb",
 						"type": "DatasetReference"
 					}
 				]

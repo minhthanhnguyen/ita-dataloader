@@ -1,5 +1,5 @@
 {
-	"name": "OcedGdpBlob",
+	"name": "OecdGdpBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage",
