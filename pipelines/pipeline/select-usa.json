@@ -2400,6 +2400,195 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy OCED_GDP",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OCED_GDP;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "LOCATION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LOCATION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Country",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Subject",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Subject",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Measure",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Measure",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIME",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode_Code",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Value",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Value",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Flag Codes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flag_Codes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Flags",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flags",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OcedGdpBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OcedGdpDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
