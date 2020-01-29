@@ -2427,7 +2427,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "TRUNCATE TABLE OCED_GDP;",
+						"preCopyScript": "TRUNCATE TABLE OECD_GDP;",
 						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
