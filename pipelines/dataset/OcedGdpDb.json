@@ -17,15 +17,7 @@
 				"type": "varchar"
 			},
 			{
-				"name": "SUBJECT_CODE",
-				"type": "varchar"
-			},
-			{
 				"name": "Subject",
-				"type": "varchar"
-			},
-			{
-				"name": "MEASURE_CODE",
 				"type": "varchar"
 			},
 			{
