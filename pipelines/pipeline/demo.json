@@ -67,11 +67,31 @@
 							},
 							{
 								"source": {
+									"name": "Subject",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Subject",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
 									"name": "MEASURE",
 									"type": "String"
 								},
 								"sink": {
 									"name": "MEASURE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Measure",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Measure",
 									"type": "String"
 								}
 							},
@@ -148,11 +168,11 @@
 							{
 								"source": {
 									"name": "Value",
-									"type": "Double"
+									"type": "String"
 								},
 								"sink": {
 									"name": "Value",
-									"type": "Int32"
+									"type": "Decimal"
 								}
 							},
 							{
