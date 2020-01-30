@@ -60,7 +60,7 @@
               @change="updateBusinessUnitContent()"
             >Snapshots</md-switch>
             <md-switch class="display-switch" v-model="displayDeleteButton">Delete Button
-              <md-tooltip>To recover a deleted file, please contact technical support.</md-tooltip>
+              <md-tooltip md-direction="right">To recover a deleted file, please contact technical support.</md-tooltip>
             </md-switch>
           </div>
         </div>
