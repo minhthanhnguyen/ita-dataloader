@@ -2589,6 +2589,362 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Copy OECD Strictness of Employment Protection",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OECD_STRICTNESS_OF_EMPLOYMENT_PROTECTION;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Country",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Series",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Series",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIME",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode_Code",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Value",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Value",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Flag Codes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flag_Codes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Flags",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flags",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OecdStrictnessOfEmploymentProtectionBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OecdStrictnessOfEmploymentProtectionDb",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy OECD Avg Annual Hrs Worked Per Worker",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE OECD_AVERAGE_ANNUAL_HOURS_WORKED_PER_WORKER;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Country",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EMPSTAT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EMPSTAT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Employment status",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Employment_status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Frequency",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Frequency",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIME",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unit",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode_Code",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PowerCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PowerCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period_Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reference Period",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Reference_Period",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Value",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Value",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Flag Codes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flag_Codes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Flags",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Flags",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "OecdAvgAnnualHrsWorkedPerWorkerBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OeceAvgAnnualHrsWorkedPerWorkerDb",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
