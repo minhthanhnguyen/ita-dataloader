@@ -1,0 +1,69 @@
+{
+	"name": "OecdStrictnessOfEmploymentProtectionDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Country",
+				"type": "varchar"
+			},
+			{
+				"name": "Series",
+				"type": "varchar"
+			},
+			{
+				"name": "TIME",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Unit_Code",
+				"type": "varchar"
+			},
+			{
+				"name": "Unit",
+				"type": "varchar"
+			},
+			{
+				"name": "PowerCode_Code",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PowerCode",
+				"type": "varchar"
+			},
+			{
+				"name": "Reference_Period_Code",
+				"type": "varchar"
+			},
+			{
+				"name": "Reference_Period",
+				"type": "varchar"
+			},
+			{
+				"name": "Value",
+				"type": "decimal",
+				"precision": 30,
+				"scale": 10
+			},
+			{
+				"name": "Flag_Codes",
+				"type": "varchar"
+			},
+			{
+				"name": "Flags",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "OECD_STRICTNESS_OF_EMPLOYMENT_PROTECTION"
+		}
+	}
+}
