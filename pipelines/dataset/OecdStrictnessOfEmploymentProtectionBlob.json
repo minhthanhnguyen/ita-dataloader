@@ -1,0 +1,85 @@
+{
+	"name": "OecdStrictnessOfEmploymentProtectionBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "OCED_STRICTNESS_OF_EMPLOYMENT_PROTECTION.csv",
+				"container": "select-usa"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"nullValue": "\"\"",
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "COUNTRY",
+				"type": "String"
+			},
+			{
+				"name": "Country",
+				"type": "String"
+			},
+			{
+				"name": "SERIES",
+				"type": "String"
+			},
+			{
+				"name": "Series",
+				"type": "String"
+			},
+			{
+				"name": "TIME",
+				"type": "String"
+			},
+			{
+				"name": "Time",
+				"type": "String"
+			},
+			{
+				"name": "Unit Code",
+				"type": "String"
+			},
+			{
+				"name": "Unit",
+				"type": "String"
+			},
+			{
+				"name": "PowerCode Code",
+				"type": "String"
+			},
+			{
+				"name": "PowerCode",
+				"type": "String"
+			},
+			{
+				"name": "Reference Period Code",
+				"type": "String"
+			},
+			{
+				"name": "Reference Period",
+				"type": "String"
+			},
+			{
+				"name": "Value",
+				"type": "String"
+			},
+			{
+				"name": "Flag Codes",
+				"type": "String"
+			},
+			{
+				"name": "Flags",
+				"type": "String"
+			}
+		]
+	}
+}
