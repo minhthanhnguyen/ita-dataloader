@@ -143,10 +143,10 @@ public class ProductionStorage implements Storage {
   }
 
   @Override
-  public void delete(String containerName, String blobPattern) {
+  public void delete(String containerName, String blobName) {
     List<BlobMetaData> blobMetadata = getBlobMetadata(containerName, false);
     for (BlobMetaData b : blobMetadata) {
-      if (b.getFileName().contains(blobPattern)) {
+      if (b.getFileName().equals(blobName)) {
         log.info("Deleting blob: {}", b.getFileName());
         makeServiceURL().createContainerURL(containerName).
                 createBlobURL(b.getFileName())
