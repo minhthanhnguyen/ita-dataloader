@@ -2,13 +2,20 @@
 	"name": "otexa-blob-trigger",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
-		"pipelines": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "otexa",
+					"type": "PipelineReference"
+				}
+			}
+		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/otexa/blobs/",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/61dbae51-cdd9-4380-ba89-78dd6c20b4d7/resourceGroups/vangos-resources/providers/Microsoft.Storage/storageAccounts/vangosstorageacct",
+			"scope": "/subscriptions/675d7977-79af-4b94-b0bd-26d4095a4ffb/resourceGroups/ITA-MSDataServices-Dev-East1/providers/Microsoft.Storage/storageAccounts/itadatatloader1",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]
