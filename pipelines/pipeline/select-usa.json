@@ -58,7 +58,17 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "WEO Country Group Code",
+									"name": "WEO Country Code",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ISO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ISO",
 									"type": "String"
 								}
 							},
@@ -78,7 +88,7 @@
 									"type": "String"
 								},
 								"sink": {
-									"name": "Country Group Name",
+									"name": "Country",
 									"type": "String"
 								}
 							},
