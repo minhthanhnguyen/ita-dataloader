@@ -54,7 +54,7 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "WEO Country Group Code",
+									"name": "WEO Country Code",
 									"type": "String"
 								},
 								"sink": {
@@ -74,7 +74,7 @@
 							},
 							{
 								"source": {
-									"name": "Country Group Name",
+									"name": "Country",
 									"type": "String"
 								},
 								"sink": {
@@ -124,7 +124,7 @@
 							},
 							{
 								"source": {
-									"name": "Series-specific Notes",
+									"name": "Country/Series-specific Notes",
 									"type": "String"
 								},
 								"sink": {
