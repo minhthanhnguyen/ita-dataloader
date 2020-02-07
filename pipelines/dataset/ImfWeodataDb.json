@@ -9,7 +9,12 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "WEO Country Group Code",
+				"name": "WEO Country Code",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ISO",
 				"type": "varchar"
 			},
 			{
@@ -17,7 +22,7 @@
 				"type": "varchar"
 			},
 			{
-				"name": "Country Group Name",
+				"name": "Country",
 				"type": "varchar"
 			},
 			{
