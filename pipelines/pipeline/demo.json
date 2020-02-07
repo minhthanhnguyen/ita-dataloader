@@ -53,7 +53,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Year']"
+									"path": "['Year']"
 								},
 								"sink": {
 									"name": "Year",
@@ -62,7 +62,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesID']"
+									"path": "['SeriesID']"
 								},
 								"sink": {
 									"name": "SeriesID",
@@ -71,7 +71,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesName']"
+									"path": "['SeriesName']"
 								},
 								"sink": {
 									"name": "SeriesName",
@@ -80,7 +80,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Row']"
+									"path": "['Row']"
 								},
 								"sink": {
 									"name": "Row",
@@ -89,7 +89,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParent']"
+									"path": "['ColumnGParent']"
 								},
 								"sink": {
 									"name": "ColumnGParent",
@@ -98,7 +98,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParent']"
+									"path": "['ColumnParent']"
 								},
 								"sink": {
 									"name": "ColumnParent",
@@ -107,7 +107,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Column']"
+									"path": "['Column']"
 								},
 								"sink": {
 									"name": "Column",
@@ -116,7 +116,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['RowCode']"
+									"path": "['RowCode']"
 								},
 								"sink": {
 									"name": "RowCode",
@@ -125,7 +125,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnCode']"
+									"path": "['ColumnCode']"
 								},
 								"sink": {
 									"name": "ColumnCode",
@@ -134,7 +134,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParentCode']"
+									"path": "['ColumnParentCode']"
 								},
 								"sink": {
 									"name": "ColumnParentCode",
@@ -143,7 +143,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParentCode']"
+									"path": "['ColumnGParentCode']"
 								},
 								"sink": {
 									"name": "ColumnGParentCode",
@@ -152,7 +152,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['TableScale']"
+									"path": "['TableScale']"
 								},
 								"sink": {
 									"name": "TableScale",
@@ -161,7 +161,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValueUnformatted']"
+									"path": "['DataValueUnformatted']"
 								},
 								"sink": {
 									"name": "DataValueUnformatted",
@@ -170,14 +170,15 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValue']"
+									"path": "['DataValue']"
 								},
 								"sink": {
 									"name": "DataValue",
 									"type": "String"
 								}
 							}
-						]
+						],
+						"collectionReference": "$['BEAAPI']['Results']['Data']"
 					}
 				},
 				"inputs": [
@@ -244,7 +245,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Year']"
+									"path": "['Year']"
 								},
 								"sink": {
 									"name": "Year",
@@ -253,7 +254,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesID']"
+									"path": "['SeriesID']"
 								},
 								"sink": {
 									"name": "SeriesID",
@@ -262,7 +263,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesName']"
+									"path": "['SeriesName']"
 								},
 								"sink": {
 									"name": "SeriesName",
@@ -271,7 +272,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Row']"
+									"path": "['Row']"
 								},
 								"sink": {
 									"name": "Row",
@@ -280,7 +281,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParent']"
+									"path": "['ColumnGParent']"
 								},
 								"sink": {
 									"name": "ColumnGParent",
@@ -289,7 +290,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParent']"
+									"path": "['ColumnParent']"
 								},
 								"sink": {
 									"name": "ColumnParent",
@@ -298,7 +299,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Column']"
+									"path": "['Column']"
 								},
 								"sink": {
 									"name": "Column",
@@ -307,7 +308,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['RowCode']"
+									"path": "['RowCode']"
 								},
 								"sink": {
 									"name": "RowCode",
@@ -316,7 +317,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnCode']"
+									"path": "['ColumnCode']"
 								},
 								"sink": {
 									"name": "ColumnCode",
@@ -325,7 +326,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParentCode']"
+									"path": "['ColumnParentCode']"
 								},
 								"sink": {
 									"name": "ColumnParentCode",
@@ -334,7 +335,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParentCode']"
+									"path": "['ColumnGParentCode']"
 								},
 								"sink": {
 									"name": "ColumnGParentCode",
@@ -343,7 +344,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['TableScale']"
+									"path": "['TableScale']"
 								},
 								"sink": {
 									"name": "TableScale",
@@ -352,7 +353,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValueUnformatted']"
+									"path": "['DataValueUnformatted']"
 								},
 								"sink": {
 									"name": "DataValueUnformatted",
@@ -361,14 +362,15 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValue']"
+									"path": "['DataValue']"
 								},
 								"sink": {
 									"name": "DataValue",
 									"type": "String"
 								}
 							}
-						]
+						],
+						"collectionReference": "$['BEAAPI']['Results']['Data']"
 					}
 				},
 				"inputs": [
@@ -435,7 +437,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Year']"
+									"path": "['Year']"
 								},
 								"sink": {
 									"name": "Year",
@@ -444,7 +446,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesID']"
+									"path": "['SeriesID']"
 								},
 								"sink": {
 									"name": "SeriesID",
@@ -453,7 +455,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesName']"
+									"path": "['SeriesName']"
 								},
 								"sink": {
 									"name": "SeriesName",
@@ -462,7 +464,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Row']"
+									"path": "['Row']"
 								},
 								"sink": {
 									"name": "Row",
@@ -471,7 +473,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParent']"
+									"path": "['ColumnGParent']"
 								},
 								"sink": {
 									"name": "ColumnGParent",
@@ -480,7 +482,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParent']"
+									"path": "['ColumnParent']"
 								},
 								"sink": {
 									"name": "ColumnParent",
@@ -489,7 +491,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['Column']"
+									"path": "['Column']"
 								},
 								"sink": {
 									"name": "Column",
@@ -498,7 +500,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['RowCode']"
+									"path": "['RowCode']"
 								},
 								"sink": {
 									"name": "RowCode",
@@ -507,7 +509,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnCode']"
+									"path": "['ColumnCode']"
 								},
 								"sink": {
 									"name": "ColumnCode",
@@ -516,7 +518,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParentCode']"
+									"path": "['ColumnParentCode']"
 								},
 								"sink": {
 									"name": "ColumnParentCode",
@@ -525,7 +527,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParentCode']"
+									"path": "['ColumnGParentCode']"
 								},
 								"sink": {
 									"name": "ColumnGParentCode",
@@ -534,7 +536,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['TableScale']"
+									"path": "['TableScale']"
 								},
 								"sink": {
 									"name": "TableScale",
@@ -543,7 +545,7 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValueUnformatted']"
+									"path": "['DataValueUnformatted']"
 								},
 								"sink": {
 									"name": "DataValueUnformatted",
@@ -552,14 +554,15 @@
 							},
 							{
 								"source": {
-									"path": "$['BEAAPI']['Results']['Data'][0]['DataValue']"
+									"path": "['DataValue']"
 								},
 								"sink": {
 									"name": "DataValue",
 									"type": "String"
 								}
 							}
-						]
+						],
+						"collectionReference": "$['BEAAPI']['Results']['Data']"
 					}
 				},
 				"inputs": [
