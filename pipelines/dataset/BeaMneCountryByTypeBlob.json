@@ -1,0 +1,164 @@
+{
+	"name": "BeaMneCountryByTypeBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "bea-mne-country-by-type",
+				"container": "select-usa"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"BEAAPI": {
+					"type": "object",
+					"properties": {
+						"Request": {
+							"type": "object",
+							"properties": {
+								"RequestParam": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"ParameterName": {
+												"type": "string"
+											},
+											"ParameterValue": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						},
+						"Results": {
+							"type": "object",
+							"properties": {
+								"Table_Count": {
+									"type": "string"
+								},
+								"rowTypeID": {
+									"type": "string"
+								},
+								"InvestmentType": {
+									"type": "string"
+								},
+								"DataType": {
+									"type": "string"
+								},
+								"Entity": {
+									"type": "string"
+								},
+								"IndustryClassification": {
+									"type": "string"
+								},
+								"YearList": {
+									"type": "string"
+								},
+								"DIRECTIONOFINVESTMENT": {
+									"type": "string"
+								},
+								"OwnershipLevel": {
+									"type": "string"
+								},
+								"NonbankAffiliatesOnly": {
+									"type": "string"
+								},
+								"Tables": {
+									"type": "string"
+								},
+								"cnt": {
+									"type": "string"
+								},
+								"Dimensions": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Ordinal": {
+												"type": "string"
+											},
+											"Name": {
+												"type": "string"
+											},
+											"DataType": {
+												"type": "string"
+											},
+											"IsValue": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"Data": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"Year": {
+												"type": "string"
+											},
+											"SeriesID": {
+												"type": "string"
+											},
+											"SeriesName": {
+												"type": "string"
+											},
+											"Row": {
+												"type": "string"
+											},
+											"ColumnGParent": {
+												"type": "string"
+											},
+											"ColumnParent": {
+												"type": "string"
+											},
+											"Column": {
+												"type": "string"
+											},
+											"RowCode": {
+												"type": "string"
+											},
+											"ColumnCode": {
+												"type": "string"
+											},
+											"ColumnParentCode": {
+												"type": "string"
+											},
+											"ColumnGParentCode": {
+												"type": "string"
+											},
+											"TableScale": {
+												"type": "string"
+											},
+											"DataValueUnformatted": {
+												"type": "string"
+											},
+											"TableColumnDisplayOrder": {
+												"type": "string"
+											},
+											"TableRowDisplayOrder": {
+												"type": "string"
+											},
+											"DataValue": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

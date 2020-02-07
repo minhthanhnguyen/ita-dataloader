@@ -1,0 +1,197 @@
+{
+	"name": "demo",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy BEA MNE Country by Type",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "TRUNCATE TABLE BEA_MNE_COUNTRY_BY_TYPE;",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['DIRECTIONOFINVESTMENT']"
+								},
+								"sink": {
+									"name": "DIRECTIONOFINVESTMENT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['OwnershipLevel']"
+								},
+								"sink": {
+									"name": "OwnershipLevel",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['Year']"
+								},
+								"sink": {
+									"name": "Year",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesID']"
+								},
+								"sink": {
+									"name": "SeriesID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['SeriesName']"
+								},
+								"sink": {
+									"name": "SeriesName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['Row']"
+								},
+								"sink": {
+									"name": "Row",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParent']"
+								},
+								"sink": {
+									"name": "ColumnGParent",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParent']"
+								},
+								"sink": {
+									"name": "ColumnParent",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['Column']"
+								},
+								"sink": {
+									"name": "Column",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['RowCode']"
+								},
+								"sink": {
+									"name": "RowCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnCode']"
+								},
+								"sink": {
+									"name": "ColumnCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnParentCode']"
+								},
+								"sink": {
+									"name": "ColumnParentCode",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['ColumnGParentCode']"
+								},
+								"sink": {
+									"name": "ColumnGParentCode",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['TableScale']"
+								},
+								"sink": {
+									"name": "TableScale",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['DataValueUnformatted']"
+								},
+								"sink": {
+									"name": "DataValueUnformatted",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['BEAAPI']['Results']['Data'][0]['DataValue']"
+								},
+								"sink": {
+									"name": "DataValue",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "BeaMneCountryByTypeBlob",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "BeaMneCountryByTypeDb",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
