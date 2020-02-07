@@ -1,0 +1,86 @@
+{
+	"name": "BeaMneIndustryByTypeDb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DIRECTIONOFINVESTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "OwnershipLevel",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Year",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SeriesID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SeriesName",
+				"type": "varchar"
+			},
+			{
+				"name": "Row",
+				"type": "varchar"
+			},
+			{
+				"name": "Column",
+				"type": "varchar"
+			},
+			{
+				"name": "RowCode",
+				"type": "varchar"
+			},
+			{
+				"name": "ColumnCode",
+				"type": "varchar"
+			},
+			{
+				"name": "TableScale",
+				"type": "varchar"
+			},
+			{
+				"name": "DataValueUnformatted",
+				"type": "varchar"
+			},
+			{
+				"name": "DataValue",
+				"type": "varchar"
+			},
+			{
+				"name": "ColumnParent",
+				"type": "varchar"
+			},
+			{
+				"name": "ColumnParentCode",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ColumnGParent",
+				"type": "varchar"
+			},
+			{
+				"name": "ColumnGParentCode",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "BEA_MNE_INDUSTRY_BY_TYPE"
+		}
+	}
+}
