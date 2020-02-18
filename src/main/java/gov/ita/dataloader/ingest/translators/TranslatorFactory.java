@@ -14,6 +14,8 @@ public class TranslatorFactory {
     translators.put("otexa#OTEXA_DATA_SET_CAT.csv", new OtexaCatCsvTranslator());
     translators.put("otexa#OTEXA_EXE_HTS.csv", new OtexaHtsCsvTranslator());
     translators.put("select-usa#WORLDBANK_EASE_COUNTRY_INDEX.csv", new WorldBankEaseIndexCsvTranslator());
+    translators.put("sima#census", new SimaCensusCsvTranslator());
+
   }
 
   public Translator getTranslator(String containerFileCompositeKey) {

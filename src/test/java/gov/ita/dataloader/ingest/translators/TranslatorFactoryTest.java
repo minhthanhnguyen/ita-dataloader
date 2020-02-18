@@ -14,6 +14,7 @@ public class TranslatorFactoryTest {
     Translator translator = translatorFactory.getTranslator("otexa#OTEXA_DATA_SET_CAT.csv");
     assertThat(translator, instanceOf(OtexaCatCsvTranslator.class));
     assertEquals(-1, translator.pageSize());
+    assertEquals(TranslatorType.CSV, translator.type());
   }
 
   @Test
@@ -22,6 +23,7 @@ public class TranslatorFactoryTest {
     Translator translator = translatorFactory.getTranslator("otexa#OTEXA_EXE_HTS.csv");
     assertThat(translator, instanceOf(OtexaHtsCsvTranslator.class));
     assertEquals(25000, translator.pageSize());
+    assertEquals(TranslatorType.CSV, translator.type());
   }
 
   @Test
@@ -30,6 +32,16 @@ public class TranslatorFactoryTest {
     Translator translator = translatorFactory.getTranslator("select-usa#WORLDBANK_EASE_COUNTRY_INDEX.csv");
     assertThat(translator, instanceOf(WorldBankEaseIndexCsvTranslator.class));
     assertEquals(-1, translator.pageSize());
+    assertEquals(TranslatorType.CSV, translator.type());
+  }
+
+  @Test
+  public void returnsSimaTranslator() {
+    TranslatorFactory translatorFactory = new TranslatorFactory();
+    Translator translator = translatorFactory.getTranslator("sima#census/Dec2019P.txt");
+    assertThat(translator, instanceOf(SimaCensusCsvTranslator.class));
+    assertEquals(-1, translator.pageSize());
+    assertEquals(TranslatorType.CSV, translator.type());
   }
 
 }

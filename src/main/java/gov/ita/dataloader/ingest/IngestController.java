@@ -65,8 +65,8 @@ public class IngestController {
 
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @DeleteMapping("/api/file")
-  public void saveFile(@RequestParam("fileName") String fileName,
-                       @RequestParam("containerName") String containerName) throws IOException {
+  public void deleteFile(@RequestParam("fileName") String fileName,
+                       @RequestParam("containerName") String containerName) {
     storage.delete(containerName, fileName);
   }
 

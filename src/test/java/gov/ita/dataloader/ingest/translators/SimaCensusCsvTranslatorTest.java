@@ -1,0 +1,79 @@
+package gov.ita.dataloader.ingest.translators;
+
+import gov.ita.dataloader.TestHelpers;
+import org.apache.commons.csv.CSVRecord;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static gov.ita.dataloader.TestHelpers.formattedResults;
+import static org.junit.Assert.*;
+
+public class SimaCensusCsvTranslatorTest {
+
+  private TestHelpers h = new TestHelpers();
+  private List<CSVRecord> results;
+
+  @Before
+  public void setUp() {
+    SimaCensusCsvTranslator simaCensusCsvTranslator = new SimaCensusCsvTranslator();
+    byte[] translatedBytes = simaCensusCsvTranslator.translate(h.get("/fixtures/sima/Dec2019P.txt"));
+    results = formattedResults(translatedBytes);
+  }
+
+  @Test
+  public void translates_CountryID() {
+    assertEquals("1220", results.get(0).get("CTRY_ID"));
+  }
+
+  @Test
+  public void translates_CountryName() {
+    assertEquals("Canada", results.get(0).get("CTRY_NAME"));
+  }
+
+  @Test
+  public void translates_UnknownField1() {
+    assertEquals("INGOTS AND STEEL FOR CASTINGS.........1A", results.get(0).get("UNKNOWN_FIELD_1"));
+  }
+
+  @Test
+  public void translates_UnknownField2() {
+    assertEquals("S", results.get(0).get("UNKNOWN_FIELD_2"));
+  }
+
+  @Test
+  public void translates_UnknownField3() {
+    assertEquals("0000918325", results.get(0).get("UNKNOWN_FIELD_3"));
+  }
+
+  @Test
+  public void translates_UnknownField4() {
+    assertEquals("0000000547.785", results.get(0).get("UNKNOWN_FIELD_4"));
+  }
+
+  @Test
+  public void translates_UnknownField5() {
+    assertEquals("000001676.43", results.get(0).get("UNKNOWN_FIELD_5"));
+  }
+
+  @Test
+  public void translates_UnknownField6() {
+    assertEquals("0000000496.943", results.get(0).get("UNKNOWN_FIELD_6"));
+  }
+
+  @Test
+  public void translates_UnknownField7() {
+    assertEquals("000001847.94", results.get(0).get("UNKNOWN_FIELD_7"));
+  }
+
+  @Test
+  public void translates_Month() {
+    assertEquals("12", results.get(0).get("MONTH"));
+  }
+
+  @Test
+  public void translates_Year() {
+    assertEquals("2019", results.get(0).get("YEAR"));
+  }
+}
