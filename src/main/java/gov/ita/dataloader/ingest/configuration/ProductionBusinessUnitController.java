@@ -36,7 +36,9 @@ public class ProductionBusinessUnitController {
 
   @GetMapping(value = "/api/storage-containers", produces = MediaType.APPLICATION_JSON_VALUE)
   public List<String> getStorageContainers() throws Exception {
-    return getBusinessUnits().stream().map(BusinessUnit::getContainerName).collect(Collectors.toList());
+    byte[] dataloaderConfig = storage.getBlob("dataloader", "configuration.json");
+    BusinessUnitConfigResponse buc = objectMapper.readValue(dataloaderConfig, BusinessUnitConfigResponse.class);
+    return buc.getBusinessUnits().stream().map(BusinessUnit::getContainerName).collect(Collectors.toList());
   }
 
 }

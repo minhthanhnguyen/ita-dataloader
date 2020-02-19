@@ -1,7 +1,6 @@
 package gov.ita.dataloader.ingest.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gov.ita.dataloader.security.AuthenticationFacade;
 import gov.ita.dataloader.storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -18,9 +17,6 @@ public class DevelopmentBusinessUnitController {
 
   @Autowired
   private ObjectMapper objectMapper;
-
-  @Autowired
-  private AuthenticationFacade authenticationFacade;
 
   @Autowired
   private Storage storage;
