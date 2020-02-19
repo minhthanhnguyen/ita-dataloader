@@ -7,7 +7,10 @@ import gov.ita.dataloader.security.AuthenticationFacade;
 import gov.ita.dataloader.storage.BlobMetaData;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +47,7 @@ public class IngestController {
     return getDataloaderConfig(containerName);
   }
 
-//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
+  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @GetMapping("/api/ingest")
   public void startIngestProcess(@RequestParam("containerName") String containerName) {
     automatedIngestProcessor.process(
@@ -54,7 +57,7 @@ public class IngestController {
       5000);
   }
 
-//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
+  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @PutMapping("/api/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
                        @RequestParam("containerName") String containerName) throws IOException {
@@ -66,17 +69,17 @@ public class IngestController {
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @DeleteMapping("/api/file")
   public void deleteFile(@RequestParam("fileName") String fileName,
-                       @RequestParam("containerName") String containerName) {
+                         @RequestParam("containerName") String containerName) {
     storage.delete(containerName, fileName);
   }
 
-//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
+  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @GetMapping("/api/reprocess/file")
   public void reProcessFile(@RequestParam("containerName") String containerName, @RequestParam("fileName") String fileName) {
     translationProcessor.reProcess(containerName, fileName);
   }
 
-//  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
+  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @PutMapping("/api/configuration")
   public void saveConfiguration(@RequestBody DataloaderConfig dataloaderConfig,
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
@@ -114,6 +117,22 @@ public class IngestController {
         return blobMetaData;
       })
       .collect(Collectors.toList());
+  }
+
+  @GetMapping(value = "/api/{containerName}/{blobName}")
+  public ResponseEntity<ByteArrayResource> downloadBlob(@PathVariable String containerName,
+                                                        @PathVariable String blobName,
+                                                        @RequestParam(name = "snapshot", defaultValue = "") String snapshot) {
+    byte[] blob = (!snapshot.equals("")) ?
+      storage.getBlob(containerName, blobName, snapshot) :
+      storage.getBlob(containerName, blobName);
+    ByteArrayResource resource = new ByteArrayResource(blob);
+
+    return ResponseEntity.ok()
+      .header(HttpHeaders.CONTENT_DISPOSITION,
+        "attachment;filename=" + blobName)
+      .contentType(MediaType.APPLICATION_PDF).contentLength(blob.length)
+      .body(resource);
   }
 
   private DataloaderConfig getDataloaderConfig(String containerName) {

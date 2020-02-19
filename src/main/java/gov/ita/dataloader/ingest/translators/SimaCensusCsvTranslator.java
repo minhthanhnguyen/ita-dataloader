@@ -15,18 +15,18 @@ public class SimaCensusCsvTranslator implements Translator {
   public byte[] translate(byte[] bytes) {
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
-              .withHeader(
-                      "CTRY_ID",
-                      "CTRY_NAME",
-                      "UNKNOWN_FIELD_1",
-                      "UNKNOWN_FIELD_2",
-                      "UNKNOWN_FIELD_3",
-                      "UNKNOWN_FIELD_4",
-                      "UNKNOWN_FIELD_5",
-                      "UNKNOWN_FIELD_6",
-                      "UNKNOWN_FIELD_7",
-                      "MONTH",
-                      "YEAR")
+        .withHeader(
+          "CTRY_ID",
+          "CTRY_NAME",
+          "UNKNOWN_FIELD_1",
+          "UNKNOWN_FIELD_2",
+          "UNKNOWN_FIELD_3",
+          "UNKNOWN_FIELD_4",
+          "UNKNOWN_FIELD_5",
+          "UNKNOWN_FIELD_6",
+          "UNKNOWN_FIELD_7",
+          "MONTH",
+          "YEAR")
       );
 
       String[] lines = new String(bytes).split(System.getProperty("line.separator"));
@@ -44,17 +44,17 @@ public class SimaCensusCsvTranslator implements Translator {
         String month = line.substring(146, 148);
         String year = line.substring(149, 153);
         csvPrinter.printRecord(
-                countryId,
-                countryName,
-                unknownField1,
-                unknownField2,
-                unknownField3,
-                unknownField4,
-                unknownField5,
-                unknownField6,
-                unknownField7,
-                month,
-                year
+          countryId,
+          countryName,
+          unknownField1,
+          unknownField2,
+          unknownField3,
+          unknownField4,
+          unknownField5,
+          unknownField6,
+          unknownField7,
+          month,
+          year
         );
       }
 

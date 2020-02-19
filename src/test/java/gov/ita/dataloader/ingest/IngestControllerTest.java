@@ -2,7 +2,6 @@ package gov.ita.dataloader.ingest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ita.dataloader.ingest.configuration.DataloaderConfig;
-import gov.ita.dataloader.ingest.translators.TranslatorType;
 import gov.ita.dataloader.security.AuthenticationFacade;
 import gov.ita.dataloader.storage.Storage;
 import org.junit.Before;
@@ -53,7 +52,7 @@ public class IngestControllerTest {
     ingestController.startIngestProcess("some-container");
 
     verify(automatedIngestProcessor, times(1))
-            .process(Collections.emptyList(), "some-container", "TestUser@gmail.com", 5000L);
+      .process(Collections.emptyList(), "some-container", "TestUser@gmail.com", 5000L);
   }
 
   @Test
@@ -68,7 +67,7 @@ public class IngestControllerTest {
     verify(storage, times(1)).save("OG File Name.csv", SOME_BYTES, "TestUser@gmail.com", "cool-container", true);
     verify(storage, times(1)).makeSnapshot("cool-container", "OG File Name.csv");
     verify(translationProcessor, times(1))
-            .initProcessing("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
+      .initProcessing("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -81,7 +80,7 @@ public class IngestControllerTest {
     ingestController.saveFile(multipartFile, "cool-container");
 
     verify(translationProcessor, times(1))
-            .initProcessing("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
+      .initProcessing("cool-container", "OG File Name.csv", SOME_BYTES, "TestUser@gmail.com");
   }
 
 }

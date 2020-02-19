@@ -57,25 +57,25 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
-            .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+      .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
-            .save("very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+      .save("very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
-            .save("really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+      .save("really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com", "a-container", false);
 
     verify(storage, times(1))
-            .makeSnapshot("a-container", "rad.csv");
+      .makeSnapshot("a-container", "rad.csv");
     verify(storage, times(1))
-            .makeSnapshot("a-container", "very-rad.csv");
+      .makeSnapshot("a-container", "very-rad.csv");
     verify(storage, times(1))
-            .makeSnapshot("a-container", "really-rad.csv");
+      .makeSnapshot("a-container", "really-rad.csv");
 
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "very-rad.csv", VERY_RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "really-rad.csv", REALLY_RAD_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -87,11 +87,11 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(0))
-            .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
+      .save("rad.csv", RAD_BYTES, "TestUser@gmail.com", "a-container", false);
     verify(storage, times(0))
-            .makeSnapshot("a-container", "rad.csv");
+      .makeSnapshot("a-container", "rad.csv");
     verify(translationProcessor, times(0))
-            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
   }
 
   @Test
@@ -106,11 +106,11 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(storage, times(1))
-            .save("vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com", "a-container", false);
+      .save("vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com", "a-container", false);
     verify(storage, times(1))
-            .makeSnapshot("a-container", "vangos.csv");
+      .makeSnapshot("a-container", "vangos.csv");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com");
+      .initProcessing("a-container", "vangos.csv", "The best sport is football!".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
@@ -135,11 +135,11 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com");
+      .initProcessing("a-container", "Hobbies_A.csv", "My favorite hobby is hiking!".getBytes(), "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "Hobbies_B.csv", "My favorite hobby is climbing!".getBytes(), "TestUser@gmail.com");
+      .initProcessing("a-container", "Hobbies_B.csv", "My favorite hobby is climbing!".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
@@ -161,9 +161,9 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "vangos.zip", ZIP_FILE_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com");
+      .initProcessing("a-container", "Skipped_Hobbies.csv", " and more \n never ending bytes\n".getBytes(), "TestUser@gmail.com");
   }
 
   @Test
@@ -174,9 +174,9 @@ public class AutomatedIngestProcessorTest {
     automatedIngestProcessor.process(dataSetConfigs, "a-container", "TestUser@gmail.com", 0);
 
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
     verify(translationProcessor, times(1))
-            .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
+      .initProcessing("a-container", "rad.csv", RAD_BYTES, "TestUser@gmail.com");
   }
 
   private ByteArrayOutputStream convert(String s) {

@@ -4,7 +4,6 @@ import com.microsoft.azure.storage.blob.*;
 import com.microsoft.azure.storage.blob.models.BlobFlatListSegment;
 import com.microsoft.azure.storage.blob.models.BlobHTTPHeaders;
 import com.microsoft.azure.storage.blob.models.ContainerItem;
-import com.microsoft.azure.storage.blob.models.PublicAccessType;
 import com.microsoft.rest.v2.http.HttpPipeline;
 import gov.ita.dataloader.HttpHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.microsoft.azure.storage.blob.models.DeleteSnapshotsOptionType.INCLUDE;
-import static com.microsoft.azure.storage.blob.models.DeleteSnapshotsOptionType.ONLY;
 
 @Slf4j
 @Service
@@ -48,7 +47,7 @@ public class ProductionStorage implements Storage {
   public void createContainer(String containerName) {
     log.info("Initializing container: {}", containerName);
     makeContainerUrl(containerName)
-      .create(null, PublicAccessType.CONTAINER, null)
+      .create(null, null, null)
       .blockingGet();
   }
 
@@ -129,12 +128,29 @@ public class ProductionStorage implements Storage {
 
   @Override
   public byte[] getBlob(String containerName, String blobName) {
+    return makeContainerUrl(containerName).createBlobURL(blobName)
+      .download()
+      .blockingGet()
+      .body(new ReliableDownloadOptions())
+      .blockingFirst().array();
+  }
+
+  @Override
+  public byte[] getBlob(String containerName, String blobName, String snapshot) {
+    BlobURL blobURL = null;
     try {
-      return httpHelper.getBytes(buildUrlForBlob(containerName, blobName, null));
-    } catch (Exception e) {
+      blobURL = (snapshot == null) ?
+        makeContainerUrl(containerName).createBlobURL(blobName) :
+        makeContainerUrl(containerName).createBlobURL(blobName).withSnapshot(snapshot);
+    } catch (MalformedURLException | UnknownHostException e) {
       e.printStackTrace();
     }
-    return null;
+
+    return blobURL
+      .download()
+      .blockingGet()
+      .body(new ReliableDownloadOptions())
+      .blockingFirst().array();
   }
 
   @Override
@@ -149,16 +165,16 @@ public class ProductionStorage implements Storage {
       if (b.getFileName().equals(blobName)) {
         log.info("Deleting blob: {}", b.getFileName());
         makeServiceURL().createContainerURL(containerName).
-                createBlobURL(b.getFileName())
-                .delete(INCLUDE, null, null).blockingGet();
+          createBlobURL(b.getFileName())
+          .delete(INCLUDE, null, null).blockingGet();
       }
     }
   }
 
-  private String buildUrlForBlob(String containerName, String name, String snapshot) {
+  private String buildUrlForBlob(String containerName, String blobName, String snapshot) {
     if (snapshot != null)
-      return String.format("https://%s.blob.core.windows.net/%s/%s?snapshot=%s", accountName, containerName, name, snapshot);
-    return String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, name);
+      return String.format("/api/%s/%s?snapshot=%s", containerName, blobName, snapshot);
+    return String.format("/api/%s/%s", containerName, blobName);
   }
 
   private ContainerURL makeContainerUrl(String containerName) {

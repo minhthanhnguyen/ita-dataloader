@@ -30,8 +30,8 @@ public class ProductionBusinessUnitController {
     byte[] dataloaderConfig = storage.getBlob("dataloader", "configuration.json");
     BusinessUnitConfigResponse buc = objectMapper.readValue(dataloaderConfig, BusinessUnitConfigResponse.class);
     return buc.getBusinessUnits().stream()
-            .filter(businessUnit -> businessUnit.getUsers().contains(authenticationFacade.getUserName().toLowerCase()))
-            .collect(Collectors.toList());
+      .filter(businessUnit -> businessUnit.getUsers().contains(authenticationFacade.getUserName().toLowerCase()))
+      .collect(Collectors.toList());
   }
 
   @GetMapping(value = "/api/storage-containers", produces = MediaType.APPLICATION_JSON_VALUE)
