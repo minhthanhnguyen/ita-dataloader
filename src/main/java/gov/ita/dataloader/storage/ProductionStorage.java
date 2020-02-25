@@ -162,7 +162,7 @@ public class ProductionStorage implements Storage {
   public void delete(String containerName, String blobName) {
     List<BlobMetaData> blobMetadata = getBlobMetadata(containerName, false);
     for (BlobMetaData b : blobMetadata) {
-      if (b.getFileName().equals(blobName)) {
+      if (b.getFileName().contains(blobName)) {
         log.info("Deleting blob: {}", b.getFileName());
         makeServiceURL().createContainerURL(containerName).
           createBlobURL(b.getFileName())
