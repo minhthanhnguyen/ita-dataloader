@@ -23,57 +23,57 @@ public class SimaCensusCsvTranslatorTest {
   }
 
   @Test
-  public void translates_CountryID() {
-    assertEquals("1220", results.get(0).get("CTRY_ID"));
+  public void translates_COUNTRY() {
+    assertEquals("1220", results.get(0).get("COUNTRY"));
   }
 
   @Test
-  public void translates_CountryName() {
-    assertEquals("Canada", results.get(0).get("CTRY_NAME"));
+  public void translates_CNTYDESC() {
+    assertEquals("Canada", results.get(0).get("CNTYDESC"));
   }
 
   @Test
-  public void translates_UnknownField1() {
-    assertEquals("INGOTS AND STEEL FOR CASTINGS.........1A", results.get(0).get("UNKNOWN_FIELD_1"));
+  public void translates_ldesccen36() {
+    assertEquals("INGOTS AND STEEL FOR CASTINGS.........1A", results.get(0).get("ldesccen36"));
   }
 
   @Test
-  public void translates_UnknownField2() {
-    assertEquals("S", results.get(0).get("UNKNOWN_FIELD_2"));
+  public void translates_grade() {
+    assertEquals("S", results.get(0).get("grade"));
+  }
+
+  @Test
+  public void translates_VALUE() {
+    assertEquals("0000918325", results.get(0).get("VALUE"));
+  }
+
+  @Test
+  public void translates_UNKNOWN_FIELD_1() {
+    assertEquals("0000000547.785", results.get(0).get("UNKNOWN_FIELD_1"));
+  }
+
+  @Test
+  public void translates_UNKNOWN_FIELD_2() {
+    assertEquals("000001676.43", results.get(0).get("UNKNOWN_FIELD_2"));
+  }
+
+  @Test
+  public void translates_QTYMT() {
+    assertEquals("0000000496.943", results.get(0).get("QTYMT"));
   }
 
   @Test
   public void translates_UnknownField3() {
-    assertEquals("0000918325", results.get(0).get("UNKNOWN_FIELD_3"));
-  }
-
-  @Test
-  public void translates_UnknownField4() {
-    assertEquals("0000000547.785", results.get(0).get("UNKNOWN_FIELD_4"));
-  }
-
-  @Test
-  public void translates_UnknownField5() {
-    assertEquals("000001676.43", results.get(0).get("UNKNOWN_FIELD_5"));
-  }
-
-  @Test
-  public void translates_UnknownField6() {
-    assertEquals("0000000496.943", results.get(0).get("UNKNOWN_FIELD_6"));
-  }
-
-  @Test
-  public void translates_UnknownField7() {
-    assertEquals("000001847.94", results.get(0).get("UNKNOWN_FIELD_7"));
+    assertEquals("000001847.94", results.get(0).get("UNKNOWN_FIELD_3"));
   }
 
   @Test
   public void translates_Month() {
-    assertEquals("12", results.get(0).get("MONTH"));
+    assertEquals("12", results.get(0).get("SMONTH"));
   }
 
   @Test
   public void translates_Year() {
-    assertEquals("2019", results.get(0).get("YEAR"));
+    assertEquals("2019", results.get(0).get("SYEAR"));
   }
 }

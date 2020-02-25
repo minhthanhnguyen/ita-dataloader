@@ -16,45 +16,47 @@ public class SimaCensusCsvTranslator implements Translator {
     try {
       csvPrinter = new CSVPrinter(stringWriter, CSVFormat.DEFAULT
         .withHeader(
-          "CTRY_ID",
-          "CTRY_NAME",
+          "COUNTRY",
+          "CNTYDESC",
+          "ldesccen36",
+          "grade",
+          "VALUE",
           "UNKNOWN_FIELD_1",
           "UNKNOWN_FIELD_2",
+          "QTYMT",
           "UNKNOWN_FIELD_3",
-          "UNKNOWN_FIELD_4",
-          "UNKNOWN_FIELD_5",
-          "UNKNOWN_FIELD_6",
-          "UNKNOWN_FIELD_7",
-          "MONTH",
-          "YEAR")
+          "SMONTH",
+          "SYEAR"
+        )
       );
 
       String[] lines = new String(bytes).split(System.getProperty("line.separator"));
 
       for (String line : lines) {
-        String countryId = line.substring(0, 4);
-        String countryName = line.substring(5, 35);
-        String unknownField1 = line.substring(36, 76);
-        String unknownField2 = line.substring(77, 78);
-        String unknownField3 = line.substring(79, 89);
-        String unknownField4 = line.substring(90, 104);
-        String unknownField5 = line.substring(105, 117);
-        String unknownField6 = line.substring(118, 132);
-        String unknownField7 = line.substring(133, 145);
-        String month = line.substring(146, 148);
-        String year = line.substring(149, 153);
+        String country = line.substring(0, 4);
+        String countrydesc = line.substring(5, 35);
+        String ldesccen36 = line.substring(36, 76);
+        String grade = line.substring(77, 78);
+        String value = line.substring(79, 89);
+        String unknownField1 = line.substring(90, 104);
+        String unknownField2 = line.substring(105, 117);
+        String qtymt = line.substring(118, 132);
+        String unknownField3 = line.substring(133, 145);
+        String smonth = line.substring(146, 148);
+        String syear = line.substring(149, 153);
+
         csvPrinter.printRecord(
-          countryId,
-          countryName,
+          country,
+          countrydesc,
+          ldesccen36,
+          grade,
+          value,
           unknownField1,
           unknownField2,
+          qtymt,
           unknownField3,
-          unknownField4,
-          unknownField5,
-          unknownField6,
-          unknownField7,
-          month,
-          year
+          smonth,
+          syear
         );
       }
 
