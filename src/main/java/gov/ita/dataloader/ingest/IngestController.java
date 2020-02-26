@@ -85,6 +85,7 @@ public class IngestController {
                                 @RequestParam("containerName") String containerName) throws JsonProcessingException {
     byte[] dataSetConfigsJsonBytes = objectMapper.writeValueAsString(dataloaderConfig).getBytes();
     storage.save("configuration.json", dataSetConfigsJsonBytes, authenticationFacade.getUserName(), containerName, true);
+    storage.makeSnapshot(containerName, "configuration.json");
   }
 
   @GetMapping("/api/storage-content-url")
@@ -137,7 +138,8 @@ public class IngestController {
 
   private DataloaderConfig getDataloaderConfig(String containerName) {
     try {
-      return objectMapper.readValue(storage.getBlob(containerName, "configuration.json"), DataloaderConfig.class);
+      byte[] blob = storage.getBlob(containerName, "configuration.json");
+      return objectMapper.readValue(blob, DataloaderConfig.class);
     } catch (IOException e) {
       e.printStackTrace();
     }

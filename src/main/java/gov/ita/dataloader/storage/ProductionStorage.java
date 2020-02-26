@@ -128,15 +128,18 @@ public class ProductionStorage implements Storage {
 
   @Override
   public byte[] getBlob(String containerName, String blobName) {
-    return makeContainerUrl(containerName).createBlobURL(blobName)
+    StringBuffer sb = new StringBuffer();
+    makeContainerUrl(containerName).createBlobURL(blobName)
       .download()
       .blockingGet()
       .body(new ReliableDownloadOptions())
-      .blockingFirst().array();
+      .blockingForEach(b -> sb.append(new String(b.array())));
+    return sb.toString().getBytes();
   }
 
   @Override
   public byte[] getBlob(String containerName, String blobName, String snapshot) {
+    StringBuffer sb = new StringBuffer();
     BlobURL blobURL = null;
     try {
       blobURL = (snapshot == null) ?
@@ -146,11 +149,13 @@ public class ProductionStorage implements Storage {
       e.printStackTrace();
     }
 
-    return blobURL
+    blobURL
       .download()
       .blockingGet()
       .body(new ReliableDownloadOptions())
-      .blockingFirst().array();
+      .blockingForEach(b -> sb.append(new String(b.array())));
+
+    return sb.toString().getBytes();
   }
 
   @Override

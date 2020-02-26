@@ -23,6 +23,8 @@ spring:
     url: ${FLYWAY_URL}
     username: ${FLYWAY_USER}
     password: ${FLYWAY_PASSWORD}
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 storage-params:
   azure-storage-account: ${AZURE_STORAGE_ACCOUNT}
   azure-storage-account-key: ${AZURE_STORAGE_ACCOUNT_KEY}

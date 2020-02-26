@@ -22,19 +22,34 @@
           "originalFileName": "^API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_INDEX.csv",
           "skipLineCount": 4,
-          "replaceValues": [ { "replaceThis": ",\r\n", "withThis": "\r\n" } ]
+          "replaceValues": [
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
+          ]
         },
         {
           "originalFileName": "^Metadata_Indicator_API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_INDICATOR_DESCRIPTION.csv",
           "skipLineCount": null,
-          "replaceValues": [ { "replaceThis": ",\r\n", "withThis": "\r\n" } ]
+          "replaceValues": [
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
+          ]
         },
         {
           "originalFileName": "^Metadata_Country_API_IC.BUS.EASE.XQ_DS2_en_csv_v2.*$",
           "destinationFileName": "WORLDBANK_EASE_COUNTRY_METADATA.csv",
           "skipLineCount": null,
-          "replaceValues": [ { "replaceThis": ",\r\n", "withThis": "\r\n" } ]
+          "replaceValues": [
+            {
+              "replaceThis": ",\r\n",
+              "withThis": "\r\n"
+            }
+          ]
         }
       ]
     },
@@ -242,8 +257,8 @@
       "zipFileConfigs": null
     },
     {
-      "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=countrybytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
-      "enabled": false,
+      "url": "https://apps.bea.gov/api/data/?UserID=DE111E03-2350-4F3F-B11E-31CCB940C1AE&Classification=countryofUBObytype&DataSetName=MNE&DirectionOfInvestment=inward&ResultFormat=json&Year=ALL&method=GetData",
+      "enabled": true,
       "fileName": "bea-mne-country-by-type/BEA13_C_TYPE_IN.json",
       "replaceValues": null,
       "zipFileConfigs": null
