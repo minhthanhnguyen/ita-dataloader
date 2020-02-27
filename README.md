@@ -44,7 +44,7 @@ Steps to run this application on you local machine for development purposes.
 1. An Azure AD App Registration is required to procure an OAuth Client ID and Client Secret
     - a sample manifest is located here: /manifests/sample-ita-data-loader-app-registration.json
 1. Create a SQL Database: <https://docs.microsoft.com/en-us/azure/sql-database/scripts/sql-database-create-and-configure-database-cli?toc=%2fcli%2fazure%2ftoc.json>
-1. Create a Data Factory using the Azure Portal (<https://portal.azure.com>) and deploy the configuration using this Git repository: <https://github.com/InternationalTradeAdministration/ita-mds-datafactory-config>
+1. Create a Data Factory using the Azure Portal (<https://portal.azure.com>) and deploy the configuration using this Git repository: <https://github.com/InternationalTradeAdministration/ita-datafactory-config>
 1. Create an App Registration for the Data Factory with the Contributor Role
    - a sample manifest is located here: /manifests/sample-data-factory-app-registration.json
 1. Deploy ITA Data Factory Log Extractor (see section below)
