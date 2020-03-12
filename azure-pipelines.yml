@@ -4,12 +4,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-16.04'
 
-variables:
-  webAppName: 'ita-dataloader-dev'
-  azureServiceConnection: 'ITAARMServiceConnection01'
-  containerRegestryServiceConnection: '<container-registry-service connection>'
-  imageName: 'dataservices.azurecr.io/ita-dataloader'
-
 steps:
   - task: Gradle@2
     inputs:
@@ -18,17 +12,21 @@ steps:
   - script: |
       ./build.sh
     displayName: Build project artifacts
-  # - task: Docker@2
-  #   displayName: Build & Push docker image
-  #   inputs:
-  #     containerRegistry: $(containerRegestryServiceConnection)
-  #     repository: $(imageName)
-  #     command: 'buildAndPush'
-  #     Dockerfile: 'docker/Dockerfile'
-  #     tags: 'latest'
-  # - task: AzureAppServiceManage@0
-  #   displayName: Restart App Service
-  #   inputs:
-  #     azureSubscription: '$(azureServiceConnection)'
-  #     Action: 'Restart Azure App Service'
-  #     WebAppName: '$(webAppName)'
+  - task: DockerCompose@0
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscription: 'ITADEV2-MSDataServicesAzure'
+      azureContainerRegistry: '{"loginServer":"dataservices.azurecr.io", "id" : "/subscriptions/675d7977-79af-4b94-b0bd-26d4095a4ffb/resourceGroups/ITA-MSDataServices-Dev-East1/providers/Microsoft.ContainerRegistry/registries/dataservices"}'
+      dockerComposeFile: '**/docker-compose.yml'
+      action: 'Build services'
+      additionalImageTags: '$(Build.BuildId)'
+    displayName: Build Docker image
+  - task: DockerCompose@0
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscription: 'ITADEV2-MSDataServicesAzure'
+      azureContainerRegistry: '{"loginServer":"dataservices.azurecr.io", "id" : "/subscriptions/675d7977-79af-4b94-b0bd-26d4095a4ffb/resourceGroups/ITA-MSDataServices-Dev-East1/providers/Microsoft.ContainerRegistry/registries/dataservices"}'
+      dockerComposeFile: '**/docker-compose.yml'
+      action: 'Push services'
+      additionalImageTags: '$(Build.BuildId)'
+    displayName: Push Docker image
