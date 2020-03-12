@@ -1,0 +1,5 @@
+version: '3'
+services:
+  ita-dataloader:
+    image: dataservices.azurecr.io/ita-dataloader:latest
+    restart: always
