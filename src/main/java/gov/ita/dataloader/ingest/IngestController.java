@@ -71,8 +71,12 @@ public class IngestController {
   @DeleteMapping("/api/file")
   public void deleteFile(@RequestParam("fileName") String fileName,
                          @RequestParam("containerName") String containerName,
-                         @RequestParam("snapshot") String snapshot) {
-    storage.delete(containerName, fileName, snapshot);
+                         @RequestParam(name = "snapshot", defaultValue = "") String snapshot) {
+    if (snapshot.equals("")) {
+      storage.delete(containerName, fileName, null);
+    } else {
+      storage.delete(containerName, fileName, snapshot);
+    }
   }
 
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
