@@ -11,7 +11,7 @@ steps:
       tasks: 'build test'
   - script: |
       ./build.sh
-    displayName: Build project artifacts
+    displayName: 'Build project artifacts'
   - task: DockerCompose@0
     inputs:
       containerregistrytype: 'Azure Container Registry'
@@ -20,7 +20,12 @@ steps:
       dockerComposeFile: '**/docker-compose.yml'
       action: 'Build services'
       additionalImageTags: '$(Build.BuildId)'
-    displayName: Build Docker image
+    displayName: 'Build Docker image'
+  - task: PowerShell@1
+    inputs:
+      scriptType: 'inlineScript'
+      inlineScript: 'docker tag ita-dataloader dataservices.azurecr.io/ita-dataloader:$(Build.BuildId)'
+    displayName: 'Tag Docker image'
   - task: DockerCompose@0
     inputs:
       containerregistrytype: 'Azure Container Registry'
@@ -29,4 +34,4 @@ steps:
       dockerComposeFile: '**/docker-compose.yml'
       action: 'Push services'
       additionalImageTags: '$(Build.BuildId)'
-    displayName: Push Docker image
+    displayName: 'Push Docker image'
