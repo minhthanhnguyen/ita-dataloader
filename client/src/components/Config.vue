@@ -10,26 +10,25 @@
       <dataloader-menu :containerName="containerName" />
       <div class="sub-content">
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-80"></div>
-          <div class="md-layout-item md-size-10">
+          <div class="md-layout-item md-size-70"></div>
+          <div class="md-layout-item md-size-30">
             <md-button
               v-if="!editing"
-              class="md-secondary md-raised top-btn"
+              class="md-secondary md-raised md-dense top-btn"
               @click="editConfiguration()"
             >
               <label>Edit</label>
             </md-button>
             <md-button
               v-if="editing"
-              class="md-secondary md-raised top-btn"
+              class="md-primary md-raised md-dense top-btn"
               @click="saveConfiguration()"
             >
               <label>Save</label>
             </md-button>
-          </div>
-          <div class="md-layout-item md-size-10">
             <md-button
-              class="md-primary md-raised top-btn"
+              v-if="!editing"
+              class="md-primary md-raised md-dense top-btn"
               @click="startIngestProcess()"
             >
               <label>Ingest</label>
@@ -65,6 +64,7 @@
 </template>
 <style>
 .config-text {
+  margin-top: 12px;
   margin-left: 35px;
   width: 1350px;
 }
@@ -115,7 +115,7 @@ export default {
   methods: {
     async startIngestProcess() {
       this.ingestClicked = true;
-      const status = await this.repository._startIngestProcess(this.containerName);
+      const status = await this.repository._startAutomatedIngestProcess(this.containerName);
       if (status === 'started') {
         this.ingestMessage = 'The ingest process was started successfully! To view its progress, see the log.'
       }

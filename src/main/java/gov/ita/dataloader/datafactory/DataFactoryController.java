@@ -16,4 +16,9 @@ public class DataFactoryController {
   public PipelineRun getPipelineStatus(@RequestParam("pipelineName") String pipelineName) {
     return dataFactoryGateway.getPipelineStatus(pipelineName);
   }
+
+  @GetMapping(value = "/api/data-factory/run-pipeline", produces = MediaType.APPLICATION_JSON_VALUE)
+  public void runPipeline(@RequestParam("pipelineName") String pipelineName) {
+    dataFactoryGateway.runPipeline(pipelineName);
+  }
 }

@@ -1,7 +1,7 @@
 import Router from 'vue-router'
 import Upload from '@/components/Upload'
 import Config from '@/components/Config'
-import Log from '@/components/Log'
+import SystemLogs from '@/components/SystemLogs'
 import APIs from '@/components/APIs'
 
 export default function router (repository) {
@@ -30,8 +30,8 @@ export default function router (repository) {
         }
       }, {
         path: '/log/:containerName',
-        name: 'Log',
-        component: Log,
+        name: 'SystemLogs',
+        component: SystemLogs,
         props: {
           repository
         }

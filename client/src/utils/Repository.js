@@ -54,7 +54,7 @@ export default class Repository {
     return storageMetadataResponse.data
   }
 
-  async _startIngestProcess (containerName) {
+  async _startAutomatedIngestProcess (containerName) {
     const ingestProcessResponse = await axios.get('/api/ingest', {
       params: {
         containerName
@@ -64,7 +64,7 @@ export default class Repository {
     return ingestProcessResponse.data
   }
 
-  async _getIngestStatus (containerName) {
+  async _getAutomatedIngestStatus (containerName) {
     const ingestStatusResponse = await axios.get('/api/automated-ingest/status', {
       params: {
         containerName
@@ -73,7 +73,7 @@ export default class Repository {
     return ingestStatusResponse.data
   }
 
-  _clearIngestStatus (containerName) {
+  _clearAutomatedIngestStatus (containerName) {
     axios.get('/api/automated-ingest/log/clear', {
       params: {
         containerName
@@ -81,12 +81,38 @@ export default class Repository {
     })
   }
 
-  _stopIngestProcess (containerName) {
+  _stopAutomatedIngestProcess (containerName) {
     axios.get('/api/automated-ingest/stop', {
       params: {
         containerName
       }
     })
+  }
+
+  async _getManualIngestStatus (containerName) {
+    const ingestStatusResponse = await axios.get('/api/manual-ingest/status', {
+      params: {
+        containerName
+      }
+    })
+    return ingestStatusResponse.data
+  }
+
+  _clearManualIngestStatus (containerName) {
+    axios.get('/api/manual-ingest/log/clear', {
+      params: {
+        containerName
+      }
+    })
+  }
+
+  async _runPipeline (pipelineName) {
+    const pipelineStatusResponse = await axios.get('/api/data-factory/run-pipeline', {
+      params: {
+        pipelineName
+      }
+    })
+    return pipelineStatusResponse.data ? pipelineStatusResponse.data : null
   }
 
   async _getPipelineStatus (pipelineName) {

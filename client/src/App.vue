@@ -24,7 +24,7 @@ export default {
 @import "~vue-material/dist/theme/all"; // Apply the theme
 
 .top-btn {
-  margin-top: 16px;
+  margin: 16px 32px 0 0;
 }
 
 .loading {
@@ -37,18 +37,6 @@ export default {
   margin-right: 16px;
 }
 
-.spinner {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.stat {
-  font-size: 12px;
-  margin-right: 16px;
-  margin-top: 10px;
-}
-
 .content {
   display: flex;
 }
@@ -59,7 +47,4 @@ export default {
   padding-top: 12px;
 }
 
-.refresh-btn {
-  top: -10px;
-}
 </style>

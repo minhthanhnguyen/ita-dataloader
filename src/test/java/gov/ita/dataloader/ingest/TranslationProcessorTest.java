@@ -1,6 +1,7 @@
 package gov.ita.dataloader.ingest;
 
 import gov.ita.dataloader.TestHelpers;
+import gov.ita.dataloader.datafactory.DataFactoryGateway;
 import gov.ita.dataloader.ingest.translators.Translator;
 import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.ingest.translators.TranslatorType;
@@ -48,12 +49,13 @@ public class TranslationProcessorTest {
     when(translator.translate(thirdPartition)).thenReturn(THIRD_TRANSLATED_BYTES);
 
     TranslationProcessor translationProcessor = new TranslationProcessor(storage, translatorFactory);
-    translationProcessor.initProcessing("some-container", "some-file-name.csv", wholeFile, "TestUser@gmail.com");
+    translationProcessor.initProcessing("some-container", "some-file-name.csv", wholeFile);
 
     verify(storage).delete("some-container", "translated/some-file-name.csv");
     verify(storage).save(anyString(), eq(FIRST_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true), eq(false));
     verify(storage).save(anyString(), eq(SECOND_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true), eq(false));
     verify(storage).save(anyString(), eq(THIRD_TRANSLATED_BYTES), eq("system"), eq("some-container"), eq(true), eq(false));
+
   }
 
 }
