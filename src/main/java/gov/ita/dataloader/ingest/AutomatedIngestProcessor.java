@@ -1,6 +1,7 @@
 package gov.ita.dataloader.ingest;
 
 import gov.ita.dataloader.HttpHelper;
+import gov.ita.dataloader.datafactory.DataFactoryGateway;
 import gov.ita.dataloader.ingest.configuration.DataSetConfig;
 import gov.ita.dataloader.ingest.configuration.ReplaceValue;
 import gov.ita.dataloader.storage.Storage;
@@ -26,17 +27,20 @@ public class AutomatedIngestProcessor {
   private HttpHelper httpHelper;
   private TranslationProcessor translationProcessor;
   private Storage storage;
+  private DataFactoryGateway dataFactoryGateway;
   private Map<String, List<LogItem>> logItems = new HashMap<>();
   private Map<String, Boolean> stopProcessing = new HashMap<>();
 
   public AutomatedIngestProcessor(ZipFileExtractor zipFileExtractor,
                                   HttpHelper httpHelper,
                                   TranslationProcessor translationProcessor,
-                                  Storage storage) {
+                                  Storage storage,
+                                  DataFactoryGateway dataFactoryGateway) {
     this.zipFileExtractor = zipFileExtractor;
     this.httpHelper = httpHelper;
     this.translationProcessor = translationProcessor;
     this.storage = storage;
+    this.dataFactoryGateway = dataFactoryGateway;
   }
 
   @Async
@@ -105,6 +109,7 @@ public class AutomatedIngestProcessor {
       log.info("Ingest process complete for container: {}", containerName);
       updateLog(containerName, String.format("Process complete; ingested (%s of %s)", completedApiCalls, totalApiCalls));
       stopProcessing.put(containerName, false);
+      dataFactoryGateway.runPipeline(containerName);
     }
 
     return CompletableFuture.completedFuture("complete");
@@ -133,7 +138,7 @@ public class AutomatedIngestProcessor {
     updateLog(containerName, String.format("Saving %s", fileName));
     storage.save(fileName, fileBytes, userName, containerName, false, false);
     storage.makeSnapshot(containerName, fileName);
-    translationProcessor.initProcessing(containerName, fileName, fileBytes, userName);
+    translationProcessor.initProcessing(containerName, fileName, fileBytes);
   }
 
   private byte[] skipLines(byte[] fileBytes, Integer skipLineCount) {
@@ -174,7 +179,7 @@ public class AutomatedIngestProcessor {
   }
 
   public void clearLog(String containerName) {
-    logItems.get(containerName).clear();
+    if (logItems.get(containerName) != null) logItems.get(containerName).clear();
   }
 
   private void updateLog(String containerName, String message) {

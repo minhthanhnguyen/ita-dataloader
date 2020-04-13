@@ -30,19 +30,20 @@ public class IngestController {
   private AutomatedIngestProcessor automatedIngestProcessor;
   private AuthenticationFacade authenticationFacade;
   private ObjectMapper objectMapper;
-  private TranslationProcessor translationProcessor;
-  private Map<String, CompletableFuture> processes = new HashMap<>();
+  private ManualIngestProcessor manualIngestProcessor;
+  private Map<String, CompletableFuture> automatedIngestProcesses = new HashMap<>();
+  private Map<String, CompletableFuture> manualIngestProcesses = new HashMap<>();
 
   public IngestController(Storage storage,
                           AutomatedIngestProcessor automatedIngestProcessor,
                           AuthenticationFacade authenticationFacade,
                           ObjectMapper objectMapper,
-                          TranslationProcessor translationProcessor) {
+                          ManualIngestProcessor manualIngestProcessor) {
     this.storage = storage;
     this.automatedIngestProcessor = automatedIngestProcessor;
     this.authenticationFacade = authenticationFacade;
     this.objectMapper = objectMapper;
-    this.translationProcessor = translationProcessor;
+    this.manualIngestProcessor = manualIngestProcessor;
   }
 
   @GetMapping(value = "/api/configuration", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,21 +54,21 @@ public class IngestController {
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @GetMapping("/api/ingest")
   public String startIngestProcess(@RequestParam("containerName") String containerName) {
-    if (processes.get(containerName) != null && !processes.get(containerName).isDone())
+    if (automatedIngestProcesses.get(containerName) != null && !automatedIngestProcesses.get(containerName).isDone())
       return "running";
     CompletableFuture<String> process = automatedIngestProcessor.process(
       getDataloaderConfig(containerName).getDataSetConfigs(),
       containerName,
       authenticationFacade.getUserName(),
       5000);
-    processes.put(containerName, process);
+    automatedIngestProcesses.put(containerName, process);
     return "started";
   }
 
   @GetMapping(value = "/api/automated-ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
   public ProcessorStatus getAutomatedIngestStatus(@RequestParam("containerName") String containerName) {
     return new ProcessorStatus(
-      processes.get(containerName) != null ? processes.get(containerName).isDone() : null,
+      automatedIngestProcesses.get(containerName) != null ? automatedIngestProcesses.get(containerName).isDone() : null,
       automatedIngestProcessor.getLog(containerName)
     );
   }
@@ -82,6 +83,19 @@ public class IngestController {
     automatedIngestProcessor.stopProcessing(containerName);
   }
 
+  @GetMapping(value = "/api/manual-ingest/status", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ProcessorStatus getManualIngestStatus(@RequestParam("containerName") String containerName) {
+    return new ProcessorStatus(
+      manualIngestProcesses.get(containerName) != null ? manualIngestProcesses.get(containerName).isDone() : null,
+      manualIngestProcessor.getLog(containerName)
+    );
+  }
+
+  @GetMapping("/api/manual-ingest/log/clear")
+  public void clearManualIngestLog(@RequestParam("containerName") String containerName) {
+    manualIngestProcessor.clearLog(containerName);
+  }
+
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
   @PutMapping("/api/file")
   public void saveFile(@RequestParam("file") MultipartFile file,
@@ -89,7 +103,7 @@ public class IngestController {
                        @RequestParam("pii") Boolean pii) throws IOException {
     storage.save(file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName(), containerName, true, pii);
     storage.makeSnapshot(containerName, file.getOriginalFilename());
-    translationProcessor.initProcessing(containerName, file.getOriginalFilename(), file.getBytes(), authenticationFacade.getUserName());
+    manualIngestProcessor.process(containerName, file.getOriginalFilename(), file.getBytes());
   }
 
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
@@ -102,12 +116,6 @@ public class IngestController {
     } else {
       storage.delete(containerName, fileName, snapshot);
     }
-  }
-
-  //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")
-  @GetMapping("/api/reprocess/file")
-  public void reProcessFile(@RequestParam("containerName") String containerName, @RequestParam("fileName") String fileName) {
-    translationProcessor.reProcess(containerName, fileName);
   }
 
   //  @PreAuthorize("hasRole('ROLE_TSI_AllUsers')")

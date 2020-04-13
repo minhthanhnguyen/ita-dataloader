@@ -1,119 +1,97 @@
 <template>
-  <div>
-    <dataloader-header
-      v-if="containerName"
-      :businessUnits="businessUnits"
-      :initialContainerName="containerName"
-      :updateContainerFn="updateContainer"
-    />
-    <div class="content">
-      <dataloader-menu :containerName="containerName" />
-      <div class="sub-content">
-        <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-70">
-            <strong>STATUS:</strong>
-            <span v-if="injestStatus.isDone === null">n/a</span>
-            <span v-else-if="injestStatus.isDone === true">Complete</span>
-            <span v-else-if="injestStatus.isDone === false">Processing</span>
-          </div>
-          <div class="md-layout-item md-size-10">
-            <md-button class="md-dense top-btn md-raised md-accent" @click="stopIngest()">Stop</md-button>
-          </div>
-          <div class="md-layout-item md-size-10">
-            <md-button class="md-secondary md-raised top-btn" @click="clearLog()">Clear</md-button>
-          </div>
-          <div class="md-layout-item md-size-10">
-            <md-button class="md-primary md-raised top-btn" @click="refreshLog()">Refresh</md-button>
-          </div>
+  <div :class="paneClass(visible)">
+    <div class="pane-header">
+      <span class="pane-operation" @click="visible = false" v-if="visible">
+        <md-icon>remove</md-icon>
+      </span>
+      <span class="pane-operation" @click="visible = true" v-if="!visible">
+        <md-icon>add</md-icon>
+      </span>
+      <span v-if="visible" class="md-title">{{header}}</span>
+    </div>
+    <div v-if="visible">
+      <div class="ingest-header">
+        <div class="status">
+          <strong>STATUS:</strong>
+          <span v-if="status.isDone === true">Complete</span>
+          <span v-else-if="status.isDone === false">Processing</span>
+          <span v-else>n/a</span>
         </div>
-        <md-table
-          v-if="injestStatus.logItems"
-          v-model="injestStatus.logItems"
-          md-sort="time"
-          md-sort-order="asc"
-        >
-          <md-table-row slot-scope="{ item }" slot="md-table-row">
-            <md-table-cell md-label="Timestamp" md-sort-by="time">{{item.time}}</md-table-cell>
-            <md-table-cell md-label="Message">{{item.message}}</md-table-cell>
-          </md-table-row>
-        </md-table>
+        <div class="log-operations">
+          <md-button v-if="stopFn" class="md-dense top-btn md-raised md-accent" @click="stopFn">Stop</md-button>
+          <md-button class="md-dense md-raised top-btn" @click="clearFn">Clear</md-button>
+          <md-button class="md-dense top-btn md-raised md-primary" @click="refreshFn(500)">Refresh</md-button>
+        </div>
       </div>
+      <md-table
+        v-if="!loading && status.logItems"
+        v-model="status.logItems"
+        md-sort="time"
+        md-sort-order="asc"
+      >
+        <md-table-row slot-scope="{ item }" slot="md-table-row">
+          <md-table-cell md-label="Timestamp" md-sort-by="time">{{item.time}}</md-table-cell>
+          <md-table-cell md-label="Message">{{item.message}}</md-table-cell>
+        </md-table-row>
+      </md-table>
       <div v-if="loading" class="loading">
         <md-progress-bar md-mode="indeterminate"></md-progress-bar>
       </div>
     </div>
   </div>
 </template>
-<style>
-.status {
-  width: 162px;
-}
-</style>
 <script>
-import Menu from "./Menu";
-import Header from "./Header";
-
 export default {
   name: "Log",
-  props: ["repository"],
-  components: {
-    "dataloader-header": Header,
-    "dataloader-menu": Menu
-  },
-  async created() {
-    this.loading = true;
-    this.containerName = this.$route.params["containerName"];
-    await this.updateBusinessUnitContent();
-    this.loading = false;
-  },
-  data() {
-    return {
-      loading: true,
-      containerName: null,
-      businessUnits: [],
-      injestStatus: this.defaultInjectStatus()
-    };
-  },
+  props: [
+    "header",
+    "visible",
+    "status",
+    "loading",
+    "stopFn",
+    "clearFn",
+    "refreshFn"
+  ],
   methods: {
-    async refreshLog() {
-      this.loading = true;
-      this.injestStatus = await this.repository._getIngestStatus(
-        this.containerName
-      );
-      this.loading = false;
-    },
-    clearLog() {
-      this.repository._clearIngestStatus(this.containerName);
-      this.injestStatus.isDone = null;
-      this.injestStatus.logItems = [];
-    },
-    stopIngest() {
-      this.repository._stopIngestProcess(this.containerName);
-    },
-    defaultInjectStatus() {
-      return {
-        isDone: null,
-        logItems: []
-      };
-    },
-    async updateBusinessUnitContent() {
-      this.businessUnits = await this.repository._getBusinessUnits();
-      this.businessUnitName = this.businessUnits.find(
-        b => b.containerName === this.containerName
-      ).businessName;
-      this.injestStatus = await this.repository._getIngestStatus(
-        this.containerName
-      );
-
-      if (!this.injestStatus) {
-        this.injestStatus = this.defaultInjectStatus();
+    paneClass(visible) {
+      if (visible) {
+        return "pane open-pane";
+      } else {
+        return "pane closed-pane";
       }
-    },
-    async updateContainer(containerName) {
-      this.containerName = containerName;
-      await this.updateBusinessUnitContent();
-      this.$forceUpdate();
     }
   }
 };
 </script>
+<style>
+.ingest-header {
+  display: flex;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.status {
+  padding-left: 34px;
+}
+
+.pane-header {
+  display: flex;
+}
+
+.pane-operation {
+  cursor: pointer;
+  padding-right: 12px;
+}
+
+.open-pane {
+  min-width: 50%;
+}
+
+.pane {
+  padding: 0 22px 0 22px;
+}
+
+.closed-pane {
+  min-width: 10px;
+}
+</style>

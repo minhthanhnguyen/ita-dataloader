@@ -9,7 +9,7 @@
         <md-icon id="menu-icon">settings_applications</md-icon>
         <span class="md-list-item-text">Configure</span>
       </md-list-item>
-      <md-list-item :class="getClasses('Log')" @click="goTo('Log')">
+      <md-list-item :class="getClasses('SystemLogs')" @click="goTo('SystemLogs')">
         <md-icon id="menu-icon">menu_book</md-icon>
         <span class="md-list-item-text">Log</span>
       </md-list-item>

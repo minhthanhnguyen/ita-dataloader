@@ -10,29 +10,29 @@
       <dataloader-menu :containerName="containerName" />
       <div class="sub-content">
         <div class="md-layout md-gutter">
-          <div class="md-layout-item md-size-30">
+          <div class="md-layout-item md-size-25">
             <md-field>
               <label>Select file</label>
               <md-file @md-change="onFileSelection($event)"></md-file>
             </md-field>
           </div>
-          <div class="md-layout-item md-size-30">
+          <div class="md-layout-item md-size-25">
             <md-autocomplete v-model="destinationFileName" :md-options="destinationFileNameOptions">
               <label>File name</label>
             </md-autocomplete>
           </div>
-          <div class="md-layout-item md-size-10">
-            <md-checkbox v-if="!uploading" v-model="containsPii">Contains PII</md-checkbox>
-          </div>
-          <div class="md-layout-item md-size-10">
+          <div class="md-layout-item md-size-50">
+            <md-checkbox v-model="containsPii">Contains PII</md-checkbox>
+            <md-button
+              class="md-raised md-dense top-btn"
+              @click="updateBusinessUnitContent()"
+            >Refresh</md-button>
             <md-button
               v-if="!uploading"
-              class="md-primary md-raised top-btn"
+              class="md-primary md-raised md-dense top-btn"
               @click="uploadFile()"
             >Upload</md-button>
-            <div v-if="uploading" class="spinner">
-              <md-progress-spinner md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
-            </div>
+            <md-progress-spinner class="spinner" v-if="uploading" md-mode="indeterminate" :md-diameter="30"></md-progress-spinner>
           </div>
         </div>
         <div v-if="loading" class="loading">
@@ -56,7 +56,6 @@
               <span v-else>{{this.pipelineStatus.status}}</span>
               <span>{{this.pipelineStatus.runEnd}}</span>
             </span>
-            <md-button class="md-dense refresh-btn" @click="updateBusinessUnitContent()">Refresh</md-button>
             <md-switch
               class="display-switch"
               v-model="displaySnapshots"
@@ -79,9 +78,7 @@
                 </md-button>
               </md-table-cell>
               <md-table-cell md-label="File Name" md-sort-by="fileName">
-                <label
-                  v-if="item.snapshot"
-                >{{item.fileName + ' (' + item.snapshot + ')'}}</label>
+                <label v-if="item.snapshot">{{item.fileName + ' (' + item.snapshot + ')'}}</label>
                 <label v-else>{{item.fileName}}</label>
               </md-table-cell>
               <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
@@ -103,10 +100,7 @@
                 <span v-else class="dot"></span>
               </md-table-cell>
               <md-table-cell v-if="displayDeleteButton">
-                <md-button
-                  class="md-icon-button"
-                  @click="deleteFile(item.fileName, item.snapshot)"
-                >
+                <md-button class="md-icon-button" @click="deleteFile(item.fileName, item.snapshot)">
                   <md-icon>delete</md-icon>
                 </md-button>
               </md-table-cell>
@@ -117,7 +111,7 @@
           <md-dialog-alert
             :md-active.sync="uploadSuccessful"
             md-title="Upload Successful!"
-            md-content="Your file was uploaded successfully! "
+            md-content="Your file was uploaded successfully! To view the progress of any translations, see the log."
             md-confirm-text="Close"
           />
           <md-dialog-alert
@@ -166,7 +160,21 @@
 }
 
 .display-switch {
-  margin: 0 22px 0 0;
+  top: 4px;
+  margin: 0 20px 0 0;
+}
+
+.md-checkbox {
+  padding-top: 8px;
+}
+
+.spinner {
+  margin-left: 20px;
+}
+
+.stat {
+  font-size: 12px;
+  margin-right: 16px;
 }
 </style>
 <script>
@@ -306,11 +314,14 @@ export default {
     },
     deleteFile(fileName, snapshot) {
       this.repository._deleteBlob(this.containerName, fileName, snapshot);
-      this.storageMetadata = this.storageMetadata.filter(meta =>
-        !(meta.containerName === this.containerName &&
-        meta.fileName === fileName &&
-        meta.snapshot === snapshot)
-      )
+      this.storageMetadata = this.storageMetadata.filter(
+        meta =>
+          !(
+            meta.containerName === this.containerName &&
+            meta.fileName === fileName &&
+            meta.snapshot === snapshot
+          )
+      );
     },
     downloadBlob(blobItem) {
       this.repository._downloadBlob(

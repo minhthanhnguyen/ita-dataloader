@@ -5,7 +5,6 @@ import gov.ita.dataloader.ingest.translators.TranslatorFactory;
 import gov.ita.dataloader.ingest.translators.TranslatorType;
 import gov.ita.dataloader.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -24,18 +23,15 @@ public class TranslationProcessor {
     this.translatorFactory = translatorFactory;
   }
 
-  @Async
-  public CompletableFuture<String> initProcessing(String containerName, String fileName, byte[] fileBytes, String userName) {
-    return process(containerName, fileName, fileBytes);
+  public boolean hasTranslator(String containerName, String fileName) {
+    String containerFileCompositeKey = containerName + "#" + fileName;
+    return translatorFactory.getTranslator(containerFileCompositeKey) != null;
   }
 
-  @Async
-  public CompletableFuture<String> reProcess(String containerName, String fileName) {
-    byte[] fileBytes = storage.getBlob(containerName, fileName);
-    return process(containerName, fileName, fileBytes);
+  public void initProcessing(String containerName, String fileName, byte[] fileBytes) {
+    process(containerName, fileName, fileBytes);
   }
 
-  @Async
   private CompletableFuture<String> process(String containerName, String fileName, byte[] fileBytes) {
     String containerFileCompositeKey = containerName + "#" + fileName;
     String fileRootName = "translated/" + fileName;
