@@ -91,12 +91,15 @@
                 <label v-if="item.snapshot">{{item.fileName + ' (' + item.snapshot + ')'}}</label>
                 <label v-else>{{item.fileName}}</label>
               </md-table-cell>
+              <md-table-cell md-label="Public URL" v-if="isContainerPublic">
+                <input :value="item.url" class="public-url" :ref="'public-url-'+item.index"/>
+                <button @click="copyBlobUrl(item.index)">Copy</button>
+              </md-table-cell>
               <md-table-cell md-label="Uploaded At" md-sort-by="uploadedAt">{{item.uploadedAt}}</md-table-cell>
               <md-table-cell
                 md-label="Uploaded By"
                 md-sort-by="metadata.uploaded_by"
               >{{item.metadata.uploaded_by}}</md-table-cell>
-              <md-table-cell md-label="Size" md-sort-by="size" md-numeric>{{item.size}}</md-table-cell>
               <md-table-cell md-label="PII" md-sort-by="metadata.pii">
                 <span v-if="item.metadata.pii === 'true'" class="dot filled"></span>
                 <span v-else class="dot"></span>
@@ -182,6 +185,11 @@ dialog {
 dialog + .backdrop {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
+.public-url {
+  margin-top: 8px;
+  margin-right: 8px;
+}
 </style>
 <script>
 import Menu from "./Menu";
@@ -244,6 +252,9 @@ export default {
       this.storageMetadata = storageMetadata.filter(metadata => {
         if (this.displaySnapshots) return true;
         else return !metadata.snapshot;
+      }).map((v, i) => {
+        v.index = i
+        return v
       });
 
       this.totalFiles = this.storageMetadata.length;
@@ -339,6 +350,11 @@ export default {
     },
     displayUploadSuccessDialog() {
       this.$refs["upload-success-dialog"].showModal();
+    },
+    copyBlobUrl(index) {
+      let ref = 'public-url-' + index;
+      this.$refs[ref].select()
+      document.execCommand('copy')
     }
   }
 };
