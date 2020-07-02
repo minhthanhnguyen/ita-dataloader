@@ -21,7 +21,7 @@ Steps to run this application on your local machine for development purposes.
 #### Running Locally
 
 - Backend: `gradle bootRun`, [](http://localhost:8080)
-- Frontend: `cd client && npm start`, [](http://localhost:8081)
+- Frontend: `cd client && npm run serve`, [](http://localhost:8081)
 
 ## Test
 
