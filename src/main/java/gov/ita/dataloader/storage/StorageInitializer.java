@@ -38,6 +38,7 @@ public class StorageInitializer {
     newContainers.put("siat", new ContainerConfig(false, false));
     newContainers.put("sima", new ContainerConfig(false, false));
     newContainers.put("taxonomy", new ContainerConfig(false, true));
+    newContainers.put("data-inventory", new ContainerConfig(false, false));
 
     Set<String> existingContainers = storage.getContainerNames();
 
