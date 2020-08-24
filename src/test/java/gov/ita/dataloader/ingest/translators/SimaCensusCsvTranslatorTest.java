@@ -18,7 +18,7 @@ public class SimaCensusCsvTranslatorTest {
   @Before
   public void setUp() {
     SimaCensusCsvTranslator simaCensusCsvTranslator = new SimaCensusCsvTranslator();
-    byte[] translatedBytes = simaCensusCsvTranslator.translate(h.get("/fixtures/sima/Dec2019P.txt"));
+    byte[] translatedBytes = simaCensusCsvTranslator.translate(h.get("/fixtures/sima/fstldata012012_sima.txt"));
     results = formattedResults(translatedBytes);
   }
 
@@ -34,46 +34,46 @@ public class SimaCensusCsvTranslatorTest {
 
   @Test
   public void translates_COMM_DESC() {
-    assertEquals("INGOTS AND STEEL FOR CASTINGS.........1A", results.get(0).get("COMM_DESC"));
+    assertEquals("Carbon and Alloy > 16 Inches in Diameter..................33", results.get(0).get("COMM_DESC"));
   }
 
   @Test
   public void translates_STEEL_TYPE() {
-    assertEquals("S", results.get(0).get("STEEL_TYPE"));
+    assertEquals("Carbon and Alloy", results.get(0).get("STEEL_TYPE"));
   }
 
   @Test
   public void translates_VALUE() {
-    assertEquals("0000918325", results.get(0).get("VALUE"));
+    assertEquals("0006737328", results.get(0).get("VALUE"));
   }
 
   @Test
   public void translates_NETTON() {
-    assertEquals("0000000547.785", results.get(0).get("NETTON"));
+    assertEquals("0000004492.407", results.get(0).get("NETTON"));
   }
 
   @Test
   public void translates_AVGNETPR() {
-    assertEquals("000001676.43", results.get(0).get("AVGNETPR"));
+    assertEquals("000001499.71", results.get(0).get("AVGNETPR"));
   }
 
   @Test
   public void translates_METRICTON() {
-    assertEquals("0000000496.943", results.get(0).get("METRICTON"));
+    assertEquals("0000004075.445", results.get(0).get("METRICTON"));
   }
 
   @Test
   public void translates_AVGMETPR() {
-    assertEquals("000001847.94", results.get(0).get("AVGMETPR"));
+    assertEquals("000001653.15", results.get(0).get("AVGMETPR"));
   }
 
   @Test
   public void translates_STAT_MO() {
-    assertEquals("12", results.get(0).get("STAT_MO"));
+    assertEquals("01", results.get(0).get("STAT_MO"));
   }
 
   @Test
   public void translates_STAT_YEAR() {
-    assertEquals("2019", results.get(0).get("STAT_YEAR"));
+    assertEquals("2012", results.get(0).get("STAT_YEAR"));
   }
 }
