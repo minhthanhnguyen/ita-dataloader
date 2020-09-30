@@ -39,7 +39,7 @@ public class OtexaAnnualCsvTranslator implements Translator {
         .collect(Collectors.toList());
 
       for (CSVRecord csvRecord : csvParser.getRecords()) {
-        String country = csvRecord.get("CNAME");
+        String country = csvRecord.get("Country");
         String catId = csvRecord.get("CAT");
         String syef = csvRecord.get("SYEF");
         String hts = csvRecord.get("HTS");

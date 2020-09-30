@@ -2,7 +2,7 @@ package gov.ita.dataloader.ingest.translators;
 
 public class ScientificNotationTranslator {
   public boolean isScientificNotation(String val) {
-    return val.contains("E+");
+    return val.matches("[+-]?\\d(\\.\\d+)?[Ee][+-]?\\d+");
   }
 
   String translate(String val) {
