@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: ita-dataloader
   namespace: mdsnamespace
@@ -16,6 +16,9 @@ spec:
     metadata:
       labels:
         app: ita-dataloader
+  selector:
+    matchLabels:
+      app: ita-dataloader
     spec:
       containers:
       - name: ita-dataloader
