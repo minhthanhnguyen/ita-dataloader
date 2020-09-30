@@ -12,13 +12,13 @@ spec:
       maxSurge: 1
       maxUnavailable: 1
   minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: ita-dataloader
   template:
     metadata:
       labels:
         app: ita-dataloader
-  selector:
-    matchLabels:
-      app: ita-dataloader
     spec:
       containers:
       - name: ita-dataloader
