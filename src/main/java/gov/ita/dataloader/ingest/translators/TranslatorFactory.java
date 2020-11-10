@@ -12,6 +12,7 @@ public class TranslatorFactory {
 
   static {
     translators.put("otexa#ANNUAL.csv", new OtexaAnnualCsvTranslator());
+    translators.put("otexa#Annual_Exports.csv", new OtexaAnnualExportsCsvTranslator());
     translators.put("otexa#Merged_Cat_Imports.csv", new OtexaMergedCatImportsCsvTranslator());
     translators.put("otexa#Part_Cat_Imports.csv", new OtexaPartCatImportsCsvTranslator());
     translators.put("otexa#ANNUAL_FOOTWEAR_VALUE.csv", new OtexaAnnualFootwearCsvTranslator("DOLLARS"));
